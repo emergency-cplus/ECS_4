@@ -8,9 +8,19 @@
 
     <%= stylesheet_link_tag "application.tailwind", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   </head>
 
   <body>
+    <% if logged_in? %>
+      <%= render 'shared/header' %>
+    <% else %>
+      <%= render 'shared/before_login_header' %>
+    <% end %>
+
     <%= yield %>
+
+      <%= render 'shared/footer' %>
+
   </body>
 </html>
