@@ -1,0 +1,24 @@
+<div class="mx-5">
+  <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
+    <h1 class="text-3xl font-semibold text-center">ユーザー登録</h1>
+    <div class= "space-y-4">
+      <%= form_with model: @user, local: true do |f| %>
+        <%= f.label :name %>
+        <%= f.text_field :name, class: 'w-full input input-bordered input-primary', required: true %>
+        <%= f.label :email %>
+        <%= f.email_field :email, class: 'w-full input input-bordered input-primary', required: true %>
+        <%= f.label :password %>
+        <%= f.password_field :password, class: 'w-full input input-bordered input-primary', required: true %>
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation, class: 'w-full input input-bordered input-primary', required: true %>
+      
+        <div class="text-3xl font-semibold text-center">
+          <%= f.submit '新規登録', class: 'btn  my-3' %>
+        </div>
+      <% end %>
+    </div>
+    <div class='text-center link link-neutral'>
+      <%= link_to 'ログインページへ', login_path %>
+    </div>
+  </div>
+</div>
