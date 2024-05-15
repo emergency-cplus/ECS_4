@@ -18,8 +18,8 @@
         <div class="relative">
           <%= link_to t('header.item'), '#', class: "text-gray-700 hover:text-gray-900", id: "header-item-menu-button" %>
           <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg hidden" id="header-item-menu">
-            <%= link_to t('header.item_index'), '#', class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %>
-            <%= link_to t('header.create_item'), '#', class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %>
+            <%= link_to t('header.item_index'), items_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %>
+            <%= link_to t('header.create_item'), '/items/new', class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %>
           </div>
         </div>
 

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  
   get "up" => "rails/health#show", as: :rails_health_check
 
   root 'static_pages#top'
@@ -11,4 +12,5 @@ Rails.application.routes.draw do
 
   resources :users, only: [:new, :create, :show, :edit, :update]
 
+  resources :items
 end
