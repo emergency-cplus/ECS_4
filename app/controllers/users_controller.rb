@@ -1,70 +1,73 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :require_login, except: [:new, :create]
+  before_action :set_user, only: [:show, :edit, :update]
 
-  # GET /users or /users.json
-  def index
-    @users = User.all
-  end
-
-  # GET /users/1 or /users/1.json
-  def show
-  end
-
-  # GET /users/new
   def new
     @user = User.new
   end
 
-  # GET /users/1/edit
-  def edit
-  end
-
-  # POST /users or /users.json
   def create
     @user = User.new(user_params)
-
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to user_url(@user), notice: "User was successfully created." }
-        format.json { render :show, status: :created, location: @user }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    
+    if @user.save
+      # あえてroot_pathにリダイレクトさせる
+      redirect_to root_path, flash: { success: "ユーザー登録が成功しました" }
+    else
+      flash.now[:danger] = "ユーザー登録に失敗しました"
+      render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /users/1 or /users/1.json
+  def show; end
+
+  def edit; end
+
   def update
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @user.update(user_params)
+      redirect_to user_path(@user), flash: { success: "更新しました" }
+    else
+      flash.now[:danger] = "更新に失敗しました"
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /users/1 or /users/1.json
-  def destroy
-    @user.destroy!
+  # def edit_password
+  #   @user = current_user # ここで適切に@userをセットする
+  #   @user_password = UserPassword.new
+  # end
 
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: "User was successfully destroyed." }
-      format.json { head :no_content }
-    end
-  end
+  # def update_password
+  #   @user_password = UserPassword.new(password_params)
+  #   if @user_password.valid?
+  #     if @user.update(password: @user_password.password, password_confirmation: @user_password.password_confirmation)
+  #       redirect_to user_path(@user), flash: { success: t('users.update_password.success') }
+  #     else
+  #       flash.now[:danger] = t('users.update_password.failure')
+  #       render :edit_password, status: :unprocessable_entity
+  #     end
+  #   else
+  #     render :edit_password, status: :unprocessable_entity
+  #   end
+  # end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def user_params
-      params.require(:user).permit(:new, :edit, :show)
+  def require_login
+    unless logged_in?
+      flash[:error] = "ログインしてください"
+      redirect_to login_url, status: :see_other
     end
+  end
+
+  def user_params
+    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+  end
+
+  # def password_params
+  #   params.require(:user_password).permit(:password, :password_confirmation)
+  # end
+
+  def set_user
+    @user = User.find(params[:id])
+  end
 end
