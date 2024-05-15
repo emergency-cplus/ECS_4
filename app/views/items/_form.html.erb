@@ -1,0 +1,32 @@
+<%= form_with(model: item, local: true) do |form| %>
+  <% if item.errors.any? %>
+    <div class="text-red-500 mb-4">
+      <h2 class="text-xl font-semibold"><%= pluralize(item.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+      <ul class="list-disc list-inside">
+        <% item.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-4">
+    <%= form.label :title, class: "block text-gray-700" %>
+    <%= form.text_field :title, class: "w-full input input-bordered input-primary mt-1" %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :description, class: "block text-gray-700" %>
+    <%= form.text_area :description, class: "w-full textarea textarea-bordered textarea-primary mt-1" %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :item_url, class: "block text-gray-700" %>
+    <%= form.text_field :item_url, class: "w-full input input-bordered input-primary mt-1" %>
+  </div>
+
+  <div class="text-center">
+    <%= form.submit '保存', class: "btn btn-primary" %>
+  </div>
+<% end %>
