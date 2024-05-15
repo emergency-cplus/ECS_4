@@ -1,37 +1,47 @@
-#ベースイメージの指定
+# ベースイメージの指定
 FROM ruby:3.2.2
 
-#環境変数
+# 環境変数
 ENV TZ Asia/Tokyo
 ENV LANG ja_JP.UTF-8
 ENV LC_ALL C.UTF-8
 ENV EDITOR=vim
 
-#dbにpostgreSQLを使用するので対象のパッケージをインストール
-RUN apt-get update && apt-get install -y postgresql-client vim
+# dbにPostgreSQLを使用するので対象のパッケージをインストール
+RUN apt-get update && apt-get install -y postgresql-client vim curl
 
-#appディレクトリを作成
+# Node.jsとnpmをインストール
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y nodejs
+
+# Yarnのインストール
+RUN npm install -g yarn
+
+# appディレクトリを作成
 RUN mkdir /app
-#コマンドを実行するディレクトリを/appに指定
+# コマンドを実行するディレクトリを/appに指定
 WORKDIR /app
 
-#ローカルのGemfileとGemfile.lockをコンテナ内にコピー
+# ローカルのGemfileとGemfile.lockをコンテナ内にコピー
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
 
-#bundle installを実行
+# bundle installを実行
 RUN bundle install
 
-#ローカルの現在のディレクトリをコンテナ内にコピー
+# ローカルの現在のディレクトリをコンテナ内にコピー
 COPY . /app
 
-#後述のentrypoint.shを実行するための記述
+# 必要なパッケージのインストール
+RUN yarn install
+
+# 後述のentrypoint.shを実行するための記述
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
 
-#コンテナがリッスンするPORTを指定
+# コンテナがリッスンするPORTを指定
 EXPOSE 3000
 
-#コンテナ作成時にサーバーを立てる
+# コンテナ作成時にサーバーを立てる
 CMD ["rails", "server", "-b", "0.0.0.0"]
