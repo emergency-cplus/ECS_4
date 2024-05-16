@@ -1,5 +1,5 @@
 # Emergency_Call_Support
-  アプリURL https://ecs-4.fly.dev/login
+  アプリURL https://ecs-4.fly.dev/
 ---
 
 ### **サービス概要**
