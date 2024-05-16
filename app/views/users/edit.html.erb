@@ -1,0 +1,25 @@
+<% content_for(:title, t('users.edit.title')) %>
+<div class="container mx-auto pt-3">
+  <div class="flex justify-center">
+    <div class="w-full md:w-10/12">
+      <h1 class="text-2xl font-bold mb-5"><%= t('users.edit.title') %></h1>
+      <%= form_with(model: @user, url: user_path(@user), method: :patch, local: true) do |form| %>
+        <div class="mb-4">
+          <%= form.label :name, class: 'block text-gray-700' %>
+          <%= form.text_field :name, class: 'w-full input input-bordered input-primary mt-1' %>
+        </div>
+        <div class="mb-4">
+          <%= form.label :email, class: 'block text-gray-700' %>
+          <%= form.email_field :email, class: 'w-full input input-bordered input-primary mt-1' %>
+        </div>
+        <div class="mb-4">
+          <%= form.label :message_template, class: 'block text-gray-700' %>
+          <%= form.text_area :message_template, class: 'w-full textarea textarea-bordered textarea-primary mt-1' %>
+        </div>
+        <div class="text-center">
+          <%= form.submit class: 'btn btn-green' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

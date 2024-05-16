@@ -1,0 +1,28 @@
+<% content_for(:title, t('users.show.title')) %>
+<div class="container mx-auto pt-3">
+  <div class="flex justify-center">
+    <div class="w-full md:w-10/12">
+      <h1 class="text-2xl font-bold mb-5"><%= t('users.show.title') %></h1>
+      <table class="table-auto w-full border-collapse border border-gray-300">
+        <tbody>
+          <tr>
+            <th class="border border-gray-300 px-4 py-2 text-left bg-gray-100"><%= User.human_attribute_name(:name) %></th>
+            <td class="border border-gray-300 px-4 py-2"><%= @user.name %></td>
+          </tr>
+          <tr>
+            <th class="border border-gray-300 px-4 py-2 text-left bg-gray-100"><%= User.human_attribute_name(:email) %></th>
+            <td class="border border-gray-300 px-4 py-2"><%= @user.email %></td>
+          </tr>
+          <tr>
+            <th class="border border-gray-300 px-4 py-2 text-left bg-gray-100"><%= User.human_attribute_name(:message_template) %></th>
+            <td class="border border-gray-300 px-4 py-2"><%= @user.message_template %></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="flex justify-between mt-5">
+        <%= link_to t('users.show.edit'), edit_user_path(@user), class: 'btn btn-green' %>
+        <%= link_to t('users.show.change_password'), "#", class: 'btn btn-blue' %> <!-- ここにパスワード変更のリンクを追加 edit_password_user_path(@user) -->
+      </div>
+    </div>
+  </div>
+</div>
