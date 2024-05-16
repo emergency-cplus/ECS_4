@@ -1,0 +1,47 @@
+<div class="mx-5" data-controller="video-preview">
+  <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
+    <%= form_with(model: @item, local: true) do |f| %>
+      <% if @item.errors.any? %>
+        <div class="text-red-500 mb-4">
+          <h2 class="text-xl font-semibold"><%= pluralize(@item.errors.count, "error") %> prohibited this item from being saved:</h2>
+          <ul class="list-disc list-inside">
+            <% @item.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="mb-4">
+        <%= f.label :title, class: "block text-gray-700" %>
+        <%= f.text_field :title, class: "w-full input input-bordered input-primary mt-1", placeholder: '例：心臓マッサージ' %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :description, class: "block text-gray-700" %>
+        <%= f.text_area :description, class: "w-full textarea textarea-bordered textarea-primary mt-1" %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :tags, class: "block text-gray-700" %>
+        <!-- 動画の種類が多くないから、タグはいらないかも... -->
+        [タグ]
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :item_url, class: "block text-gray-700" %>
+        YouTube shortsの動画URLを貼りつけてください
+      </div>
+
+      <div class="mb-4">
+        <%= f.text_field :item_url, class: "w-full input input-bordered input-primary mt-1", id: 'item_url', data: { target: "video-preview.url" } %>
+      </div>
+
+      <div id="preview" data-target="video-preview.preview"></div>
+
+      <div class="text-center">
+        <%= f.submit '保存', class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

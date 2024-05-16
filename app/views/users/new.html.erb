@@ -3,6 +3,7 @@
     <h1 class="text-3xl font-semibold text-center">ユーザー登録</h1>
     <div class= "space-y-4">
       <%= form_with model: @user, local: true do |f| %>
+      
         <%= f.label :name %>
         <%= f.text_field :name, class: 'w-full input input-bordered input-primary', required: true %>
         <%= f.label :email %>
