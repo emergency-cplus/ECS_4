@@ -1,13 +1,34 @@
-<div id="<%= dom_id(item) %>" class="p-4 bg-white shadow-md rounded-md mb-4">
-  <p class="text-lg font-semibold">
-    <strong>タイトル</strong> <%= item.title %>
-  </p>
-
-  <p class="mt-2">
-    <strong>説明欄</strong> <%= item.description %>
-  </p>
-
-  <p class="mt-2">
-    <strong>動画URL:</strong> <%= link_to item.item_url, item.item_url, class: "text-blue-500 underline" %>
-  </p>
+<div class="col-sm-6 col-lg-4 mb-3">
+  <div id="post-id-<%= item.id %>">
+    <div class="bg-white shadow-md rounded-md p-4 h-full">
+      <%= link_to item_path(item), class: "block h-full" do %>
+        <div class="text-center h-full flex flex-col justify-between">
+          <iframe
+            class="w-full aspect-[9/16]"
+            src="https://www.youtube.com/embed/<%= get_youtube_shorts_id(item.item_url) %>"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+          <div class="mt-4">
+            <div class="text-lg font-semibold">
+              <%= item.title %>
+            </div>
+            <div class="mt-2 text-gray-600">
+<!-- 動画の種類が多くないから、タグはいらないかも... -->
+              [タグ] 
+            </div>
+          </div>
+          <div class="mt-4 flex justify-between">
+            <div>
+              <%= link_to '送るボタン', '#', class: "btn btn-primary" %>
+            </div>
+            <div>
+              <%= link_to t('defaults.show'), item_path(item), class: "text-blue-500 underline" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
