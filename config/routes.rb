@@ -6,9 +6,9 @@ Rails.application.routes.draw do
   # get 'privacy_policy', to: 'static_pages#privacy_policy'
   # get 'terms_of_use', to: 'static_pages#terms_of_use'
 
-  get 'login', to: 'user_sessions#new'
+  get 'login', to: 'user_sessions#new' , as: :login
   post 'login', to: 'user_sessions#create'
-  delete 'logout', to: 'user_sessions#destroy'
+  delete 'logout', to: 'user_sessions#destroy', as: :logout
 
   resources :users, only: [:new, :create, :show, :edit, :update]
 
