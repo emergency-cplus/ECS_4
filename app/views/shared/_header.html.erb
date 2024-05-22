@@ -1,9 +1,8 @@
-<!-- 各項目が横に並ぶよう配置 -->
 <header>
   <nav class="bg-gray-100 p-4">
     <div class="container mx-auto flex items-center justify-between">
       <%= link_to root_path, class: "text-3xl font-header_name" do %>
-        <%= image_tag 'logo.png', alt: 'Logo' %>
+        <%= image_tag 'new_logo.png', alt: 'Logo' %>
       <% end %>
 
       <div class="md:hidden">
@@ -53,60 +52,3 @@
     });
   </script>
 </header>
-
-<!-- 各項目が縦に並ぶ
-<header>
-  <nav class="bg-gray-100 p-4">
-    <div class="container mx-auto flex items-center justify-between">
-      <%= link_to root_path, class: "text-3xl font-header_name" do %>
-        <%= image_tag 'logo.png', alt: 'Logo' %>
-      <% end %>
-
-      <div class="md:hidden">
-        <button class="text-gray-500 focus:outline-none" id="mobile-menu-button">
-          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-          </svg>
-        </button>
-      </div>
-
-      <div class="hidden md:flex space-x-6">
-        <div class="relative">
-          <%= link_to t('header.item'), '#', class: "text-gray-700 hover:text-gray-900", id: "header-item-menu-button" %>
-          <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg hidden" id="header-item-menu">
-            <%= link_to t('header.item_index'), '#', class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %>
-            <%= link_to t('header.create_item'), '#', class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %>
-          </div>
-        </div>
-
-        <%= link_to t('header.done_index'), "#", class: "text-gray-700 hover:text-gray-900" %>
-
-        <div class="relative">
-          <%= link_to '#', class: "text-gray-700 hover:text-gray-900", id: "header-profile-button" do %>
-            <%= current_user.name %>
-          <% end %>
-          <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg hidden" id="header-profile-menu">
-            <%= link_to t('header.user_show'), user_path(current_user), class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %>
-            <div class="border-t border-gray-200"></div>
-            <%= link_to t('header.logout'), logout_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100', data: { turbo_method: :delete } %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <script>
-    // Toggle item dropdown menu
-    document.getElementById('header-item-menu-button').addEventListener('click', function() {
-      var menu = document.getElementById('header-item-menu');
-      menu.classList.toggle('hidden');
-    });
-
-    // Toggle profile dropdown menu
-    document.getElementById('header-profile-button').addEventListener('click', function() {
-      var menu = document.getElementById('header-profile-menu');
-      menu.classList.toggle('hidden');
-    });
-  </script>
-</header>
---->
