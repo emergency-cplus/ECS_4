@@ -1,22 +1,20 @@
 class UserSessionsController < ApplicationController
-  skip_before_action :require_login, only: %i[create new]
+  skip_before_action :require_login, only: %i[new create]
 
-  def new; end
+  def new; end # app/views/user_sessions/new.html.erb ログインページを表示する
 
   def create
     @user = login(params[:email], params[:password])
     if @user
-      flash[:success] = "ログインしました"
-      redirect_back_or_to root_path
+      redirect_back_or_to root_path, success: t('user_sessions.create.success')
     else
-      flash.now[:error] = 'ログインに失敗しました'
+      flash[:danger] = t('user_sessions.create.failure')
       render :new, status: :unprocessable_entity
     end
   end
 
   def destroy
     logout
-    flash[:success] = "ログアウトしました"
-    redirect_to root_path
+    redirect_to root_path, status: :see_other, danger: t('user_sessions.destroy.success')
   end
 end
