@@ -30,9 +30,9 @@ ja:
     logout: ログアウト
     item: アイテム
     item_index: アイテム一覧
-    create_item: 新規作成
+    create_item: アイテム新規作成
     done_index: 送信済み一覧
-    user_show: ユーザー詳細
+    user_show: ユーザー情報
   user_sessions:
     new:
       title: ログイン
