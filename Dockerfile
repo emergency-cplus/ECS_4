@@ -1,47 +1,36 @@
-# ベースイメージの指定
-FROM ruby:3.2.2
+# 使いたいバージョンを決めて{{}}をruby:tag名の形で置き換えてください
+# 例: ARG RUBY_VERSION=ruby:3.2.2
+ARG RUBY_VERSION=ruby:3.2.2
+# {{}}を丸ごと使いたいnodeのversionに置き換えてください、小数点以下はいれないでください
+# 例: ARG NODE_VERSION=19
+ARG NODE_VERSION=18
 
-# 環境変数
+FROM $RUBY_VERSION
+ARG RUBY_VERSION
+ARG NODE_VERSION
+ENV LANG C.UTF-8
 ENV TZ Asia/Tokyo
-ENV LANG ja_JP.UTF-8
-ENV LC_ALL C.UTF-8
-ENV EDITOR=vim
-
-# dbにPostgreSQLを使用するので対象のパッケージをインストール
-RUN apt-get update && apt-get install -y postgresql-client vim curl
-
-# Node.jsとnpmをインストール
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt-get install -y nodejs
-
-# Yarnのインストール
-RUN npm install -g yarn
-
-# appディレクトリを作成
+RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
+&& wget --quiet -O - /tmp/pubkey.gpg https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+&& echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+&& apt-get update -qq \
+&& apt-get install -y build-essential nodejs yarn libvips
 RUN mkdir /app
-# コマンドを実行するディレクトリを/appに指定
 WORKDIR /app
-
-# ローカルのGemfileとGemfile.lockをコンテナ内にコピー
+RUN gem install bundler
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
-
-# bundle installを実行
+COPY yarn.lock /app/yarn.lock
 RUN bundle install
-
-# ローカルの現在のディレクトリをコンテナ内にコピー
+RUN yarn install
 COPY . /app
 
-# 必要なパッケージのインストール
-RUN yarn install
-
-# 後述のentrypoint.shを実行するための記述
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
 
-# コンテナがリッスンするPORTを指定
+RUN bundle exec rails assets:precompile
+
+ENTRYPOINT ["entrypoint.sh"]
 EXPOSE 3000
 
-# コンテナ作成時にサーバーを立てる
 CMD ["rails", "server", "-b", "0.0.0.0"]
