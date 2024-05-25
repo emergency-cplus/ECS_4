@@ -38,6 +38,9 @@ RUN yarn install
 # 後述のentrypoint.shを実行するための記述
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
+
+RUN bundle exec rails assets:precompile
+
 ENTRYPOINT ["entrypoint.sh"]
 
 # コンテナがリッスンするPORTを指定
