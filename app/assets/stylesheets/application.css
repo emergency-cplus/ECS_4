@@ -15,6 +15,14 @@
     @apply bg-blue-500 hover:bg-blue-600;
 }
 
+body {
+  padding-top: 120px; /* ヘッダーの高さを考慮した上部のパディング */
+  padding-bottom: 56px; /* フッターの高さに合わせて調整 */
+  position: relative;
+  min-height: 100vh; /* ビューポートの高さに合わせて、ページの高さを設定 */
+}
+
+
 /* Custom mockup phone styles */
 @layer components {
   .mockup-phone {

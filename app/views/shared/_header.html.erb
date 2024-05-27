@@ -1,5 +1,5 @@
 <header>
-  <nav class="bg-gray-100 p-4">
+  <nav class="bg-gray-100 p-4 fixed top-0 w-full z-50">
     <div class="container mx-auto flex items-center justify-between">
       <%= link_to root_path, class: "text-3xl font-header_name" do %>
         <%= image_tag 'new_logo.png', alt: 'Logo' %>
@@ -51,4 +51,34 @@
       menu.classList.toggle('hidden');
     });
   </script>
+
+<!--
+
+<div class="drawer drawer-end">
+  <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content">
+    <-- Page content here --
+    <label for="my-drawer-4" class="drawer-button btn btn-primary">menu</label>
+  </div> 
+  <div class="drawer-side z-70">
+    <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
+    <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+      <-- Sidebar content here --
+      <li><a>Sidebar Item 1</a></li>
+      <li><a>Sidebar Item 2</a></li>
+      <div class="flex flex-col w-full">
+  <div class="divider">Default</div>
+  </div>
+      <li><a>Sidebar Item 1</a></li>
+      <li><a>Sidebar Item 1</a></li>
+      <li><a>Sidebar Item 1</a></li>
+      <li><a>Sidebar Item 1</a></li>
+
+    </ul>
+  </div>
+</div>
+
+-->
+
 </header>
+
