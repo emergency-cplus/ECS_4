@@ -1,5 +1,5 @@
 <div class="hero min-h-screen" style="background-image: url(<%= image_url('top.jpg') %>); background-size: cover; background-position: center; background-repeat: no-repeat;">
-  <div class="hero-overlay bg-opacity-60" ></div>
+  <div class="hero-overlay bg-opacity-60"></div>
   <div class="hero-content text-neutral-content" style="display: flex; justify-content: flex-start; align-items: center; width: 100%; padding-left: 2%;">
     <div class="max-w-md">
       <h1 class="mb-5 text-4xl font-bold" style="color: white;">Welcome to the Platform</h1>
@@ -7,8 +7,9 @@
         動画で伝える<br>
         的確な口頭指導<br>
       </p>
-      <%# <button class="btn btn-primary">Get Started</button> %>
+      <% unless logged_in? %>
+        <%= button_to 'Get Started', login_path, method: :get, class: "btn btn-primary" %>
+      <% end %>
     </div>
   </div>
 </div>
-
