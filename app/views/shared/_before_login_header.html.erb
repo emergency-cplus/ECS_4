@@ -1,5 +1,5 @@
 <header>
-  <nav class="bg-gray-100 p-4">
+  <nav class="bg-gray-100 p-4 fixed top-0 w-full z-50">
     <div class="container mx-auto flex items-center justify-between">
       <%= link_to root_path, class: "text-3xl font-header_name" do %>
         <%= image_tag 'new_logo.png', alt: 'Logo' %>
@@ -17,9 +17,8 @@
       <div class="hidden md:flex space-x-6 items-center">
         <%= link_to t('header.login'), login_path, class: "text-gray-700 hover:text-gray-900" %>
       </div>
-    </div>
 -->
-
+    </div>
   </nav>
 
   <script>
