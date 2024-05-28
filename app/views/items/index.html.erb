@@ -15,8 +15,10 @@
   <% else %>
     <!-- 保存されたアイテムがないときのメッセージを中央寄せで表示 -->
     <div class="text-center mt-10">
-      <p class="text-lg">まだアイテムが保存されていません</p>
+      <p class="text-lg">まだアイテムがありませんよ...</p>
+      <br>
+      <br>
+      <%= button_to '新規作成する', '/items/new', method: :get, class: "btn btn-primary" %>
     </div>
-
   <% end %>
 </div>
