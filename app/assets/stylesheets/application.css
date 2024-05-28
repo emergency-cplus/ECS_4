@@ -22,7 +22,6 @@ body {
   min-height: 100vh; /* ビューポートの高さに合わせて、ページの高さを設定 */
 }
 
-
 /* Custom mockup phone styles */
 @layer components {
   .mockup-phone {
