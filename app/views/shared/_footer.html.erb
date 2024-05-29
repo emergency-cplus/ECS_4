@@ -2,14 +2,14 @@
   <div class="container mx-auto px-4 flex justify-between items-center">
   <!-- コピーライト情報を左寄せ -->
     <div>
-      <p class="text-sm">&copy; Emergency C+ <%= Time.current.year %></p>
+      <p class="text-sm">&copy; EmergenCy+ <%= Time.current.year %></p>
     </div>
     <!-- リンクをナビゲーションバーとして右寄せ -->
     <nav class="flex space-x-4">
       <!-- 各リンクを追加 -->
-      <%= link_to '利用規約', '#', class: "link link-hover" %>
-      <%= link_to 'プライバシーポリシー', '#', class: "link link-hover" %>
-      <%= link_to 'お問い合わせ', "https://twitter.com/RapidCplus", class: "link link-hover" %>
+      <%= link_to '利用規約', terms_of_use_path, class: "link link-hover" %>
+      <%= link_to 'プライバシーポリシー', privacy_policy_path, class: "link link-hover" %>
+      <%= link_to 'お問い合わせ', "https://twitter.com/EmergencyCplus", class: "link link-hover" %>
     </nav>
   </div>
 </footer>
