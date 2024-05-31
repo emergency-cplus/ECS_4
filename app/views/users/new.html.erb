@@ -7,6 +7,7 @@
     <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
     <div class= "space-y-4">
       <%= form_with model: @user, local: true do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
       
         <%= f.label :name, '名前' %>
         <%= f.text_field :name, class: 'w-full input input-bordered input-primary', required: true %>
