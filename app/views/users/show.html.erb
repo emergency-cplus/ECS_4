@@ -3,30 +3,27 @@
 
   <!-- ページタイトルを中央寄せにし、上の余白を加える -->
   <h1 class="text-2xl font-bold my-20 text-center">ユーザー詳細情報</h1>
-  
-<div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20" style="width: 360px;">
-    <div class= "space-y-4">
-      <table class="table-auto w-full border-collapse border border-gray-300">
-        <tbody>
-          <tr>
-            <th class="border border-gray-300 px-4 py-2 text-left bg-gray-100">名前</th>
-            <td class="border border-gray-300 px-4 py-2"><%= @user.name %></td>
-          </tr>
-          <tr>
-            <th class="border border-gray-300 px-4 py-2 text-left bg-gray-100">メールアドレス</th>
-            <td class="border border-gray-300 px-4 py-2"><%= @user.email %></td>
-          </tr>
-          <tr>
-            <th class="border border-gray-300 px-4 py-2 text-left bg-gray-100">メッセージテンプレート</th>
-            <td class="border border-gray-300 px-4 py-2"><%= @user.message_template %></td>
-          </tr>
-        </tbody>
-      </table>
+
+  <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
+    <div class="space-y-4">
+      <div class="mb-4">
+        <label class="block text-gray-700">名前</label>
+        <div class="w-full input input-bordered input-primary mt-1 p-2 bg-white flex items-center"><%= @user.name %></div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700">メールアドレス</label>
+        <div class="w-full input input-bordered input-primary mt-1 p-2 bg-white flex items-center"><%= @user.email %></div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700">メッセージテンプレート</label>
+        <div class="w-full input input-bordered input-primary mt-1 p-2 bg-white h-64 flex items-center"><%= @user.message_template %></div>
+      </div>
+      <br>
       <div class="flex justify-between mt-5">
         <%= link_to '編集', edit_user_path(@user), class: 'btn btn-green' %>
-        <%= link_to 'パスワード変更', "#", class: 'btn btn-blue' %> 
+        <%= link_to 'パスワード変更', "#", class: 'btn btn-blue' %>
         <!-- ここにパスワード変更のリンクを追加 edit_password_user_path(@user) -->
       </div>
+    </div>
   </div>
-</div>
 </div>
