@@ -67,13 +67,16 @@ ja:
       body: 本文
     create:
       success: アイテムを作成しました
-      failure: アイテムを作成出来ませんでした
+      failure: アイテムを作成できませんでした
     show:
       title: アイテム詳細
     index:
       title: アイテム一覧
     edit:
       title: アイテム編集
+    update:
+      success: アイテムを更新しました
+      failure: アイテムを更新できませんでした
     dones:
       title: 送信済み一覧
       no_result: 情報がありません

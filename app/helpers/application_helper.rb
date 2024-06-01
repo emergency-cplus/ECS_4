@@ -1,10 +1,19 @@
 module ApplicationHelper
-    def get_youtube_shorts_id(url)
-      if url.include?('youtube.com/shorts/')
-        video_id = url.split('youtube.com/shorts/')[1].split('?')[0]
-        return video_id
-      end
-      nil
+  def get_youtube_shorts_id(url)
+    if url.include?('youtube.com/shorts/')
+      video_id = url.split('youtube.com/shorts/')[1].split('?')[0]
+      return video_id
+    end
+    nil
+  end
+
+  def flash_background_color(type)
+    case type.to_sym
+    when :success then "bg-primary"   # 成功メッセージ用
+    when :danger then "bg-accent"      # 警告メッセージ用
+    when :error then "bg-info"      # エラーメッセージ用
+    else "bg-gray-500"                 # その他のメッセージ用
     end
   end
-  
+
+end
