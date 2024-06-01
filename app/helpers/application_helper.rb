@@ -9,9 +9,9 @@ module ApplicationHelper
 
   def flash_background_color(type)
     case type.to_sym
-    when :success then "bg-primary"   # 成功メッセージ用
+    when :success then "bg-info"   # 成功メッセージ用
     when :danger then "bg-accent"      # 警告メッセージ用
-    when :error then "bg-info"      # エラーメッセージ用
+    when :error then "bg-gray-500"      # エラーメッセージ用
     else "bg-gray-500"                 # その他のメッセージ用
     end
   end
