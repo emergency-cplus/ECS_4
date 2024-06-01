@@ -13,72 +13,23 @@
         </button>
       </div>
 
-      <div class="hidden md:flex space-x-6 items-center">
-        <div class="relative">
-          <%= link_to t('header.item'), '#', class: "text-gray-700 hover:text-gray-900", id: "header-item-menu-button" %>
-          <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg hidden" id="header-item-menu">
-            <%= link_to t('header.item_index'), items_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %>
-            <%= link_to t('header.create_item'), '/items/new', class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %>
-          </div>
-        </div>
+      <div class="dropdown dropdown-bottom dropdown-end" style="z-index: 200;">
+        <div tabindex="0" role="button" class="bg-transparent text-black">アイテム</div>
+          <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+            <li><%= link_to 'アイテム一覧', items_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %></li>
+            <li><%= link_to 'アイテム作成', new_item_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %></li>
+          </ul>
+      </div>
 
-        <%= link_to t('header.done_index'), "#", class: "text-gray-700 hover:text-gray-900" %>
+      <%= link_to '送信一覧', "#", class: "text-gray-700 hover:text-gray-900" %>
 
-        <div class="relative">
-          <%= link_to '#', class: "text-gray-700 hover:text-gray-900", id: "header-profile-button" do %>
-            <%= current_user.name %>
-          <% end %>
-          <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg hidden" id="header-profile-menu">
-            <%= link_to t('header.user_show'), user_path(current_user), class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %>
-            <div class="border-t border-gray-200"></div>
-            <%= link_to t('header.logout'), logout_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100', data: { turbo_method: :delete } %>
-          </div>
-        </div>
+      <div class="dropdown dropdown-bottom dropdown-end" style="z-index: 200;">
+        <div tabindex="0" role="button" class="bg-transparent text-black"><%= current_user.name %></div>
+          <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+            <li><%= link_to 'ユーザー詳細', user_path(current_user), class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %></li>
+            <li><%= link_to 'ログアウト', logout_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100', data: { turbo_method: :delete } %></li>
+          </ul>
       </div>
     </div>
   </nav>
-
-  <script>
-    // Toggle item dropdown menu
-    document.getElementById('header-item-menu-button').addEventListener('click', function() {
-      var menu = document.getElementById('header-item-menu');
-      menu.classList.toggle('hidden');
-    });
-
-    // Toggle profile dropdown menu
-    document.getElementById('header-profile-button').addEventListener('click', function() {
-      var menu = document.getElementById('header-profile-menu');
-      menu.classList.toggle('hidden');
-    });
-  </script>
-
-<!--
-
-<div class="drawer drawer-end">
-  <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
-  <div class="drawer-content">
-    <-- Page content here --
-    <label for="my-drawer-4" class="drawer-button btn btn-primary">menu</label>
-  </div> 
-  <div class="drawer-side z-70">
-    <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-    <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-      <-- Sidebar content here --
-      <li><a>Sidebar Item 1</a></li>
-      <li><a>Sidebar Item 2</a></li>
-      <div class="flex flex-col w-full">
-  <div class="divider">Default</div>
-  </div>
-      <li><a>Sidebar Item 1</a></li>
-      <li><a>Sidebar Item 1</a></li>
-      <li><a>Sidebar Item 1</a></li>
-      <li><a>Sidebar Item 1</a></li>
-
-    </ul>
-  </div>
-</div>
-
--->
-
 </header>
-
