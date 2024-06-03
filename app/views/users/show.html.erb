@@ -7,7 +7,7 @@
   <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
     <div class="space-y-4">
       <div class="mb-4">
-        <label class="block text-gray-700">名前</label>
+        <label class="block text-gray-700">ユーザー名</label>
         <div class="w-full input input-bordered input-primary mt-1 p-2 bg-white flex items-center"><%= @user.name %></div>
       </div>
       <div class="mb-4">
@@ -16,10 +16,10 @@
       </div>
       <div class="mb-4">
         <label class="block text-gray-700">メッセージテンプレート</label>
-        <div class="w-full input input-bordered input-primary mt-1 p-2 bg-white h-64 flex items-center"><%= @user.message_template %></div>
+        <div class="w-full input input-bordered input-primary mt-1 p-2 bg-white h-32 flex items-center"><%= @user.message_template %></div>
       </div>
       <br>
-      <div class="flex justify-between mt-5">
+      <div class="flex justify-end space-x-2 mt-4">
         <%= link_to '編集', edit_user_path(@user), class: 'btn btn-primary' %>
         <%= link_to 'パスワード変更', "#", class: 'btn btn-secondary' %>
         <!-- ここにパスワード変更のリンクを追加 edit_password_user_path(@user) -->
