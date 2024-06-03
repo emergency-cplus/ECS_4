@@ -11,19 +11,20 @@
         <%= render 'shared/error_messages', object: f.object %>
         
         <div class="mb-4">
-          <%= f.label :name, class: 'block text-gray-700' %>
+          <%= f.label 'ユーザー名', class: 'block text-gray-700' %>
           <%= f.text_field :name, class: 'w-full input input-bordered input-primary mt-1' %>
         </div>
         <div class="mb-4">
-          <%= f.label :email, class: 'block text-gray-700' %>
+          <%= f.label 'メールアドレス', class: 'block text-gray-700' %>
           <%= f.email_field :email, class: 'w-full input input-bordered input-primary mt-1' %>
         </div>
         <div class="mb-4">
-          <%= f.label :message_template, class: 'block text-gray-700' %>
+          <%= f.label 'メッセージテンプレート', class: 'block text-gray-700' %>
           <%= f.text_area :message_template, class: 'w-full textarea textarea-bordered textarea-primary mt-1' %>
         </div>
-        <div class="text-center">
-          <%= f.submit class: 'btn btn-primary' %>
+        <br>
+        <div class="text-center mt-4">
+          <%= f.submit '更新', class: 'btn btn-primary' %>
         </div>
       <% end %>
     </div>
