@@ -7,19 +7,23 @@
   <div class="flex flex-col sm:flex-row justify-center items-center sm:space-x-20">
 
     <!-- 詳細情報 -->
-    <div class="p-6 bg-slate-50 rounded-md shadow-md sm:max-w-md" style="width: 360px;">
-      <div class="mb-6">
-        <h1 class="font-bold">タイトル</h1>
-        <p><%= @item.title %></p>
+  <div class="p-6 bg-slate-50 rounded-md shadow-md" style="width: 360px;">
+    <div class="space-y-4">
+      <div class="mb-4">
+        <label class="block text-gray-700">タイトル</label>
+        <div class="w-full input input-bordered input-primary-content mt-1 p-2 bg-white flex items-center"><%= @item.title %></div>
       </div>
-      <div class="mb-6">
-        <h1 class="font-bold">説明</h1>
-        <p><%= @item.description %></p>
+      <div class="mb-4">
+        <label class="block text-gray-700">説明</label>
+        <div class="w-full input input-bordered input-primary-content mt-1 p-2 bg-white flex items-center"><%= @item.description %></div>
       </div>
-      <div class="mb-6">
-        <h1 class="font-bold">動画URL</h1>
-        <a href="<%= @item.item_url %>"><%= @item.item_url %></a>
+      <div class="mb-4">
+        <label class="block text-gray-700">動画URL</label>
+        <div class="w-full input input-bordered input-primary-content mt-1 p-2 bg-white h-32 flex items-center">
+          <%= @item.item_url %>
+        </div>
       </div>
+      <br>
       <div class='flex justify-end space-x-2 mt-4'>
         <%= link_to '編集', edit_item_path(@item), class: "btn btn-primary", id: "button-edit-#{@item.id}" %> 
         <%= link_to '削除', item_path(@item),
@@ -32,6 +36,7 @@
         <%= link_to "一覧に戻る", items_path, class: "btn-link" %>
       </div>
     </div>
+  </div>
 
     <!-- プレビュー画面 -->
     <div class="mockup-phone" style="width: 360px;">
