@@ -1,4 +1,4 @@
-<div class="col-span-1 mb-3">
+<div class="col-span-1 mb-3 max-h-480 min-h-240">
   <div id="post-id-<%= item.id %>" class="bg-white shadow-md rounded-md p-4 h-full">
     <%= link_to item_path(item), class: "block h-full" do %>
       <div class="text-center h-full flex flex-col justify-between">
@@ -14,9 +14,7 @@
         <div class="mt-4">
           <div class="text-lg font-semibold">
             <%= item.title %>
-            <p>
-              [タグ]
-            </p>
+            <p>[タグ]</p>
             <%= link_to '送信する', '#', class: "btn btn-primary" %>
           </div>
         </div>
