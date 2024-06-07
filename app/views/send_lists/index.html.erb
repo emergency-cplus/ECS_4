@@ -19,7 +19,7 @@
               <th class="px-6 py-4"><%= index + 1 %></th>
               <td class="px-6 py-4"><%= send_list.phone_number %></td>
               <td class="px-6 py-4"><%= send_list.send_at %></td>
-              <td class="px-6 py-4"><%= send_list.item_id %></td>
+              <td class="px-6 py-4"><%= get_youtube_shorts_id(send_list.item.item_url) %></td>
               <td class="px-6 py-4"><%= send_list.sender %></td>
             </tr>
           <% end %>
