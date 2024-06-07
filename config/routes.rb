@@ -13,4 +13,7 @@ Rails.application.routes.draw do
   resources :users, only: [:new, :create, :show, :edit, :update]
 
   resources :items
+
+  resources :send_lists
+
 end
