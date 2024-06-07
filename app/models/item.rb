@@ -1,5 +1,6 @@
 class Item < ApplicationRecord
   belongs_to :user
+  has_many :send_lists
 
   validates :title, presence: true, length: { maximum: 255 }
   validates :item_url, presence: true, length: { maximum: 255 }
