@@ -1,24 +1,49 @@
 <div class="col-span-1 mb-3 max-h-480 min-h-240">
   <div id="post-id-<%= item.id %>" class="bg-white shadow-md rounded-md p-4 h-full">
-    <%= link_to item_path(item), class: "block h-full" do %>
-      <div class="text-center h-full flex flex-col justify-between">
-        <div class="relative" style="padding-bottom: 177.78%; height: 0; overflow: hidden;">
-          <iframe
-            class="absolute top-0 left-0 w-full h-full"
-            src="https://www.youtube.com/embed/<%= get_youtube_shorts_id(item.item_url) %>"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-          </iframe>
-        </div>
-        <div class="mt-4">
-          <div class="text-lg font-semibold">
-            <%= item.title %>
-            <p>[タグ]</p>
-            <%= link_to '送信する', '#', class: "btn btn-primary" %>
-          </div>
-        </div>
+    <div class="text-center h-full flex flex-col justify-between">
+      <div class="relative" style="padding-bottom: 177.78%; height: 0; overflow: hidden;">
+        <iframe
+          class="absolute top-0 left-0 w-full h-full"
+          src="https://www.youtube.com/embed/<%= get_youtube_shorts_id(item.item_url) %>"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
       </div>
-    <% end %>
+      <div class="mt-4">
+        <!-- タイトルのみをリンクにする -->
+        <div class="text-lg font-semibold">
+          <%= link_to item.title, item_path(item), class: "block" %>
+        </div>
+        <p>[タグ]</p>
+        <!-- モーダルを開くボタン -->
+        <button class="btn btn-primary" onclick="document.getElementById('sendModal-<%= item.id %>').showModal()">送信する</button>
+        
+        <!-- モーダルの定義 -->
+        <dialog id="sendModal-<%= item.id %>" class="modal">
+          <div class="modal-box">
+            <button class="btn btn-sm btn-circle absolute right-2 top-2" onclick="document.getElementById('sendModal-<%= item.id %>').close()">✕</button>
+            <h3 class="font-bold text-lg">SMSを送信</h3>
+            <form method="post" action="/send_sms">
+              <div class="mb-4">
+                <label class="label">
+                  <span class="label-text">送信先電話番号:</span>
+                </label>
+                <input type="text" placeholder="電話番号を入力" name="phone_number" class="input input-bordered w-full max-w-xs" required>
+              </div>
+              <div class="mb-4">
+                <label class="label">
+                  <span class="label-text">送信者名:</span>
+                </label>
+                <input type="text" placeholder="送信者名を入力" name="sender_name" class="input input-bordered w-full max-w-xs" required>
+              </div>
+              <div class="modal-action">
+                <input type="submit" value="SMSを送信" class="btn btn-primary">
+              </div>
+            </form>
+          </div>
+        </dialog>
+      </div>
+    </div>
   </div>
 </div>
