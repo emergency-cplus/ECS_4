@@ -18,9 +18,11 @@ class SendListsController < ApplicationController
   def create
     @send_list = SendList.new(send_list_params)
     if @send_list.save
-      redirect_to @send_list, notice: 'Send list was successfully created.'
+      flash[:success] = "SMSが正常に送信されました。"
+      redirect_to root_path # 適切なリダイレクト先に変更してください。
     else
-      render :new
+      flash[:error] = "SMSの送信に失敗しました。"
+      render 'new' # 適切なビューに戻るように調整してください。
     end
   end
 
@@ -43,6 +45,6 @@ class SendListsController < ApplicationController
     end
 
     def send_list_params
-      params.require(:send_list).permit(:item_id, :phone_number, :send_at, :sender_name, :user_id)
+      params.require(:send_list).permit(:phone_number, :sender_name, :item_id, :user_id, :send_at)
     end
 end

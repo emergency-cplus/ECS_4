@@ -15,5 +15,6 @@ Rails.application.routes.draw do
   resources :items
 
   resources :send_lists
+  post 'send_sms', to: 'send_lists#create', as: 'send_sms'
 
 end
