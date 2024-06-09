@@ -11,34 +11,30 @@
         </iframe>
       </div>
       <div class="mt-4">
-        <!-- タイトルのみをリンクにする -->
         <div class="text-lg font-semibold">
           <%= link_to item.title, item_path(item), class: "block" %>
         </div>
         <p>[タグ]</p>
-        <!-- モーダルを開くボタン -->
-        <button class="btn btn-primary" onclick="document.getElementById('sendModal-<%= item.id %>').showModal()">送信する</button>
-        
-        <!-- モーダルの定義 -->
+        <div class="flex justify-end">
+          <button class="btn btn-primary" onclick="document.getElementById('sendModal-<%= item.id %>').showModal()">
+            <i class="ph ph-rocket-launch large-icon"></i> <!-- Phosphor icon for sending -->
+          </button>
+        </div>
         <dialog id="sendModal-<%= item.id %>" class="modal">
           <div class="modal-box">
             <button class="btn btn-sm btn-circle absolute right-2 top-2" onclick="document.getElementById('sendModal-<%= item.id %>').close()">✕</button>
-            <h3 class="font-bold text-lg">SMSを送信</h3>
-            <form method="post" action="/send_sms">
-              <div class="mb-4">
-                <label class="label">
-                  <span class="label-text">送信先電話番号:</span>
-                </label>
-                <input type="text" placeholder="電話番号を入力" name="phone_number" class="input input-bordered w-full max-w-xs" required>
+            <h3 class="font-bold text-lg mb-4">送信フォーム</h3> <!-- 追加したマージン -->
+            <form method="post" action="/send_sms" class="flex flex-col items-center gap-4">
+              <div class="w-full max-w-xs"> <!-- マージン追加でフォームのタイトルと間隔を開ける -->
+                <label class="label block text-left">送信先電話番号:</label>
+                <input type="text" placeholder="ハイフンなし" name="phone_number" class="input input-bordered w-full" required>
               </div>
-              <div class="mb-4">
-                <label class="label">
-                  <span class="label-text">送信者名:</span>
-                </label>
-                <input type="text" placeholder="送信者名を入力" name="sender_name" class="input input-bordered w-full max-w-xs" required>
+              <div class="w-full max-w-xs">
+                <label class="label block text-left">送信者名:</label>
+                <input type="text" placeholder="送信者名を入力" name="sender_name" class="input input-bordered w-full" required>
               </div>
               <div class="modal-action">
-                <input type="submit" value="SMSを送信" class="btn btn-primary">
+                <input type="submit" value="送信する" class="btn btn-primary">
               </div>
             </form>
           </div>
