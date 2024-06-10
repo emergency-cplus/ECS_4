@@ -90,6 +90,7 @@
 ### **技術スタック**
 
 - フロントエンド: HTML, CSS, JavaScript
+  TailwindCSS, phosphoricons
 - バックエンド: Ruby (Ruby on Rails)
 - データベース: MySQL => PostgreSQL へ変更
 - インフラ: Docker環境
