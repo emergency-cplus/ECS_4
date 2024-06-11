@@ -27,9 +27,14 @@
           </div>
         </div>
         <div class='flex justify-end space-x-2 mt-4'>
-          <%= link_to '編集', edit_item_path(@item), class: "btn btn-primary", id: "button-edit-#{@item.id}" %> 
-          <%= link_to '削除', item_path(@item), method: :delete, data: { turbo_confirm: '削除しますか?', turbo_method: :delete }, class: "btn btn-accent", id: "button-delete-#{@item.id}" %>
+          <%= link_to edit_item_path(@item), class: "btn btn-primary", id: "button-edit-#{@item.id}" do %>
+            <i class="ph ph-note-pencil large-icon"></i> 編集
+          <% end %>
+          <%= link_to item_path(@item), method: :delete, data: { turbo_confirm: '削除しますか?', turbo_method: :delete }, class: "btn btn-accent", id: "button-delete-#{@item.id}" do %>
+            <i class="ph ph-trash large-icon"></i> 削除
+          <% end %>
         </div>
+
         <!-- Back link positioned at the bottom of the card -->
         <div class="flex justify-end mt-6">
           <%= link_to "一覧に戻る", items_path, class: "btn-link" %>

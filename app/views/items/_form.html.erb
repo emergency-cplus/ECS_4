@@ -32,9 +32,11 @@
           <%= f.label :item_url, "動画URL", class: "block text-gray-700" %>
           <%= f.text_area :item_url, placeholder: 'YouTube shortsのURLを貼り付ける', class: "w-full textarea textarea-bordered textarea-primary mt-1 h-32", data: { video_preview_target: "url" } %>
         </div>
-        <br>
-        <div class="flex justify-end">
-          <%= f.submit '保存', class: "btn btn-primary" %>
+
+        <div class="flex justify-end space-x-2 mt-4">
+          <%= f.button type: 'submit', class: 'btn btn-primary' do %>
+            <i class="ph ph-download-simple large-icon"></i> 保存
+          <% end %>
         </div>
       <% end %>
     </div>
