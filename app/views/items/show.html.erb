@@ -36,9 +36,12 @@
         </div>
 
         <!-- Back link positioned at the bottom of the card -->
-        <div class="flex justify-end mt-6">
-          <%= link_to "一覧に戻る", items_path, class: "btn-link" %>
-        </div>
+        <div class='flex justify-end'>
+  <ul class="menu menu-horizontal px-1">
+    <li><%= link_to '一覧に戻る', items_path %></li>
+  </ul>
+</div>
+
       </div>
     </div>
 

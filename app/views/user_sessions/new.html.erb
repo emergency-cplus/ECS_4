@@ -2,7 +2,7 @@
 <div class="mx-5 mt-5 sm:mt-20" data-controller="video-preview">
 
   <!-- ページタイトルを中央寄せにし、上の余白を加える -->
-  <h1 class="text-2xl font-bold my-20 text-center">ログイン</h1>
+  <h1 class="text-2xl font-bold my-20 text-center">ユーザーログイン</h1>
 
   <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
     
@@ -12,11 +12,14 @@
         <%= f.text_field :email, class: 'w-full input input-bordered input-primary' %>
         <%= f.label :password, 'パスワード' %>
         <%= f.password_field :password, class: 'w-full input input-bordered input-primary space-y-4' %>
-        <div class="text-3xl font-semibold text-center">
-          <%= f.submit 'ログイン', class: 'btn my-3 btn-green' %>
+        <div class="flex justify-end space-x-2 mt-4">
+          <%= f.button type: 'submit', class: 'btn btn-primary' do %>
+          <i class="ph ph-user large-icon"></i> ログイン
+          <% end %>
         </div>
       <% end %>
     </div>
+    <br>
     <div class='text-center'>
       <ul class="menu menu-horizontal px-1">
         <li><%= link_to '新規登録ページへ', new_user_path %></li>

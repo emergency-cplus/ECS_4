@@ -18,13 +18,18 @@
         <%= f.label :password_confirmation, 'パスワード確認' %>
         <%= f.password_field :password_confirmation, class: 'w-full input input-bordered input-primary', required: true %>
         
-        <div class="text-3xl font-semibold text-center">
-          <%= f.submit '新規登録', class: 'btn my-3 btn-green' %>
+        <div class="flex justify-end space-x-2 mt-4">
+          <%= f.button type: 'submit', class: 'btn btn-primary' do %>
+            <i class="ph ph-user-plus large-icon"></i> 新規登録
+          <% end %>
         </div>
       <% end %>
     </div>
-    <div class='text-center link link-neutral'>
-      <%= link_to 'ログインページへ', login_path %>
+    <br>
+    <div class='text-center'>
+      <ul class="menu menu-horizontal px-1">
+        <li><%= link_to 'ログインページへ', login_path %></li>
+      <ul>
     </div>
   </div>
 </div>
