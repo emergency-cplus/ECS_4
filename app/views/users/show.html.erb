@@ -1,9 +1,5 @@
-<!-- ページの全体的なマージンとパディングを設定 -->
 <div class="mx-5 mt-5 sm:mt-20" data-controller="video-preview">
-
-  <!-- ページタイトルを中央寄せにし、上の余白を加える -->
   <h1 class="text-2xl font-bold my-20 text-center">ユーザー詳細情報</h1>
-
   <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
     <div class="space-y-4">
       <div class="mb-4">
@@ -18,11 +14,13 @@
         <label class="block text-gray-700">メッセージテンプレート</label>
         <div class="w-full input input-bordered input-primary-content mt-1 p-2 bg-white h-32 flex items-center"><%= @user.message_template %></div>
       </div>
-      <br>
       <div class="flex justify-end space-x-2 mt-4">
-        <%= link_to '編集', edit_user_path(@user), class: 'btn btn-primary' %>
-        <%= link_to 'パスワード変更', "#", class: 'btn btn-secondary' %>
-        <!-- ここにパスワード変更のリンクを追加 edit_password_user_path(@user) -->
+        <%= link_to edit_user_path(@user), class: "btn btn-primary", id: "button-edit-#{@user.id}" do %>
+          <i class="ph ph-note-pencil large-icon"></i> 編集
+        <% end %>
+      </div>
+      <div class="mt-6">
+        <%= link_to "パスワード変更はこちら", items_path, class: "btn-link" %>
       </div>
     </div>
   </div>
