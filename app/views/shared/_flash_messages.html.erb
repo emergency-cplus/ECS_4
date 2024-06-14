@@ -1,4 +1,4 @@
-<div class="mx-2" style="position: relative; z-index: 100;">
+<div class="flash-message" style="position: relative;">
   <% flash.each do |message_type, message| %>
     <div class="<%= flash_background_color(message_type) %> px-4 py-2 rounded-md text-white mb-4">
       <%= message %>
