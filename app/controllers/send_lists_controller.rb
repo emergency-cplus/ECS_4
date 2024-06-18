@@ -1,5 +1,5 @@
 class SendListsController < ApplicationController
-  before_action :set_send_list, only: [:show, :edit, :update, :destroy]
+  before_action :set_send_list, only: [:show, :edit, :update]
 
   def index
     @send_lists = SendList.all
@@ -16,15 +16,28 @@ class SendListsController < ApplicationController
   end
 
   def create
-    @send_list = SendList.new(send_list_params)
-    if @send_list.save
-      flash[:success] = "SMSが正常に送信されました。"
-      redirect_to root_path # 適切なリダイレクト先に変更してください。
-    else
-      flash[:error] = "SMSの送信に失敗しました。"
-      render 'new' # 適切なビューに戻るように調整してください。
-    end
+  sms_sender = SmsSender.new
+  item = Item.find(params[:item_id])
+
+  response = sms_sender.send_sms(
+    to: params[:phone_number],
+    body: "#{User.find(item.user_id).message_template} Check this out: #{item.item_url}",
+    item: item
+  )
+
+  if response.status == 'queued'
+    SendList.create(
+      phone_number: params[:phone_number],
+      send_at: Time.zone.now,
+      sender: params[:sender_name],
+      item_id: item.id,
+      user_id: current_user.id
+    )
+    redirect_to send_lists_path, notice: 'SMSを送信しました。'
+  else
+    redirect_to send_lists_path, alert: 'SMSの送信に失敗しました。'
   end
+end
 
   def update
     if @send_list.update(send_list_params)
@@ -32,11 +45,6 @@ class SendListsController < ApplicationController
     else
       render :edit
     end
-  end
-
-  def destroy
-    @send_list.destroy
-    redirect_to send_lists_url, notice: 'Send list was successfully destroyed.'
   end
 
   private
