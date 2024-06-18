@@ -23,6 +23,10 @@ module App
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # servicesディレクトリの読み込みを追加
+    config.autoload_paths += %W(#{config.root}/app/services)
+
     config.generators do |g|
       g.skip_routes true
       g.helper false

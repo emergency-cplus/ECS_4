@@ -3,12 +3,26 @@ class SmsSender
     @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
   end
 
-  # SMSを送信するメソッド
-  def send_sms(to:, body:)
+  def send_sms(to:, body:, item:)
+    formatted_phone_number = format_phone_number(to)
+    return unless formatted_phone_number
+
+    user_message = User.find(item.user_id).message_template
+    full_body = "#{user_message} Check this out: #{item.item_url}"
+
     @client.messages.create(
-      from: ENV['TWILIO_PHONE_NUMBER'], # 送信元の電話番号
-      to: to,                           # 送信先の電話番号
-      body: body                        # 送信するメッセージ本文
+      from: ENV['TWILIO_PHONE_NUMBER'],
+      to: formatted_phone_number,
+      body: full_body
     )
+  end
+
+  private
+
+  # 電話番号を国際形式にフォーマット
+  def format_phone_number(phone_number)
+    phone_number = phone_number.gsub(/\D/, '') # 数字のみ取り出す
+    return nil unless phone_number.length == 10 || phone_number.length == 11
+    "+81#{phone_number[1..]}"
   end
 end
