@@ -5,15 +5,13 @@ class SendListsController < ApplicationController
     @send_lists = SendList.all
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @send_list = SendList.new
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
   sms_sender = SmsSender.new
@@ -33,19 +31,13 @@ class SendListsController < ApplicationController
       item_id: item.id,
       user_id: current_user.id
     )
-    redirect_to send_lists_path, notice: 'SMSを送信しました。'
+    redirect_to send_lists_path, success: 'SMSを送信しました。'
   else
     redirect_to send_lists_path, alert: 'SMSの送信に失敗しました。'
   end
 end
 
-  def update
-    if @send_list.update(send_list_params)
-      redirect_to @send_list, notice: 'Send list was successfully updated.'
-    else
-      render :edit
-    end
-  end
+  def update; end
 
   private
     def set_send_list
