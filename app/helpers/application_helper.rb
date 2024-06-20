@@ -16,4 +16,7 @@ module ApplicationHelper
     end
   end
 
+  def mask_phone_number(phone_number)
+    phone_number.gsub(/(\d{3})\d*(\d{2})$/, '\1******\2')
+  end
 end

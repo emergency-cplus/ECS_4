@@ -8,7 +8,7 @@ class SmsSender
     return unless formatted_phone_number
 
     user_message = User.find(item.user_id).message_template
-    full_body = "#{user_message} Check this out: #{item.item_url}"
+    full_body = "#{user_message} #{item.item_url} 身に覚えのない場合は無視してください。"
 
     @client.messages.create(
       from: ENV['TWILIO_PHONE_NUMBER'],
