@@ -38,9 +38,9 @@ class SendListsController < ApplicationController
         item_id: item.id,
         user_id: current_user.id
       )
-      redirect_to send_lists_path, notice: 'SMSを送信しました。'
+      redirect_to send_lists_path, success: 'SMSを送信しました。'
     else
-      redirect_to send_lists_path, alert: 'SMSの送信に失敗しました。'
+      redirect_to send_lists_path, danger: 'SMSの送信に失敗しました。'
     end
   end
 
