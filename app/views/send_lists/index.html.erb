@@ -9,7 +9,8 @@
             <th class="px-6 py-3">No.</th>
             <th class="px-6 py-3">送信先番号</th>
             <th class="px-6 py-3">送信日時</th>
-            <th class="px-6 py-3">送信動画ID</th>
+            <th class="px-6 py-3">動画タイトル</th>
+            <th class="px-6 py-3">動画ID</th>
             <th class="px-6 py-3">送信者</th>
           </tr>
         </thead>
@@ -21,6 +22,7 @@
               <td class="px-6 py-4"><%= mask_phone_number(send_list.phone_number) %></td>
               <%# UTCからJST（東京時刻）に変換 %>
               <td class="px-6 py-4"><%= send_list.send_at.in_time_zone('Tokyo').strftime('%Y-%m-%d %H:%M:%S') %></td>
+              <td class="px-6 py-4"><%= send_list.item.title %></td>
               <td class="px-6 py-4"><%= get_youtube_shorts_id(send_list.item.item_url) %></td>
               <td class="px-6 py-4"><%= send_list.sender %></td>
             </tr>
