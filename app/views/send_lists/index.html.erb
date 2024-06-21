@@ -29,7 +29,12 @@
           <% end %>
         </tbody>
         <tfoot></tfoot>
+        
       </table>
+      <!-- ページネーションコントロールを追加 -->
+            <div class="flex justify-center mt-10 mb-20">
+              <%= render 'send_lists/send_lists_paginator', send_lists: @send_lists %>
+            </div>
     </div>
   </div>
 </div>

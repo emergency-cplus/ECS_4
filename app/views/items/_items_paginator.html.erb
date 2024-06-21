@@ -1,0 +1,29 @@
+<%# The container tag
+  - available local variables
+    current_page:  a page object for the currently displayed page
+    total_pages:   total number of pages
+    per_page:      number of items to fetch per page
+    remote:        data-remote
+    paginator:     the paginator that renders the pagination tags inside
+-%>
+<div class="join">
+  <% if @items.total_pages > 1 %>
+    <%= link_to '1', items_path(page: 1), class: "join-item btn bg-gray-700 text-white py-4" + (@items.current_page == 1 ? ' btn-active' : '') %>
+
+    <% if @items.current_page > 3 %>
+      <button class="join-item btn bg-gray-700 text-white py-4 btn-disabled">...</button>
+    <% end %>
+
+    <% [@items.current_page - 1, @items.current_page, @items.current_page + 1].each do |page| %>
+      <% if page > 1 && page < @items.total_pages %>
+        <%= link_to page, items_path(page: page), class: "join-item btn bg-gray-700 text-white py-4" + (@items.current_page == page ? ' btn-active' : '') %>
+      <% end %>
+    <% end %>
+
+    <% if @items.current_page < @items.total_pages - 2 %>
+      <button class="join-item btn bg-gray-700 text-white py-4 btn-disabled">...</button>
+    <% end %>
+
+    <%= link_to @items.total_pages, items_path(page: @items.total_pages), class: "join-item btn bg-gray-700 text-white py-4" + (@items.current_page == @items.total_pages ? ' btn-active' : '') %>
+  <% end %>
+</div>

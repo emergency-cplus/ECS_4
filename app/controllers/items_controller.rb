@@ -2,7 +2,7 @@ class ItemsController < ApplicationController
   before_action :set_item, only: %i[show edit update destroy]
 
   def index
-    @items = current_user.items.order(created_at: :desc)
+    @items = current_user.items.order(created_at: :desc).page(params[:page]).per(1)
   end
 
   def show; end
