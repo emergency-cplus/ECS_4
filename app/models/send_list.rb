@@ -4,4 +4,5 @@ class SendList < ApplicationRecord
 
   validates :phone_number, presence: true
   validates :sender, presence: true
+  
 end

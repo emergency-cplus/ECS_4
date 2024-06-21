@@ -2,7 +2,7 @@ class SendListsController < ApplicationController
   before_action :set_send_list, only: [:show, :edit, :update]
 
   def index
-    @send_lists = SendList.all
+    @send_lists = SendList.order(created_at: :desc).page(params[:page]).per(10)
   end
 
   def show; end
