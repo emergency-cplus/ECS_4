@@ -16,12 +16,17 @@
         <% end %>
       </div>
     </div>
+
+    <!-- ページネーションコントロールを追加 -->
+    <div class="flex justify-center mt-10 mb-20">
+      <%= render 'items/items_paginator', items: @items %>
+    </div>
   <% else %>
     <!-- 保存されたアイテムがないときのメッセージを中央寄せで表示 -->
     <div class="text-center mt-10">
       <p class="text-lg">まだアイテムがありません...</p>
       <br>
-      <%= button_to '新規作成する', '/items/new', method: :get, class: "btn btn-primary" %>
+      <%= button_to '新規作成する', new_item_path, method: :get, class: "btn btn-primary" %>
     </div>
   <% end %>
 </div>
