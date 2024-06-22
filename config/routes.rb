@@ -17,4 +17,5 @@ Rails.application.routes.draw do
   resources :send_lists
   post 'send_sms', to: 'send_lists#create', as: 'send_sms'
 
+  resources :password_resets, only: [:new, :create, :edit, :update]
 end
