@@ -4,7 +4,7 @@
 # Available submodules are: :user_activation, :http_basic_auth, :remember_me,
 # :reset_password, :session_timeout, :brute_force_protection, :activity_logging,
 # :magic_login, :external
-Rails.application.config.sorcery.submodules = []
+Rails.application.config.sorcery.submodules = [:reset_password]
 
 # Here you can configure each submodule's features.
 Rails.application.config.sorcery.configure do |config|
@@ -243,6 +243,15 @@ Rails.application.config.sorcery.configure do |config|
   # config.battlenet.scope = "openid"
   # --- user config ---
   config.user_config do |user|
+    user.reset_password_mailer = UserMailer
+    user.reset_password_email_method_name = :password_reset_email
+    user.reset_password_time_between_emails = 1.hour
+  
+    # パスワードリセットのトークン有効期限 (例: 24時間)
+    user.reset_password_expiration_period = 24.hours
+  
+    # パスワードリセットのメール送信を自動で行わない場合 (デフォルトは false)
+    # user.reset_password_mailer_disabled = true
     # -- core --
     # Specify username attributes, for example: [:username, :email].
     # Default: `[:email]`
