@@ -244,18 +244,7 @@ Rails.application.config.sorcery.configure do |config|
 
   # --- user config ---
   config.user_config do |user|
-    user.reset_password_mailer = UserMailer
-    user.reset_password_mailer_method_name = :reset_password_email
-    user.reset_password_email_method_name = :reset_password_email
-    user.reset_password_token_attribute_name = :reset_password_token
-    user.reset_password_token_expires_at_attribute_name = :reset_password_token_expires_at
-    user.reset_password_email_sent_at_attribute_name = :reset_password_email_sent_at
-    user.reset_password_time_between_emails = 1.hour
-  end
-
-  config.submodules = [:reset_password]
-
-  
+    
     # パスワードリセットのメール送信を自動で行わない場合 (デフォルトは false)
     # user.reset_password_mailer_disabled = true
     # -- core --
@@ -417,7 +406,7 @@ Rails.application.config.sorcery.configure do |config|
     # Password reset mailer class.
     # Default: `nil`
     #
-    # user.reset_password_mailer =
+    user.reset_password_mailer =UseMailer
 
     # Reset password email method on your mailer class.
     # Default: `:reset_password_email`
