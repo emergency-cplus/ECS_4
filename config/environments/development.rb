@@ -37,9 +37,13 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
-
   config.action_mailer.perform_caching = false
+
+  # Action Mailer Configuration for development using Letter Opener Web
+  config.action_mailer.delivery_method = :letter_opener_web
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -77,15 +81,4 @@ Rails.application.configure do
   config.hosts << "ecs-4.fly.dev"
 
   config.log_level = :debug
-
-  # Action Mailer Configuration
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address: "localhost",
-    port: 1025
-  }
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-  config.action_mailer.raise_delivery_errors = true
-
-
 end

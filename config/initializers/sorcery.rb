@@ -241,14 +241,20 @@ Rails.application.config.sorcery.configure do |config|
   # config.battlenet.secret = "xxxxxx"
   # config.battlenet.callback_url = "http://localhost:3000/oauth/callback?provider=battlenet"
   # config.battlenet.scope = "openid"
+
   # --- user config ---
   config.user_config do |user|
     user.reset_password_mailer = UserMailer
-    user.reset_password_email_method_name = :password_reset_email
+    user.reset_password_mailer_method_name = :reset_password_email
+    user.reset_password_email_method_name = :reset_password_email
+    user.reset_password_token_attribute_name = :reset_password_token
+    user.reset_password_token_expires_at_attribute_name = :reset_password_token_expires_at
+    user.reset_password_email_sent_at_attribute_name = :reset_password_email_sent_at
     user.reset_password_time_between_emails = 1.hour
-  
-    # パスワードリセットのトークン有効期限 (例: 24時間)
-    user.reset_password_expiration_period = 24.hours
+  end
+
+  config.submodules = [:reset_password]
+
   
     # パスワードリセットのメール送信を自動で行わない場合 (デフォルトは false)
     # user.reset_password_mailer_disabled = true
