@@ -10,11 +10,22 @@ Rails.application.routes.draw do
   post 'login', to: 'user_sessions#create'
   delete 'logout', to: 'user_sessions#destroy', as: :logout
 
-  resources :users, only: [:new, :create, :show, :edit, :update]
+  resources :users, only: [:new, :create, :show, :edit, :update] do
+    member do
+      get 'edit_password'
+      patch 'update_password'
+    end
+  end
 
   resources :items
 
   resources :send_lists
   post 'send_sms', to: 'send_lists#create', as: 'send_sms'
+
+  resources :password_resets, only: [:new, :create, :edit, :update]
+
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
 
 end
