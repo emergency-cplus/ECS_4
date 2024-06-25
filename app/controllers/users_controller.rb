@@ -34,10 +34,25 @@ class UsersController < ApplicationController
   end
 
   def update_password
+    @user = User.find(params[:id])
+    
+    # 新しいパスワードと確認用パスワードが一致するか確認のコードを先に記述しないと、以前のパスワードと新しいパスワードが一致する場合に、期待するエラーメッセージが表示されない
+    # 新しいパスワードと確認用パスワードが一致するか確認
+    if params[:user][:password] != params[:user][:password_confirmation]
+      redirect_to edit_password_user_path(@user), flash: { danger: '入力されたパスワードが一致しません。' }
+      return
+    end
+
+    # パスワードが以前と同じかどうかを確認
+    if same_as_old_password?(@user, params[:user][:password])
+      redirect_to edit_password_user_path(@user), flash: { danger: 'パスワードが更新できませんでした。' }
+      return
+    end
+
     if @user.update(user_password_params)
-      redirect_to @user, flash: { success: 'パスワードが更新されました。' }
+      redirect_to @user, flash: { success: 'パスワードを更新しました。' }
     else
-      render :edit_password
+      redirect_to edit_password_user_path(@user), flash: { danger: @user.errors.full_messages.join(', ') }
     end
   end
 
@@ -54,11 +69,16 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :password, :password_confirmation, :message_template)
   end
 
+  def set_user
+    @user = User.find(params[:id])
+  end
+
   def user_password_params
     params.require(:user).permit(:password, :password_confirmation)
   end
 
-  def set_user
-    @user = User.find(params[:id])
+  def same_as_old_password?(user, new_password)
+    user.crypted_password.present? && Sorcery::CryptoProviders::BCrypt.matches?(user.crypted_password, new_password, user.salt)
   end
+
 end
