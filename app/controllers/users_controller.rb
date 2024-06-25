@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :require_login, except: [:new, :create]
-  before_action :set_user, only: [:show, :edit, :update]
+  before_action :set_user, only: [:show, :edit, :update, :edit_password, :update_password]
 
   def new
     @user = User.new
@@ -8,9 +8,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    
     if @user.save
-      # あえてroot_pathにリダイレクトさせる
       redirect_to root_path, flash: { success: "ユーザー登録が成功しました" }
     else
       flash.now[:danger] = "ユーザー登録に失敗しました"
@@ -31,30 +29,38 @@ class UsersController < ApplicationController
     end
   end
 
-  # def edit_password
-  #   @user = current_user # ここで適切に@userをセットする
-  #   @user_password = UserPassword.new
-  # end
+  def edit_password
+    # 特に処理はなし
+  end
 
-  # def update_password
-  #   @user_password = UserPassword.new(password_params)
-  #   if @user_password.valid?
-  #     if @user.update(password: @user_password.password, password_confirmation: @user_password.password_confirmation)
-  #       redirect_to user_path(@user), flash: { success: t('users.update_password.success') }
-  #     else
-  #       flash.now[:danger] = t('users.update_password.failure')
-  #       render :edit_password, status: :unprocessable_entity
-  #     end
-  #   else
-  #     render :edit_password, status: :unprocessable_entity
-  #   end
-  # end
+  def update_password
+    @user = User.find(params[:id])
+    
+    # 新しいパスワードと確認用パスワードが一致するか確認のコードを先に記述しないと、以前のパスワードと新しいパスワードが一致する場合に、期待するエラーメッセージが表示されない
+    # 新しいパスワードと確認用パスワードが一致するか確認
+    if params[:user][:password] != params[:user][:password_confirmation]
+      redirect_to edit_password_user_path(@user), flash: { danger: '入力されたパスワードが一致しません。' }
+      return
+    end
+
+    # パスワードが以前と同じかどうかを確認
+    if same_as_old_password?(@user, params[:user][:password])
+      redirect_to edit_password_user_path(@user), flash: { danger: 'パスワードが更新できませんでした。' }
+      return
+    end
+
+    if @user.update(user_password_params)
+      redirect_to @user, flash: { success: 'パスワードを更新しました。' }
+    else
+      redirect_to edit_password_user_path(@user), flash: { danger: @user.errors.full_messages.join(', ') }
+    end
+  end
 
   private
 
   def require_login
     unless logged_in?
-      flash[:error] = "ログインしてください"
+      flash[:danger] = "ログインしてください"
       redirect_to login_url, status: :see_other
     end
   end
@@ -63,11 +69,16 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :password, :password_confirmation, :message_template)
   end
 
-  # def password_params
-  #   params.require(:user_password).permit(:password, :password_confirmation)
-  # end
-
   def set_user
     @user = User.find(params[:id])
   end
+
+  def user_password_params
+    params.require(:user).permit(:password, :password_confirmation)
+  end
+
+  def same_as_old_password?(user, new_password)
+    user.crypted_password.present? && Sorcery::CryptoProviders::BCrypt.matches?(user.crypted_password, new_password, user.salt)
+  end
+
 end

@@ -3,10 +3,14 @@
   <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
     <div class= "space-y-4">
       <%= form_with url: login_path, local: true do |f| %>
+      <div class="mb-4">
         <%= f.label :email, 'メールアドレス'%>
         <%= f.text_field :email, class: 'w-full input input-bordered input-primary' %>
+      </div>
+      <div class="mb-4">
         <%= f.label :password, 'パスワード' %>
         <%= f.password_field :password, class: 'w-full input input-bordered input-primary space-y-4' %>
+      </div>
         <div class="flex justify-end space-x-2 mt-4">
           <%= f.button type: 'submit', class: 'btn btn-primary' do %>
           <i class="ph ph-user large-icon"></i> ログイン
