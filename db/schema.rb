@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_23_233732) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_25_211939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,6 +53,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_23_233732) do
   end
 
   add_foreign_key "items", "users"
-  add_foreign_key "send_lists", "items"
+  add_foreign_key "send_lists", "items", on_delete: :nullify
   add_foreign_key "send_lists", "users"
 end
