@@ -48,6 +48,10 @@ class ItemsController < ApplicationController
   end
 
   def set_item
-    @item = current_user.items.find(params[:id])
+    @item = current_user.items.find_by(id: params[:id])
+    unless @item
+      redirect_to items_path, alert: '指定されたアイテムにはアクセスできません。'
+    end
   end
+
 end
