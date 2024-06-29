@@ -6,4 +6,9 @@ class StaticPagesController < ApplicationController
   def privacy_policy; end
 
   def terms_of_use; end
+
+  def not_found
+    render file: "#{Rails.root}/public/404.html", status: :not_found
+  end
+  
 end
