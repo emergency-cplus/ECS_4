@@ -13,6 +13,9 @@ class User < ApplicationRecord
   validates :email, uniqueness: true, presence: true
   validates :name, presence: true, length: { maximum: 255 }
 
+  # UUIDを生成して確保する
+  before_create :ensure_uuid
+
   # パスワードリセットトークンを生成し、メールを送信するメソッド
   # ※ このメソッドは、Sorceryのデフォルトのメール送信機能をオーバーライドしています
   def send_password_reset_email
@@ -22,4 +25,9 @@ class User < ApplicationRecord
     UserMailer.reset_password_email(self).deliver_now
   end
 
+  private
+
+  def ensure_uuid
+    self.uuid ||= SecureRandom.uuid
+  end
 end

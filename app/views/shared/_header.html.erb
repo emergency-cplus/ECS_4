@@ -24,12 +24,14 @@
       <%= link_to '送信一覧', send_lists_path, class: "text-gray-700 hover:text-gray-900" %>
 
       <div class="dropdown dropdown-bottom dropdown-end" style="z-index: 200;">
-        <div tabindex="0" role="button" class="bg-transparent text-black"><%= current_user.name %></div>
-          <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-            <li><%= link_to 'ユーザー詳細', user_path(current_user), class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %></li>
-            <li><%= link_to 'ログアウト', logout_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100', data: { turbo_method: :delete } %></li>
-          </ul>
-      </div>
+    <div tabindex="0" role="button" class="bg-transparent text-black"><%= current_user.name %></div>
+      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+        <!-- ここで current_user.uuid を使用 -->
+        <li><%= link_to 'ユーザー詳細', user_path(current_user.uuid), class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %></li>
+        <li><%= link_to 'ログアウト', logout_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100', data: { turbo_method: :delete } %></li>
+      </ul>
+</div>
+
     </div>
   </nav>
 </header>
