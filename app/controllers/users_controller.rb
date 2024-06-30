@@ -10,7 +10,8 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      redirect_to root_path, flash: { success: "ユーザー登録が成功しました" }
+      auto_login(@user)  # ユーザーを自動的にログインさせる
+      redirect_to root_path, flash: { success: "ユーザー登録が成功し、ログインしました" }
     else
       flash.now[:danger] = "ユーザー登録に失敗しました"
       render :new, status: :unprocessable_entity
