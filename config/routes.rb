@@ -16,6 +16,12 @@ Rails.application.routes.draw do
       patch 'update_password'
     end
   end
+  
+  # usersのindexページは存在しないから'/users'でroutingエラーになる
+  get '/users', to: redirect('/')  # ルートにリダイレクト
+
+  # 定義されていない全てのパスを404ページにリダイレクト
+  match '*path', via: :all, to: 'static_pages#not_found'
 
   resources :items
 

@@ -12,6 +12,7 @@ Rails.application.configure do
   config.eager_load = false
 
   # Show full error reports.
+  # falseにするとルーティングエラーが発生したときに表示されるエラーページが確認できる
   config.consider_all_requests_local = true
 
   # Enable server timing
