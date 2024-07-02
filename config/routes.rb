@@ -20,9 +20,6 @@ Rails.application.routes.draw do
   # usersのindexページは存在しないから'/users'でroutingエラーになる
   get '/users', to: redirect('/')  # ルートにリダイレクト
 
-  # 定義されていない全てのパスを404ページにリダイレクト
-  match '*path', via: :all, to: 'static_pages#not_found'
-
   resources :items
 
   resources :send_lists
@@ -34,4 +31,6 @@ Rails.application.routes.draw do
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
 
+  # 定義されていない全てのパスを404ページにリダイレクト
+  match '*path', via: :all, to: 'static_pages#not_found'
 end
