@@ -1,13 +1,12 @@
 <!-- ページの全体的なマージンとパディングを設定 -->
 <div class="mx-5 mt-5 sm:mt-20" data-controller="video-preview">
-
   <!-- ページタイトルを中央寄せにし、上の余白を加える -->
   <h1 class="text-2xl font-bold my-20 text-center">アイテム一覧</h1>
 
   <% if @items.any? %>
     <!-- コンテナ全体を中央に配置 -->
     <div class="flex justify-center">
-      <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-8 gap-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-x-8 gap-y-6">
         <% @items.each do |item| %>
           <!-- 各アイテムのサイズを固定し、間隔を最小32pxに設定 -->
           <div class="aspect-[9/16] max-h-720 min-h-480" style="max-width: 360px; min-width: 240px; margin-left: 16px; margin-right: 16px;"> 
