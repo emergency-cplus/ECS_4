@@ -14,7 +14,8 @@
         <div class="text-lg font-semibold">
           <%= link_to item.title, item_path(item), class: "block" %>
         </div>
-        <p>[タグ]</p>
+        <%# <p>[タグ]</p> %>
+        <br>
         <div class="flex justify-end">
           <button class="btn btn-primary" onclick="document.getElementById('sendModal-<%= item.id %>').showModal()">
             <i class="ph ph-rocket-launch large-icon"></i> 送信 <!-- Phosphor icon for sending -->
