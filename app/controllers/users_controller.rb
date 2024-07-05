@@ -24,12 +24,12 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to user_path(@user.uuid), flash: { success: "更新しました" }
+      redirect_to user_path(uuid: @user.uuid), flash: { success: "更新しました" }
     else
       flash.now[:danger] = "更新に失敗しました"
       render :edit, status: :unprocessable_entity
     end
-  end
+  end  
 
   def edit_password; end
 
@@ -71,7 +71,12 @@ class UsersController < ApplicationController
   end
 
   def set_user
+    Rails.logger.debug "Requested UUID: #{params[:uuid]}"
     @user = User.find_by(uuid: params[:uuid])
+    if @user.nil?
+      Rails.logger.debug "No user found with UUID: #{params[:uuid]}"
+      redirect_to root_url, alert: "ユーザーが見つかりませんでした。"
+    end
   end
 
   def user_password_params
