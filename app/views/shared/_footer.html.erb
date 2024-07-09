@@ -1,6 +1,6 @@
 <footer class="bg-gray-800 text-white py-4 fixed bottom-0 z-50 flex justify-evenly w-full">
   <div class="container mx-auto px-4 flex justify-between items-center">
-  <!-- コピーライト情報を左寄せ -->
+    <!-- コピーライト情報を左寄せ -->
     <div>
       <p class="text-sm">&copy; EmergenCy+ <%= Time.current.year %></p>
     </div>
@@ -9,7 +9,8 @@
       <!-- 各リンクを追加 -->
       <%= link_to '利用規約', terms_of_use_path, class: "link link-hover" %>
       <%= link_to 'プライバシーポリシー', privacy_policy_path, class: "link link-hover" %>
-      <%= link_to 'お問い合わせ', "https://twitter.com/EmergencyCplus", class: "link link-hover" %>
+      <!-- お問い合わせリンクを新しいタブで開くように設定 -->
+      <%= link_to 'お問い合わせ', "https://forms.gle/WoPsBfeCWghTMHAh9", target: "_blank", rel: "noopener noreferrer", class: "link link-hover" %>
     </nav>
   </div>
 </footer>
