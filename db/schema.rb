@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_28_211754) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_10_044659) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,6 +32,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_28_211754) do
     t.string "sender"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "send_as_test", default: false
     t.index ["item_id"], name: "index_send_lists_on_item_id"
     t.index ["user_id"], name: "index_send_lists_on_user_id"
   end
