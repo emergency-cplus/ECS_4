@@ -36,7 +36,9 @@ class SendListsController < ApplicationController
           send_at: Time.zone.now,
           sender: params[:sender_name],
           item_id: item.id,
-          user_id: current_user.id
+          user_id: current_user.id,
+          # send_as_test の値を保存
+          send_as_test: params[:send_as_test] == 'on'
         )
         redirect_to send_lists_path, success: 'SMSを送信しました。'
       else

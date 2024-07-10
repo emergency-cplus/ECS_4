@@ -11,6 +11,8 @@
             <th class="px-6 py-3">送信日時</th>
             <th class="px-6 py-3">動画タイトル</th>
             <th class="px-6 py-3">送信者</th>
+            <th class="px-6 py-3">備考</th>
+            
           </tr>
         </thead>
         <tbody>
@@ -27,6 +29,13 @@
                 <% end %>
               </td>
               <td class="px-6 py-4"><%= send_list.sender %></td>
+              <td class="px-6 py-4">
+                <% if send_list.send_as_test %>
+                  テスト
+                <% else %>
+                  本番
+                <% end %>
+              </td>
             </tr>
           <% end %>
         </tbody>
