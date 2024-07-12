@@ -19,6 +19,32 @@
   font-size: 24px;
 }
 
+/* Tailwind CSSを使用する例 */
+.pagination a {
+  @apply bg-gray-100 text-gray-800; /* 背景と文字色 */
+}
+
+.pagination a:hover {
+  @apply bg-gray-200; /* ホバー時の背景色 */
+}
+
+.pagination .disabled, .pagination .disabled:hover {
+  @apply bg-white text-gray-300 cursor-not-allowed; /* 非アクティブ時のスタイル */
+}
+
+.page.gap.join-item.btn.btn-outline {
+  background-color: #f8f9fa;  /* Bootstrapのデフォルトの背景色 */
+  color: #6c757d;             /* Bootstrapのデフォルトの文字色 */
+  padding: 0.5rem 0.75rem;    /* 他のボタンと同じパディング */
+  border: 1px solid #dee2e6;  /* btn-outline に適切なボーダーを追加 */
+}
+
+.pagination .current {
+  background-color: #666; /* カレントページの背景色 */
+  color: white; /* テキスト色を白に設定 */
+  border-color: #666; /* ボーダーの色も同じに */
+}
+
 *, *:before, *:after {
   box-sizing: border-box; /* 全要素に border-box を適用 */
 }
