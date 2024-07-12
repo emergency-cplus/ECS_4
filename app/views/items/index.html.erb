@@ -17,7 +17,7 @@
     </div>
     <!-- ページネーションコントロールを追加 -->
     <div class="flex justify-center mt-10 mb-20">
-      <%= render 'items/items_paginator', items: @items %>
+      <%= paginate @items %>
     </div>
   <% else %>
     <!-- 保存されたアイテムがないときのメッセージを中央寄せで表示 -->
