@@ -3,7 +3,7 @@ class Item < ApplicationRecord
   has_many :send_lists
 
   validates :title, presence: true, length: { maximum: 255 }
-  validates :item_url, presence: true, length: { maximum: 255 }
+  validates :item_url, presence: true, length: { maximum: 255 }, uniqueness: { case_sensitive: false }
   # 説明欄は必須ではない
   validates :description, length: { maximum: 255 }, allow_blank: true
   
