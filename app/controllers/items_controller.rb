@@ -13,10 +13,14 @@ class ItemsController < ApplicationController
 
   def edit; end
 
+  # app/controllers/items_controller.rb
   def create
-    @item = Item.new(item_params)
-    @item.user = current_user
-    if @item.save
+    @item = current_user.items.new(item_params)
+
+    existing_item = Item.find_by(item_url: @item.item_url)
+    if existing_item
+      redirect_to item_path(existing_item), alert: 'すでにアイテムとして保存されています'
+    elsif @item.save
       flash[:success] = 'アイテムを作成しました'
       redirect_to items_url
     else
@@ -24,6 +28,7 @@ class ItemsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
+
 
   def update
     if @item.update(item_params)
