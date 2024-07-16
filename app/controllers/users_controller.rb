@@ -47,7 +47,9 @@ class UsersController < ApplicationController
     end
 
     if @user.update(user_password_params)
-      redirect_to @user, flash: { success: 'パスワードを更新しました。' }
+      logout # ログアウトメソッドを呼び出し、セッションをクリアする
+      flash[:success] = 'パスワードが更新されました。再ログインしてください。'
+      redirect_to login_path # ログインページにリダイレクト
     else
       redirect_to edit_password_user_path(@user.uuid), flash: { danger: @user.errors.full_messages.join(', ') }
     end
