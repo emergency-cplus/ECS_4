@@ -32,6 +32,8 @@ module App
     # servicesディレクトリの読み込みを追加
     config.autoload_paths += %W(#{config.root}/app/services)
 
+    config.autoload_paths += %W(#{config.root}/app/validators)
+
     config.generators do |g|
       g.skip_routes true
       g.helper false
