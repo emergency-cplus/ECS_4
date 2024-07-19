@@ -34,24 +34,22 @@ class UsersController < ApplicationController
   def edit_password; end
 
   def update_password
-    # 新しいパスワードと確認用パスワードが一致するか確認のコードを先に記述しないと、以前のパスワードと新しいパスワードが一致する場合に、期待するエラーメッセージが表示されない
-    # 新しいパスワードと確認用パスワードが一致するか確認
     if params[:user][:password] != params[:user][:password_confirmation]
       redirect_to edit_password_user_path(@user.uuid), flash: { danger: '入力されたパスワードが一致しません。' }
       return
     end
-    # パスワードが以前と同じかどうかを確認
+  
     if same_as_old_password?(@user, params[:user][:password])
-      redirect_to edit_password_user_path(@user.uuid), flash: { danger: 'パスワードが更新できませんでした。' }
+      redirect_to edit_password_user_path(@user.uuid), flash: { danger: '新しいパスワードが以前のパスワードと同じです。' }
       return
     end
-
+  
     if @user.update(user_password_params)
       logout # ログアウトメソッドを呼び出し、セッションをクリアする
       flash[:success] = 'パスワードが更新されました。再ログインしてください。'
       redirect_to login_path # ログインページにリダイレクト
     else
-      redirect_to edit_password_user_path(@user.uuid), flash: { danger: @user.errors.full_messages.join(', ') }
+      redirect_to edit_password_user_path(@user.uuid), flash: { danger: @user.errors.full_messages.join + " 許可された記号: !@#$%^&*()_+-" }
     end
   end
 
