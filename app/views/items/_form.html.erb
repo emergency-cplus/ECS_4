@@ -25,7 +25,7 @@
 
         <div class="mb-4">
           <%= f.label :tag, 'タグ', class: "block text-gray-700" %>
-          [タグ]
+          <%= f.text_field :tag_list, class: "w-full input input-bordered input-primary mt-1", value: @item.tag_list.join(", ") , placeholder: '半角カンマ","区切って3つまで登録'%>
         </div>
 
         <div class="mb-4">

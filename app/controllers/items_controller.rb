@@ -13,11 +13,14 @@ class ItemsController < ApplicationController
 
   def edit; end
 
-  # app/controllers/items_controller.rb
   def create
     @item = current_user.items.new(item_params)
-
+    # nil チェックを追加
+    tag_list = item_params[:tag_list].presence || ''
+    # タグリストを3つまでに制限して処理
+    @item.tag_list = item_params[:tag_list].split(',').map(&:strip).uniq.first(3)
     existing_item = Item.find_by(item_url: @item.item_url)
+
     if existing_item
       redirect_to item_path(existing_item), alert: 'すでにアイテムとして保存されています'
     elsif @item.save
@@ -29,8 +32,12 @@ class ItemsController < ApplicationController
     end
   end
 
-
   def update
+    # nil チェックを追加
+    tag_list = item_params[:tag_list].presence || ''
+    # タグリストを3つまでに制限して処理
+    @item.tag_list = item_params[:tag_list].split(',').map(&:strip).uniq.first(3)
+
     if @item.update(item_params)
       flash[:success] = 'アイテムを更新しました'
       redirect_to item_url(@item)
@@ -39,6 +46,7 @@ class ItemsController < ApplicationController
       render :edit, status: :unprocessable_entity
     end
   end
+  
 
   def destroy
     @item.destroy
@@ -49,7 +57,7 @@ class ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(:title, :description, :item_url)
+    params.require(:item).permit(:title, :description, :item_url, :tag_list)
   end
 
   def set_item
