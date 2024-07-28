@@ -14,7 +14,7 @@
         <div class="text-lg font-semibold">
           <%= link_to item.title, item_path(item), class: "block" %>
         </div>
-        <%# <p>[タグ]</p> %>
+        <p><%= item.tag_list.join(", ") %></p>
         <br>
         <div class="flex justify-end">
           <button class="btn btn-primary" onclick="document.getElementById('sendModal-<%= item.id %>').showModal()">
