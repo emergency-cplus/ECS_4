@@ -2,7 +2,13 @@ class ItemsController < ApplicationController
   before_action :set_item, only: %i[show edit update destroy]
 
   def index
-    @items = current_user.items.order(created_at: :desc).page(params[:page]).per(10)
+    if params[:tag].present?
+      # タグに基づいてアイテムをフィルタリング
+      @items = current_user.items.tagged_with(params[:tag]).order(created_at: :desc).page(params[:page]).per(10)
+    else
+      # すべてのアイテムを表示
+      @items = current_user.items.order(created_at: :desc).page(params[:page]).per(10)
+    end
   end
 
   def show; end
