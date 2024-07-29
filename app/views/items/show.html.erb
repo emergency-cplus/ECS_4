@@ -21,6 +21,14 @@
           </div>
         </div>
         <div class="mb-4">
+          <label class="block text-gray-700">タグ</label>
+          <div class="w-full input input-bordered input-primary-content mt-1 p-2 bg-white flex items-center">
+            <% @item.tag_list.each_with_index do |tag, index| %>
+              <%= tag %><%= "," unless index == @item.tag_list.size - 1 %>
+            <% end %>
+          </div>
+        </div>
+        <div class="mb-4">
           <label class="block text-gray-700">動画URL</label>
           <div class="w-full input input-bordered input-primary-content mt-1 p-2 bg-white h-32 flex items-center break-all">
             <%= @item.item_url %>
