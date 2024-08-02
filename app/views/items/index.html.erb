@@ -6,12 +6,23 @@
       <%= form.submit "検索", class: "btn btn-primary px-4" %>
     </div>
   <% end %>
+
+  <% if params[:search].present? %>
+    <div class="text-center mt-5">
+      <% if @items.any? %>
+        <p>「<%= params[:search] %>」を検索した結果：<%= @items.total_count %>件見つかりました。</p>
+      <% else %>
+        <p>「<%= params[:search] %>」に一致するアイテムは見つかりませんでした。</p>
+      <% end %>
+    </div>
+  <% end %>
   <br>
+  
   <% if @items.any? %>
     <div class="flex justify-center">
       <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-x-8 gap-y-6">
         <% @items.each do |item| %>
-          <div class="aspect-[9/16] max-h-720 min-h-480" style="max-width: 360px; min-width: 240px; margin-left: 16px; margin-right: 16px;"> 
+          <div class="aspect-[9/16] max-h-720 min-h-480" style="max-width: 360px; min-width: 240px; margin-left: 16px; margin-right: 16px;">
             <%= render 'item', item: item %>
           </div>
         <% end %>
@@ -22,9 +33,13 @@
     </div>
   <% else %>
     <div class="text-center mt-10">
-      <p class="text-lg">まだアイテムがありません...</p>
-      <br>
-      <%= button_to '新規作成する', new_item_path, method: :get, class: "btn btn-primary" %>
+      <% if params[:search].present? %>
+        <!-- 何も表示しない。検索メッセージが既に表示されている -->
+      <% else %>
+        <p class="text-lg">まだアイテムがありません...</p>
+        <br>
+        <%= button_to '新規作成する', new_item_path, method: :get, class: "btn btn-primary" %>
+      <% end %>
     </div>
   <% end %>
 </div>
