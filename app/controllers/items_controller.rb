@@ -2,15 +2,20 @@ class ItemsController < ApplicationController
   before_action :set_item, only: %i[show edit update destroy]
 
   def index
-    if params[:tag].present?
-      # タグに基づいてアイテムをフィルタリング
-      @items = current_user.items.tagged_with(params[:tag]).order(created_at: :desc).page(params[:page]).per(10)
-    else
-      # すべてのアイテムを表示
-      @items = current_user.items.order(created_at: :desc).page(params[:page]).per(10)
+    # 全アイテムを基本クエリとして設定
+    @items = current_user.items.order(created_at: :desc)
+    # テキスト検索があればそれに基づいてフィルタリング
+    if params[:search].present?
+      @items = @items.left_joins(:tags).where("items.title LIKE :search OR items.description LIKE :search OR tags.name LIKE :search", search: "%#{params[:search]}%").distinct
     end
+    # タグに基づいてさらにフィルタリング
+    if params[:tag].present?
+      @items = @items.tagged_with(params[:tag])
+    end
+    # ページネーションは最終的なクエリセットに対して適用
+    @items = @items.page(params[:page]).per(10)
   end
-
+  
   def show; end
 
   def new
@@ -26,7 +31,6 @@ class ItemsController < ApplicationController
     # タグリストを3つまでに制限して処理
     @item.tag_list = item_params[:tag_list].split(',').map(&:strip).uniq.first(3)
     existing_item = Item.find_by(item_url: @item.item_url)
-
     if existing_item
       redirect_to item_path(existing_item), alert: 'すでにアイテムとして保存されています'
     elsif @item.save
@@ -43,7 +47,6 @@ class ItemsController < ApplicationController
     tag_list = item_params[:tag_list].presence || ''
     # タグリストを3つまでに制限して処理
     @item.tag_list = item_params[:tag_list].split(',').map(&:strip).uniq.first(3)
-
     if @item.update(item_params)
       flash[:success] = 'アイテムを更新しました'
       redirect_to item_url(@item)
@@ -52,7 +55,6 @@ class ItemsController < ApplicationController
       render :edit, status: :unprocessable_entity
     end
   end
-  
 
   def destroy
     @item.destroy
