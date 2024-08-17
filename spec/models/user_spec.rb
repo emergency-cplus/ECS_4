@@ -36,10 +36,10 @@ RSpec.describe User, type: :model do
   describe '#send_password_reset_email' do
     it 'sets a reset password token and sends an email' do
       user = FactoryBot.create(:user)
-      expect { user.send_password_reset_email }
-        .to change { user.reset_password_token }
-        .and change { ActionMailer::Base.deliveries.size }.by(1)
-      expect(user.reset_password_email_sent_at).not_to be_nil
+      user.send_password_reset_email
+      expect(user.reset_password_token).not_to be_nil
+      expect(user.reset_password_sent_at).not_to be_nil
+      expect(ActionMailer::Base.deliveries.size).to eq(1)
     end
   end
 end
