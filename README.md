@@ -5,7 +5,8 @@
 
 ### **サービス概要**
 　このWebアプリは、119番通報の受付の際に、消防の指令員（オペレーター）が、通報者に対して迅速かつ的確な口頭指導を可能にするプラットフォームサービスです。オペレーターは、事前に説明動画を用意しておくことで、簡単に通報者へ動画URLをSMS送信することができます。
-  [YouTube]（https://www.youtube.com/@emegency_cplus)では、応急手当て等のショート動画を発信中！
+  [YouTube](https://www.youtube.com/@emegency_cplus "YouTube EmergenCy+")
+では、応急手当て等のショート動画を発信中！
 
 ---
 
