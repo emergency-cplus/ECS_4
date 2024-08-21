@@ -84,4 +84,6 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :letter_opener_web
   config.action_mailer.perform_deliveries = true
 
+  config.i18n.fallbacks = true
+
 end

@@ -20,10 +20,17 @@ class Item < ApplicationRecord
   end
 
 # youtube shorts urlのバリデーション詳細
+  # def validate_youtube_shorts_url
+  #   return if item_url.blank?
+  #   unless item_url.match?(/\Ahttps:\/\/(?:www\.)?youtube\.com\/shorts\/[a-zA-Z0-9_-]+\z/)
+  #     errors.add(:item_url, :invalid_youtube_shorts_url)
+  #   end
+  # end
   def validate_youtube_shorts_url
-    return if item_url.blank?
+    Rails.logger.debug "Validating URL: #{item_url}"
     unless item_url.match?(/\Ahttps:\/\/(?:www\.)?youtube\.com\/shorts\/[a-zA-Z0-9_-]+\z/)
-      errors.add(:item_url, "must be a valid YouTube Shorts URL")
+      Rails.logger.debug "Invalid YouTube Shorts URL detected."
+      errors.add(:item_url, :invalid_youtube_shorts_url)
     end
-  end
+  end  
 end
