@@ -34,6 +34,9 @@ module App
 
     config.autoload_paths += %W(#{config.root}/app/validators)
 
+    # ロケールファイルの読み込みパスを設定
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
+
     config.generators do |g|
       g.skip_routes true
       g.helper false
