@@ -19,18 +19,11 @@ class Item < ApplicationRecord
     errors.add(:tag_list, "can only have up to 3 tags") if tag_list.size > 3
   end
 
-# youtube shorts urlのバリデーション詳細
-  # def validate_youtube_shorts_url
-  #   return if item_url.blank?
-  #   unless item_url.match?(/\Ahttps:\/\/(?:www\.)?youtube\.com\/shorts\/[a-zA-Z0-9_-]+\z/)
-  #     errors.add(:item_url, :invalid_youtube_shorts_url)
-  #   end
-  # end
+  # YouTube Shorts URLのバリデーション詳細
   def validate_youtube_shorts_url
-    Rails.logger.debug "Validating URL: #{item_url}"
+    return if item_url.blank?
     unless item_url.match?(/\Ahttps:\/\/(?:www\.)?youtube\.com\/shorts\/[a-zA-Z0-9_-]+\z/)
-      Rails.logger.debug "Invalid YouTube Shorts URL detected."
       errors.add(:item_url, :invalid_youtube_shorts_url)
     end
-  end  
+  end
 end
