@@ -14,6 +14,8 @@ ja:
               too_short: "は最低%{count}文字以上でなければなりません。"
         item:
           attributes:
+            tag_list:
+              too_many_tags: "は最大3つまでです"
             item_url:
               invalid_youtube_shorts_url: "は有効なYouTube Shorts URLである必要があります"
   errors:
