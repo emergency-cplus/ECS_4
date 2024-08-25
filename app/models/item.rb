@@ -16,7 +16,9 @@ class Item < ApplicationRecord
   private
 
   def validate_tag_limit
-    errors.add(:tag_list, "can only have up to 3 tags") if tag_list.size > 3
+    if tag_list.size > 3
+      errors.add(:tag_list, :too_many_tags) 
+    end
   end
 
   # YouTube Shorts URLのバリデーション詳細
