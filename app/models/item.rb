@@ -17,7 +17,7 @@ class Item < ApplicationRecord
 
   def validate_tag_limit
     if tag_list.size > 3
-      errors.add(:tag_list, "can only have up to 3 tags") 
+      errors.add(:tag_list, :too_many_tags) 
     end
   end
 
