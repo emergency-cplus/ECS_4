@@ -42,7 +42,10 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
-  config.include FactoryBot::Syntax::Methods # FactoryBot シンタックスメソッドの組み込み
+  # FactoryBot シンタックスメソッドの組み込み
+  config.include FactoryBot::Syntax::Methods
+  # Sorceryライブラリが提供するテストヘルパーモジュールをRSpecテストで使用できるように設定する
+  config.include Sorcery::TestHelpers::Rails::Controller, type: :controller
 
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
