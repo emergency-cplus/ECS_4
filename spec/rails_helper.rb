@@ -46,6 +46,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   # Sorceryライブラリが提供するテストヘルパーモジュールをRSpecテストで使用できるように設定する
   config.include Sorcery::TestHelpers::Rails::Controller, type: :controller
+  config.include Sorcery::TestHelpers::Rails::Integration, type: :request
 
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
