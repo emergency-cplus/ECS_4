@@ -5,5 +5,6 @@ FactoryBot.define do
     sequence(:email) { |n| "test#{n}@example.com" }
     password { "Password1!" }
     password_confirmation { "Password1!" }
+    uuid { SecureRandom.uuid }  # UUID をランダムに生成
   end
 end
