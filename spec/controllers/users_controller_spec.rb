@@ -32,30 +32,30 @@ RSpec.describe UsersController, type: :request do
     end
   end
 
-  # describe "PATCH /users/:uuid" do
-  #   let(:user) { create(:user) }
-  
-  #   before do
-  #     login_user(user)
-  #   end
-  
-  #   context "with valid attributes" do
-  #     it "updates the user and redirects" do
-  #       patch user_path(user.uuid), params: { user: { name: "Updated Name" } }
-  #       expect(response).to redirect_to(user_path(user.uuid))
-  #       follow_redirect!
-  #       expect(response.body).to include("更新しました")
-  #     end
-  #   end
-  
-  #   context "with invalid attributes" do
-  #     it "does not update the user and re-renders the edit template" do
-  #       patch user_path(user.uuid), params: { user: { email: nil } }
-  #       expect(response).to render_template(:edit)
-  #       expect(response).to have_http_status(:unprocessable_entity)
-  #     end
-  #   end
-  # end
+  describe "PATCH /users/:uuid" do
+    let(:user) { create(:user, password: 'Test1234!', password_confirmation: 'Test1234!') }
+
+    before do
+      post login_path, params: { email: user.email, password: 'Test1234!' }
+    end
+
+    context "with valid attributes" do
+      it "updates the user and redirects" do
+        patch user_path(user.uuid), params: { user: { name: "Updated Name" } }
+        expect(response).to redirect_to(user_path(user.uuid))
+        follow_redirect!
+        expect(response.body).to include("更新しました")
+      end
+    end
+
+    context "with invalid attributes" do
+      it "does not update the user and re-renders the edit template" do
+        patch user_path(user.uuid), params: { user: { email: nil } }
+        expect(response).to render_template(:edit)
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
   
   # describe "PATCH /users/:uuid/update_password" do
   #   let(:user) { create(:user, password: 'old_password') }
