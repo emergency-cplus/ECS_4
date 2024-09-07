@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :request do
+  let(:user) { create(:user, password: 'OldPassword1!', password_confirmation: 'OldPassword1!') }
+
   describe "GET /users/new" do
     it "returns http success" do
       get new_user_path
@@ -57,29 +59,68 @@ RSpec.describe UsersController, type: :request do
     end
   end
   
-  # describe "PATCH /users/:uuid/update_password" do
-  #   let(:user) { create(:user, password: 'old_password') }
-  
-  #   before do
-  #     login_user(user)
-  #   end
-  
-  #   context "with valid password change" do
-  #     it "updates the password and redirects to the login path" do
-  #       patch update_password_user_path(user.uuid), params: { user: { password: "new_password", password_confirmation: "new_password" } }
-  #       expect(response).to redirect_to(login_path)
-  #       follow_redirect!
-  #       expect(response.body).to include('パスワードが更新されました。再ログインしてください。')
-  #     end
-  #   end
-  
-  #   context "with password mismatch" do
-  #     it "does not update the password and redirects to edit password path" do
-  #       patch update_password_user_path(user.uuid), params: { user: { password: "new_password", password_confirmation: "different" } }
-  #       expect(response).to redirect_to(edit_password_user_path(user.uuid))
-  #       follow_redirect!
-  #       expect(response.body).to include('入力されたパスワードが一致しません。')
-  #     end
-  #   end
-  # end  
+  describe "PATCH /users/:uuid/update_password" do
+    before do
+      login_user(user)
+    end
+
+    context "with valid password change" do
+      let(:new_password_params) do
+        {
+          user: {
+            password: "NewPassword1!",
+            password_confirmation: "NewPassword1!"
+          }
+        }
+      end
+
+    it "updates the password, logs out the user and redirects to the login path" do
+      patch update_password_user_path(user.uuid), params: new_password_params
+      expect(response).to redirect_to(login_path)
+      follow_redirect!
+      expect(response.body).to include('パスワードが更新されました。再ログインしてください。')
+      expect(user.reload.valid_password?('NewPassword1!')).to be_truthy
+    end
+  end
+
+    context "with password mismatch" do
+      let(:mismatch_password_params) do
+        {
+          user: {
+            password: "NewPassword1!",
+            password_confirmation: "DifferentPassword1!"
+          }
+        }
+      end
+
+      it "does not update the password and redirects back to the password edit page with an error message" do
+        patch update_password_user_path(user.uuid), params: mismatch_password_params
+        expect(response).to redirect_to(edit_password_user_path(user.uuid))
+        follow_redirect!
+        expect(response.body).to include('入力されたパスワードが一致しません。')
+      end
+    end
+
+    context "with the same password as old" do
+      let(:same_password_params) do
+        {
+          user: {
+            password: "OldPassword1!",
+            password_confirmation: "OldPassword1!"
+          }
+        }
+      end
+
+      it "does not update the password and redirects back to the password edit page with an error message" do
+        patch update_password_user_path(user.uuid), params: same_password_params
+        expect(response).to redirect_to(edit_password_user_path(user.uuid))
+        follow_redirect!
+        expect(response.body).to include('新しいパスワードが以前のパスワードと同じです。')
+      end
+    end
+  end
+
+  def login_user(user)
+    post login_path, params: { email: user.email, password: 'OldPassword1!' }
+  end
 end
