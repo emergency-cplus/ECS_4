@@ -2,7 +2,30 @@ require 'rails_helper'
 
 RSpec.describe UsersController, type: :request do
   let(:user) { create(:user, password: 'OldPassword1!', password_confirmation: 'OldPassword1!') }
+  
+  describe 'GET #show' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:other_user) { FactoryBot.create(:user) }
 
+    context 'when the logged in user is the correct user' do
+      before do
+        login_user(user)
+        get user_path(user.uuid)  # 修正: パスを直接指定
+      end
+    end
+
+    context 'when the logged in user is not the correct user' do
+      before do
+        login_user(other_user)
+        get user_path(user.uuid)  # 修正: パスを直接指定
+      end
+
+      it 'redirects to the login page' do
+        expect(response).to redirect_to(login_path)  # ログインページへのリダイレクトを期待
+      end
+    end
+  end
+  
   describe "GET /users/new" do
     it "returns http success" do
       get new_user_path
