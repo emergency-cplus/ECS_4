@@ -1,6 +1,6 @@
 # config/initializers/sorcery.rb
 
-Rails.application.config.sorcery.submodules = [:reset_password]  # リセットパスワードモジュールを有効化
+Rails.application.config.sorcery.submodules = [:reset_password, :test_helpers]  # リセットパスワードモジュールを有効化
 
 Rails.application.config.sorcery.configure do |config|
   config.user_config do |user|
