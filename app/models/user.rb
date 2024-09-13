@@ -15,12 +15,20 @@ class User < ApplicationRecord
 
   before_create :ensure_uuid
 
-  def send_password_reset_email
-    self.reset_password_token = SecureRandom.urlsafe_base64
-    self.reset_password_sent_at = Time.zone.now
-    save!(validate: false)
+  # sorceryをつかうからいらなくなった
+  # def send_password_reset_email
+  #   self.reset_password_token = SecureRandom.urlsafe_base64
+  #   self.reset_password_sent_at = Time.zone.now
+  #   save!(validate: false)
+  #   UserMailer.reset_password_email(self).deliver_now
+  # end
+
+  # sorceryで使う
+  def deliver_reset_password_instructions!
+    generate_reset_password_token!
     UserMailer.reset_password_email(self).deliver_now
   end
+  
 
   private
 
