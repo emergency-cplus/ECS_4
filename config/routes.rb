@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   resources :send_lists
   post 'send_sms', to: 'send_lists#create', as: 'send_sms'
 
-  resources :password_resets, only: [:new, :create, :edit, :update]
+  resources :password_resets, param: :token, only: [:new, :create, :edit, :update]
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
