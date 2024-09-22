@@ -4,53 +4,41 @@ class PasswordResetsController < ApplicationController
   def new; end
 
   def edit
-    @token = params[:id]
+    @token = params[:token]
     @user = User.load_from_reset_password_token(@token)
+    
     unless @user
+      Rails.logger.info("Invalid or expired password reset token")
       redirect_to new_password_reset_path, alert: '無効または期限切れのトークンです。もう一度試してください。'
     end
   end
 
-  # def create
-  #   @user = User.find_by(email: params[:email])
-  #   if @user
-  #     @user.deliver_reset_password_instructions!  # トークン生成と保存
-  #     UserMailer.reset_password_email(@user).deliver_now  # メール送信
-  #     redirect_to login_path, notice: 'パスワードリセットのメールを送信しました。メールをご確認ください。'
-  #   else
-  #     redirect_to new_password_reset_path, alert: '指定されたメールアドレスは見つかりませんでした。'
-  #   end
-  # end
-
   def create
     @user = User.find_by(email: params[:email])
     if @user
-      @user.deliver_reset_password_instructions!  # トークン生成と保存、メール送信
+      @user.deliver_reset_password_instructions! # トークン生成と保存、メール送信
       redirect_to login_path, notice: 'パスワードリセットのメールを送信しました。メールをご確認ください。'
     else
       redirect_to new_password_reset_path, alert: '指定されたメールアドレスは見つかりませんでした。'
     end
   end
 
-  
   def update
-    @token = params[:id]
+    @token = params[:token]
     @user = User.load_from_reset_password_token(@token)
-
+  
     if @user.blank?
       redirect_to new_password_reset_path, alert: '無効または期限切れのトークンです。もう一度試してください。'
       return
     end
-
-    if valid_password_params?(params[:user][:password], params[:user][:password_confirmation])
-      if @user.change_password(params[:user][:password])
-        redirect_to login_path, notice: 'パスワードがリセットされました。新しいパスワードでログインしてください。'
-      else
-        flash.now[:error] = 'パスワードリセットに失敗しました。もう一度試してください。'
-        render :edit
-      end
+  
+    @user.password_confirmation = params[:user][:password_confirmation]
+    if @user.change_password(params[:user][:password])
+      @user.clear_reset_password_token!
+      redirect_to login_path, notice: 'パスワードがリセットされました。'
     else
-      flash.now[:error] = 'パスワードは最低6文字で、数字と大文字を含む必要があります。'
+      Rails.logger.error "パスワードの変更に失敗しました。エラー: #{@user.errors.full_messages}"
+      flash.now[:alert] = 'パスワードリセットに失敗しました。もう一度試してください。'
       render :edit
     end
   end

@@ -28,7 +28,23 @@ class User < ApplicationRecord
     generate_reset_password_token!
     UserMailer.reset_password_email(self).deliver_now
   end
-  
+
+  def clear_reset_password_token!
+    update_columns(
+      reset_password_token: nil,
+      reset_password_token_expires_at: nil
+    )
+  end
+
+  def change_password(new_password)
+    self.password = new_password
+    if valid?
+      save
+    else
+      errors.add(:password, 'は最低6文字で、数字と大文字を含む必要があります。')
+      false
+    end
+  end
 
   private
 
