@@ -15,11 +15,35 @@ class User < ApplicationRecord
 
   before_create :ensure_uuid
 
-  def send_password_reset_email
-    self.reset_password_token = SecureRandom.urlsafe_base64
-    self.reset_password_sent_at = Time.zone.now
-    save!(validate: false)
+  # sorceryをつかうからいらなくなった
+  # def send_password_reset_email
+  #   self.reset_password_token = SecureRandom.urlsafe_base64
+  #   self.reset_password_sent_at = Time.zone.now
+  #   save!(validate: false)
+  #   UserMailer.reset_password_email(self).deliver_now
+  # end
+
+  # sorceryで使う
+  def deliver_reset_password_instructions!
+    generate_reset_password_token!
     UserMailer.reset_password_email(self).deliver_now
+  end
+
+  def clear_reset_password_token!
+    update_columns(
+      reset_password_token: nil,
+      reset_password_token_expires_at: nil
+    )
+  end
+
+  def change_password(new_password)
+    self.password = new_password
+    if valid?
+      save
+    else
+      errors.add(:password, 'は最低6文字で、数字と大文字を含む必要があります。')
+      false
+    end
   end
 
   private
