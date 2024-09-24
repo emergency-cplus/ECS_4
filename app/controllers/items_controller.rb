@@ -42,33 +42,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  # def update
-  #   # nil チェックを追加
-  #   tag_list = item_params[:tag_list].presence || ''
-  #   # タグリストを3つまでに制限して処理
-  #   @item.tag_list = item_params[:tag_list].split(',').map(&:strip).uniq.first(3)
-  #   if @item.update(item_params)
-  #     flash[:success] = 'アイテムを更新しました'
-  #     redirect_to item_url(@item)
-  #   else
-  #     flash.now[:danger] = 'アイテムを更新できませんでした'
-  #     render :edit, status: :unprocessable_entity
-  #   end
-  # end
-
-  # def update
-  #   @item = Item.find(params[:id])
-  #   if @item.update(item_params)
-  #     if item_params[:tag_list].present?
-  #       @item.tag_list = item_params[:tag_list].split(',').map(&:strip).uniq.first(3)
-  #       @item.save
-  #     end
-  #     redirect_to @item, notice: 'Item was successfully updated.'
-  #   else
-  #     render :edit
-  #   end
-  # end
-
   def update
     @item = Item.find(params[:id])
     if @item.update(item_params)
