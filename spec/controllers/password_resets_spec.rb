@@ -60,6 +60,7 @@ RSpec.describe PasswordResetsController, type: :controller do
 
   describe 'PATCH #update' do
     let(:user) { create(:user) }
+
     before do
       user.deliver_reset_password_instructions!
     end

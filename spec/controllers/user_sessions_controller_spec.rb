@@ -10,7 +10,7 @@ RSpec.describe "UserSessions", type: :request do
   end
 
   describe "POST /login" do
-    let(:user) { FactoryBot.create(:user, password: 'Password1!') }
+    let(:user) { create(:user, password: 'Password1!') }
 
     context "with valid credentials" do
       it "logs the user in and redirects to the root path" do
@@ -30,7 +30,7 @@ RSpec.describe "UserSessions", type: :request do
   end
 
   describe "DELETE /logout" do
-    let(:user) { FactoryBot.create(:user, password: 'Password1!') }
+    let(:user) { create(:user, password: 'Password1!') }
 
     before do
       post login_path, params: { email: user.email, password: 'Password1!' }

@@ -3,9 +3,15 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :edit_password, :update_password]
   before_action :correct_user, only: [:show]
 
+  def show
+    # @user = User.find_by(uuid: params[:id])
+  end
+
   def new
     @user = User.new
   end
+
+  def edit; end
 
   def create
     @user = User.new(user_params)
@@ -17,12 +23,6 @@ class UsersController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
-
-  def show
-    # @user = User.find_by(uuid: params[:id])
-  end
-
-  def edit; end
 
   def update
     if @user.update(user_params)
@@ -73,10 +73,10 @@ class UsersController < ApplicationController
   end
 
   def set_user
-    Rails.logger.debug "Requested UUID: #{params[:uuid]}"
+    Rails.logger.debug { "Requested UUID: #{params[:uuid]}" }
     @user = User.find_by(uuid: params[:uuid])
     if @user.nil?
-      Rails.logger.debug "No user found with UUID: #{params[:uuid]}"
+      Rails.logger.debug { "No user found with UUID: #{params[:uuid]}" }
       redirect_to root_url, alert: "ユーザーが見つかりませんでした。"
     end
   end
