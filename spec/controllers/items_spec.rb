@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ItemsController, type: :controller do
+RSpec.describe ItemsController do
   let(:user) { create(:user) }
   let(:valid_attributes) { 
     { title: "Test Item", description: "Test Description", item_url: "https://youtube.com/shorts/abcdefghijk", tag_list: "tag1, tag2", user_id: user.id }
@@ -36,7 +36,9 @@ RSpec.describe ItemsController, type: :controller do
     end
 
     it "paginates results" do
-      create_list(:item, 15, user: user)
+      # create_list(:item, 15, user: user)
+      create_list(:item, 10, user: user)
+      5.times { create(:item, user: user) }
       get :index
       expect(assigns(:items).count).to eq(10)
     end

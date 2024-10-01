@@ -1,7 +1,7 @@
 # spec/models/send_list_spec.rb
 require 'rails_helper'
 
-RSpec.describe SendList, type: :model do
+RSpec.describe SendList do
   describe 'validations' do
     it 'is valid with valid attributes' do
       send_list = build(:send_list)

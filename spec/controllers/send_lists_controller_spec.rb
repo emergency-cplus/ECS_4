@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SendListsController, type: :controller do
+RSpec.describe SendListsController do
   let(:user) { create(:user) }
   let(:item) { create(:item, user: user) }
   let(:valid_attributes) { { phone_number: "09012345678", sender_name: "Test Sender", item_id: item.id, send_as_test: 'off' } }
@@ -12,7 +12,9 @@ RSpec.describe SendListsController, type: :controller do
 
   describe "GET #index" do
     it "returns a success response and paginates results" do
-      create_list(:send_list, 30, user: user)
+      # create_list(:send_list, 30, user: user)
+      create_list(:send_list, 10, user: user)
+      20.times { create(:send_list, user: user) }
       get :index
       expect(response).to be_successful
       expect(assigns(:send_lists).count).to eq(20)
