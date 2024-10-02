@@ -1,7 +1,7 @@
 # spec/models/item_spec.rb
 require 'rails_helper'
 
-RSpec.describe Item, type: :model do
+RSpec.describe Item do
   let(:user) { create(:user) }
   let(:item) { build(:item, user: user) }
 
@@ -12,22 +12,22 @@ RSpec.describe Item, type: :model do
 
     it 'ユーザーがなければ無効であること' do
       item.user = nil
-      expect(item).to be_invalid
+      expect(item).not_to be_valid
     end
 
     it 'タイトルがなければ無効であること' do
       item.title = nil
-      expect(item).to be_invalid
+      expect(item).not_to be_valid
     end
 
     it 'アイテムURLがなければ無効であること' do
       item.item_url = nil
-      expect(item).to be_invalid
+      expect(item).not_to be_valid
     end
 
     it '無効なURLフォーマットの場合は無効であること' do
       item.item_url = 'https://www.example.com'
-      expect(item).to be_invalid
+      expect(item).not_to be_valid
     end
 
     it '有効なYouTube Shorts URLの場合は有効であること' do
@@ -38,7 +38,7 @@ RSpec.describe Item, type: :model do
     it 'アイテムURLが重複していると無効であること' do
       existing_item = create(:item, item_url: 'https://www.youtube.com/shorts/duplicate')
       item.item_url = 'https://www.youtube.com/shorts/duplicate'
-      expect(item).to be_invalid
+      expect(item).not_to be_valid
     end
   end
 
@@ -60,7 +60,7 @@ RSpec.describe Item, type: :model do
 
     it '3つ以上のタグを追加すると無効になること' do
       item.tag_list.add('タグ1', 'タグ2', 'タグ3', 'タグ4')
-      expect(item).to be_invalid
+      expect(item).not_to be_valid
     end
   end
 end

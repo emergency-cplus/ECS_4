@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PasswordResetsController, type: :controller do
+RSpec.describe PasswordResetsController do
   describe 'GET #new' do
     it 'renders the new template' do
       get :new
@@ -60,6 +60,7 @@ RSpec.describe PasswordResetsController, type: :controller do
 
   describe 'PATCH #update' do
     let(:user) { create(:user) }
+
     before do
       user.deliver_reset_password_instructions!
     end

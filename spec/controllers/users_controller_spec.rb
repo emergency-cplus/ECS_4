@@ -4,8 +4,8 @@ RSpec.describe UsersController, type: :request do
   let(:user) { create(:user, password: 'OldPassword1!', password_confirmation: 'OldPassword1!') }
   
   describe 'GET #show' do
-    let(:user) { FactoryBot.create(:user) }
-    let(:other_user) { FactoryBot.create(:user) }
+    let(:user) { create(:user) }
+    let(:other_user) { create(:user) }
 
     context 'when the logged in user is the correct user' do
       before do
