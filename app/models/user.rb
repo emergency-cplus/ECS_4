@@ -41,7 +41,7 @@ class User < ApplicationRecord
     if valid?
       save
     else
-      errors.add(:password, 'は最低6文字で、数字と大文字を含む必要があります。')
+      errors.add(:password, 'は最低8文字で、数字と大文字を含む必要があります。')
       false
     end
   end

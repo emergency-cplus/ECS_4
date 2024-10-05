@@ -44,6 +44,14 @@ RSpec.configure do |config|
 
   # FactoryBot シンタックスメソッドの組み込み
   config.include FactoryBot::Syntax::Methods
+
+  # 認証ヘルパーメソッドを追加
+  config.include Module.new {
+    def login(user)
+      post login_path, params: { email: user.email, password: 'Password1!' }
+    end
+  }, type: :request
+
   # Sorceryライブラリが提供するテストヘルパーモジュールをRSpecテストで使用できるように設定する
   config.include Sorcery::TestHelpers::Rails::Controller, type: :controller
   config.include Sorcery::TestHelpers::Rails::Integration, type: :request
