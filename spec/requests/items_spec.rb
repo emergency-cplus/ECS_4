@@ -10,7 +10,7 @@ RSpec.describe "Items", type: :request do
   }
 
   before do
-    login_user(user)
+    login(user)
   end
 
   describe "GET /items" do
@@ -37,10 +37,14 @@ RSpec.describe "Items", type: :request do
     end
 
     it "paginates results" do
-      create_list(:item, 30, user: user)
+      create_list(:item, 11, user: user)
       get items_path
-      expect(response.body).to include('class="pagination"')
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('class="pagination join m-3"')
+      expect(response.body).to include('次へ')
+      expect(response.body).to include('href="/items?page=2"')
     end
+    
   end
 
   describe "GET /items/:id" do
