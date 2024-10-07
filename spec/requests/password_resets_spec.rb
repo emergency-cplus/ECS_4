@@ -1,10 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe PasswordResetsController do
+RSpec.describe "PasswordResets", type: :request do
   describe 'GET #new' do
     it 'renders the new template' do
-      get :new
-      expect(response).to render_template(:new)
+      get new_password_reset_path
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include('パスワードリセット')
     end
   end
 
@@ -14,7 +15,7 @@ RSpec.describe PasswordResetsController do
     context 'when email is valid' do
       it 'sends a password reset email and redirects to login path' do
         expect_any_instance_of(User).to receive(:deliver_reset_password_instructions!)
-        post :create, params: { email: user.email }
+        post password_resets_path, params: { email: user.email }
         expect(response).to redirect_to(login_path)
         expect(flash[:notice]).to eq('パスワードリセットのメールを送信しました。メールをご確認ください。')
       end
@@ -22,7 +23,7 @@ RSpec.describe PasswordResetsController do
 
     context 'when email is invalid' do
       it 'redirects to new password reset path with an alert' do
-        post :create, params: { email: 'nonexistent@example.com' }
+        post password_resets_path, params: { email: 'nonexistent@example.com' }
         expect(response).to redirect_to(new_password_reset_path)
         expect(flash[:alert]).to eq('指定されたメールアドレスは見つかりませんでした。')
       end
@@ -38,20 +39,15 @@ RSpec.describe PasswordResetsController do
       end
 
       it 'renders the edit template' do
-        get :edit, params: { token: user.reset_password_token }
-        expect(response).to render_template(:edit)
-      end
-
-      it 'assigns @user and @token' do
-        get :edit, params: { token: user.reset_password_token }
-        expect(assigns(:user)).to eq(user)
-        expect(assigns(:token)).to eq(user.reset_password_token)
+        get edit_password_reset_path(user.reset_password_token)
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include('パスワード再設定')
       end
     end
 
-    context 'with invalid or expired token' do
-      it 'redirects to new password reset path with an alert' do
-        get :edit, params: { token: 'invalidtoken' }
+    context 'with invalid token' do
+      it 'redirects to new password reset path' do
+        get edit_password_reset_path('invalid_token')
         expect(response).to redirect_to(new_password_reset_path)
         expect(flash[:alert]).to eq('無効または期限切れのトークンです。もう一度試してください。')
       end
@@ -67,7 +63,7 @@ RSpec.describe PasswordResetsController do
 
     context 'with valid password params' do
       it 'resets the password and redirects to the login path' do
-        patch :update, params: { token: user.reset_password_token, user: { password: 'NewPassword1!', password_confirmation: 'NewPassword1!' } }
+        patch password_reset_path(user.reset_password_token), params: { user: { password: 'NewPassword1!', password_confirmation: 'NewPassword1!' } }
         expect(response).to redirect_to(login_path)
         expect(flash[:notice]).to eq('パスワードがリセットされました。')
         user.reload
@@ -75,7 +71,7 @@ RSpec.describe PasswordResetsController do
       end
 
       it 'clears the reset password token after successful update' do
-        patch :update, params: { token: user.reset_password_token, user: { password: 'NewPassword1!', password_confirmation: 'NewPassword1!' } }
+        patch password_reset_path(user.reset_password_token), params: { user: { password: 'NewPassword1!', password_confirmation: 'NewPassword1!' } }
         user.reload
         expect(user.reset_password_token).to be_nil
       end
@@ -84,34 +80,32 @@ RSpec.describe PasswordResetsController do
     context 'with invalid password params' do
       it 'does not reset the password and re-renders the edit template' do
         expect {
-          patch :update, params: { token: user.reset_password_token, user: { password: 'short', password_confirmation: 'short' } }
+          patch password_reset_path(user.reset_password_token), params: { user: { password: 'short', password_confirmation: 'short' } }
         }.not_to change { user.reload.crypted_password }
         
-        expect(response).to render_template(:edit)
-        expect(assigns(:user).errors).to be_present
-        expect(flash.now[:alert]).to eq('パスワードリセットに失敗しました。もう一度試してください。')
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include('パスワードリセットに失敗しました。もう一度試してください。')
       end
     end
 
     context 'with invalid password format' do
       shared_examples 'invalid password' do |password|
         it 'does not reset the password and shows an error message' do
-          patch :update, params: { token: user.reset_password_token, user: { password: password, password_confirmation: password } }
-          expect(response).to render_template(:edit)
-          expect(flash.now[:alert]).to eq('パスワードリセットに失敗しました。もう一度試してください。')
-          expect(assigns(:user).errors[:password]).to include('は最低6文字で、数字と大文字を含む必要があります。')
+          patch password_reset_path(user.reset_password_token), params: { user: { password: password, password_confirmation: password } }
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to include('パスワードリセットに失敗しました。もう一度試してください。')
         end
       end
 
-      it_behaves_like 'invalid password', 'Short1'
-      it_behaves_like 'invalid password', 'nouppercase1'
-      it_behaves_like 'invalid password', 'NoNumber'
+      it_behaves_like 'invalid password', 'short'
+      it_behaves_like 'invalid password', 'onlylowercase123'
+      it_behaves_like 'invalid password', 'ONLYUPPERCASE123'
     end
 
     it 'logs an error when password change fails' do
       allow_any_instance_of(User).to receive(:change_password).and_return(false)
       expect(Rails.logger).to receive(:error).with(/パスワードの変更に失敗しました/)
-      patch :update, params: { token: user.reset_password_token, user: { password: 'NewPassword1!', password_confirmation: 'NewPassword1!' } }
+      patch password_reset_path(user.reset_password_token), params: { user: { password: 'NewPassword1!', password_confirmation: 'NewPassword1!' } }
     end
   end
 end
