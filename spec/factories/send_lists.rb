@@ -1,8 +1,10 @@
 FactoryBot.define do
   factory :send_list do
-    phone_number { "123-456-7890" }
-    sender { "John Doe" }
-    item
-    user
+    association :user
+    association :item
+    phone_number { "09012345678" }
+    send_at { 1.day.from_now }
+    sender { "Test Sender" }
+    send_as_test { false }
   end
 end
