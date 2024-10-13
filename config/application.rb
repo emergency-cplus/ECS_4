@@ -8,7 +8,7 @@ Bundler.require(*Rails.groups)
 
 # 環境変数を読み込む
 if ['development', 'test'].include? ENV['RAILS_ENV']
-  Dotenv::Railtie.load
+  require 'dotenv/rails-now'
 end
 
 module App
