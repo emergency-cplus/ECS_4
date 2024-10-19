@@ -1,6 +1,6 @@
 # Emergency Call Support
   アプリURL https://ecs-4.fly.dev/
-
+  ※ サービス一時停止中（2024年12月1日再開予定）
 ---
 
 ### **サービス概要**
