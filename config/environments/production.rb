@@ -73,6 +73,24 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  # Action Mailer設定
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: ENV['SMTP_SERVER'],
+    port: ENV['SMTP_PORT'].to_i, 
+    user_name: ENV['SMTP_USERNAME'],
+    password: ENV['SMTP_PASSWORD'],
+    authentication: 'plain',
+    enable_starttls_auto: true
+  }
+
+  # メール送信に関するエラーを報告するかどうか
+  config.action_mailer.raise_delivery_errors = true
+
+  # メールのデフォルトURLオプション（例: パスワードリセットのリンク生成に使用）
+  config.action_mailer.default_url_options = { host: ENV['MAIL_HOST'], protocol: 'https' }
+
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
