@@ -42,3 +42,12 @@
 config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml
+
+# データベース設定ファイル
+/config/database.yml
+
+# クレデンシャルや秘密鍵関連
+/config/credentials.yml.enc
+
+# 環境依存設定ファイル
+config/secrets.yml
