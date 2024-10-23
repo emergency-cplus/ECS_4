@@ -15,7 +15,7 @@ class User < ApplicationRecord
 
   before_create :ensure_uuid
 
-  enum role: { guest: 0, general: 1, admin: 2 }
+  enum role: { admin: 0, general: 1, demo: 2 }
 
   # sorceryで使う
   def deliver_reset_password_instructions!
