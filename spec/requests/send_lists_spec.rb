@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe SendListsController, type: :request do
+RSpec.describe SendListsController do
   let(:user) { create(:user) }
-  let(:item) { create(:item, user: user) }
+  let(:item) { create(:item, user:) }
 
   before do
     login(user)
@@ -16,22 +16,22 @@ RSpec.describe SendListsController, type: :request do
     end
 
     it "paginates results" do
-      create_list(:send_list, 25, user: user)
+      create_list(:send_list, 25, user:)
       get send_lists_path
       expect(assigns(:send_lists).count).to eq(20)
     end
   end
 
   describe "POST /create" do
-    let(:valid_attributes) {
-      FactoryBot.attributes_for(:send_list).merge(item_id: item.id)
-    }
+    let(:valid_attributes) do
+      attributes_for(:send_list).merge(item_id: item.id)
+    end
 
     context "with valid parameters" do
       it "creates a new SendList" do
-        expect {
+        expect do
           post send_lists_path, params: { send_list: valid_attributes }
-        }.to change(SendList, :count).by(1)
+        end.to change(SendList, :count).by(1)
       end
 
       it "creates a SendList with correct attributes" do
@@ -53,21 +53,22 @@ RSpec.describe SendListsController, type: :request do
       it "sends an SMS" do
         sms_sender = instance_double(SmsSender)
         allow(SmsSender).to receive(:new).and_return(sms_sender)
-        expect(sms_sender).to receive(:send_sms).and_return(OpenStruct.new(status: 'queued'))
+        # expect(sms_sender).to receive(:send_sms).and_return(OpenStruct.new(status: 'queued'))
+        allow(sms_sender).to receive(:send_sms).and_return(OpenStruct.new(status: 'queued'))
 
         post send_lists_path, params: { send_list: valid_attributes }
       end
     end
 
     context "with invalid parameters" do
-      let(:invalid_attributes) {
-        FactoryBot.attributes_for(:send_list, phone_number: "123", item_id: item.id)
-      }
+      let(:invalid_attributes) do
+        attributes_for(:send_list, phone_number: "123", item_id: item.id)
+      end
 
       it "does not create a new SendList" do
-        expect {
+        expect do
           post send_lists_path, params: { send_list: invalid_attributes }
-        }.not_to change(SendList, :count)
+        end.not_to change(SendList, :count)
       end
 
       it "redirects to the items path" do

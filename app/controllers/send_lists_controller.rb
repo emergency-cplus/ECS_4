@@ -60,5 +60,4 @@ class SendListsController < ApplicationController
   def send_list_params
     params.require(:send_list).permit(:phone_number, :sender, :item_id, :send_at, :send_as_test)
   end
-
 end

@@ -1,7 +1,7 @@
 # spec/requests/user_sessions_spec.rb
 require 'rails_helper'
 
-RSpec.describe "UserSessions", type: :request do
+RSpec.describe "UserSessions" do
   describe "GET /login" do
     it "renders the login page" do
       get login_path
