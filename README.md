@@ -1,4 +1,3 @@
-
 # Emergency Call Support
 
 Emergency Call Supportは、119番通報時の指令員（オペレーター）の業務を支援し、通報者への指導をより効果的に行うためのWebアプリケーションです。
