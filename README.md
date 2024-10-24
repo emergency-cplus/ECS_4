@@ -1,107 +1,158 @@
+
 # Emergency Call Support
-  アプリURL https://ecs-4.fly.dev/
 
----
+Emergency Call Supportは、119番通報時の指令員（オペレーター）の業務を支援し、通報者への指導をより効果的に行うためのWebアプリケーションです。
 
-### **サービス概要**
-　このWebアプリは、119番通報の受付の際に、消防の指令員（オペレーター）が、通報者に対して迅速かつ的確な口頭指導を可能にするプラットフォームサービスです。オペレーターは、事前に説明動画を用意しておくことで、簡単に通報者へ動画URLをSMS送信することができます。
-  [YouTube](https://www.youtube.com/@emegency_cplus "YouTube EmergenCy+")
-では、応急手当て等のショート動画を発信中！
+🌟 [アプリページ](https://ecs-4.fly.dev/)
 
----
+## サービス概要
 
-### **このサービスへの思い・作りたい理由**
+- 事前に準備された説明動画をSMSで送信
+- 通報者の理解度向上と迅速な対応をサポート
+- 指令員の業務効率化を実現
 
-  私は現役消防士として、119番通報を受け付け、通報内容に応じて消防車両を出動させる業務に従事している通信指令室の指令員（オペレーター）です。日々、さまざまな通報を受け付けるなかで、応急手当て等の口頭指導を行ったり、初期消火の協力を依頼したりすることがあります。
+## 主な機能
 
- しかし、私自身、声のみの説明で慌てている通報者にきちんと伝わっているか不安を覚えていましたし、一方で、通報者の方も普段やり慣れていない初期消火や応急手当ての説明を電話越しに受けても、その理解は難しいようでした。そこで、オペレーターが要点を絞った説明動画を簡単にSMS送信でき、また通報者がその動画をスマートフォンで見ることができれば、オペレーター業務の改善が図れると考えたのがきっかけです。
+- 状況別の説明動画ライブラリ
+- ワンクリックでのSMS送信機能
+- 送信履歴の管理
+- 検索・フィルタリング機能
+- ユーザー管理システム
 
- 現状はそのような説明動画を準備しておいたとしても、簡単にリンクを送る方法はありません。そのため、事前に用意した説明動画を一覧で管理し、そのリンクを簡単にSMS送信できるWebアプリ（プラットフォーム）を開発しようと決意しました。
+## 画面遷移図
 
-**口頭指導とは？**
+システムの画面遷移は以下通りです：
 
-　119番通報を受付けた際、オペレーターが傷病者の状態を聞き取り、救急車が到着するまでの間に何らかの応急手当てが必要だと判断した場合、通報者を含めた救急現場に居合わせた方々に対して電話越しに応急手当ての協力を要請し、その実践方法を説明・指導するものです。特に、心肺停止状態の方に対して行う胸骨圧迫（心臓マッサージ）やAEDを使った救命活動は、その後の生存率に直結するため、現場に居合わせた方々の適切で迅速な行動が重要となります。
+```mermaid
+flowchart TD
+  A["Create(users)"] --> B[Login]
+  B --> C[Top]
+  C <--> D[message_template]
+  C <--> E[items_index]
+  E --> F["select item"]
+  F --> G{"Send item?"}
+  G -->|Yes| H["send_form (PopUp)"]
+  H -->|OK| I["send confirm"]
+  H -->|Cancel| E
+  G -->|NG| E
+  E <--> J[send_lists]
+  E --> K["show_item"]
+  K --> L["edit_item"]
+  L --> K
+  K --> M["delete_item"]
+  M --> E
+  E <--> N["create_items"]
+  
+  %% 新しい要素
+  C <--> O[User Management]
+  E <--> P[Search/Filter]
+  I --> Q[SMS Sent via Twilio]
+ Q --> R[View Send History]
+ R --> J
+```
 
-**過去の事例**
+[詳細画面遷移図（Figma）](https://www.figma.com/file/b2eg08fgpCZsViWha4ok0T/Emergency_Call_Support(Flow-Diagram)?type=whiteboard&node-id=0%3A1&t=87TxCsT2z5kEfRZS-1)
 
-　救急隊が現場に駆けつけると、オペレーターの「心臓マッサージはできますか？」の尋ねに「できます！」と即答したはずの通報者が、一心不乱に傷病者の胸をさすっていた...。という事例がありました。現場を見ることができないオペレーターにとっても、慌てていて適切な行動ができていない通報者にとっても、電話口での確認だけではお互いの誤解に気がつくことができません。
+## ER図
 
----
+システムのデータベース構造を表すER図は以下の通りです：
 
-### **ユーザー層について**
 
-**対象ユーザー**
+```mermaid
+erDiagram
+    Users ||--o{ Items : posts
+    Users ||--o{ SendLists : creates
+    Items ||--o{ SendLists : is_sent_as
+    Items ||--o{ Taggings : has
+    Tags ||--o{ Taggings : has
 
-- 指令員（オペレーター）
+    Users {
+        bigint id PK
+        string email UK "null: false"
+        string crypted_password
+        string salt
+        string name "null: false"
+        text message_template
+        string token UK
+        string reset_password_token
+        datetime reset_password_token_expires_at
+        datetime reset_password_email_sent_at
+        string uuid UK "null: false"
+        integer role
+        datetime created_at
+        datetime updated_at
+    }
 
-**※ユーザー選定の理由（補足）**
+    Items {
+        bigint id PK
+        string title
+        text description
+        string item_url
+        bigint user_id FK
+        datetime created_at
+        datetime updated_at
+    }
 
-　このプラットフォームは、オペレーターの業務改善Webアプリです。したがって対象ユーザーは、消防指令員たちに限ります。一方で、通報者や現場に居合わせた協力者が、このWebアプリにるサービス受益者です。送信されてきた動画を視聴することで、初期消火や応急手当てのやり方を視覚的に確認することが可能になり、電話越しの声だけの説明を受けるより、理解度の向上が予測できます。
+    SendLists {
+        bigint id PK
+        bigint item_id FK
+        bigint user_id FK "null: false"
+        string phone_number
+        datetime send_at
+        string sender
+        boolean send_as_test "default: false"
+        datetime created_at
+        datetime updated_at
+    }
 
----
+    Tags {
+        bigint id PK
+        string name UK
+        integer taggings_count "default: 0"
+        datetime created_at
+        datetime updated_at
+    }
 
-### **サービスの利用イメージ**
+    Taggings {
+        bigint id PK
+        bigint tag_id FK
+        string taggable_type
+        bigint taggable_id
+        string tagger_type
+        bigint tagger_id
+        string context "limit: 128"
+        string tenant "limit: 128"
+        datetime created_at
+    }
+```
 
-1. 事前に用意しておいた動画一覧の中から、通報内容に応じた適切な説明動画を選択
-2. 動画URLを通報者・協力者のスマートフォンにSMS送信
-3. 通報者・協力者が受信したSMSのURLから説明動画にアクセスし、視聴
-4. 動画の内容に基づいて、適切な初期消火・応急手当てを実施
+## 技術スタック
 
-**※3について**
-　固定電話やフィーチャーフォン（ガラケー）からの通報も想定されるため、場合によってはスマートフォンを持っている協力者の電話番号宛にSMS送信することも考慮しています。
-
----
-
-### **サービスの差別化ポイント・推しポイント**
-
-- **動画による分かりやすい説明：** 声だけの説明と比較して、動画を見ながらの方が内容をイメージしやすく、適切な応急手当てや初期消火などの対応を実践しやすいです。
-
-- **事前準備された動画：** 状況に合わせた動画を事前に準備することで、指令員は迅速かつ的確な動画選択が可能になります。
-
-- **SMS送信による利便性：** 動画を検索してもらう煩わしさがなく、指令員も手軽に動画リンクを共有できます。
-
-- **直接SMS送信：** 動画リンクを通報者の電話に直接SMS送信することで、スムーズな情報共有を実現します。
-
-- **オペレーターの負担軽減:** 口頭指導をしないことで指令員の負担が軽減され、一方で、新たな119番通報へ迅速に応対することができます。
-
-- **公平な住民サービス:** 動画による説明は、指令員個人の説明力やコミュニケーション能力に依存しないため、常に一定した水準の市民サービスを提供できます。
-
----
-
-### **機能候補**
-
-**MVPリリース時**
-
-- 説明動画一覧画面: 様々な説明動画のサムネイルを表示
-- 動画選択機能: ユーザーが状況に合った動画を選択
-- SMS送信機能: 選択した動画のURLをSMSで送信
-
-**本リリースまで**
-
-- 検索機能: タイトル、タグ検索
-- カテゴリ分類（タグ）機能
-- ユーザー管理機能
-
----
-
-### **本リリース後の使用率の向上について**
-
-- 消防署への説明
-- 他消防本部への横展開
-- 応急手当て講習や救命講習等で試験的に活用する
-
----
-### **技術スタック**
-
-- フロントエンド: HTML, CSS, JavaScript
-  TailwindCSS, phosphoricons
-- バックエンド: Ruby (Ruby on Rails)
-- データベース: MySQL => PostgreSQL へ変更
-- インフラ: Docker環境
+- フロントエンド: HTML, CSS, JavaScript, TailwindCSS
+- バックエンド: Ruby on Rails, Node.js
+- データベース: PostgreSQL
+- インフラ: Docker
+- デプロイ: Fly.io
 - SMS送信: Twilio API
 
-[画面遷移図](https://www.figma.com/file/b2eg08fgpCZsViWha4ok0T/Emergency_Call_Support(Flow-Diagram)?type=whiteboard&node-id=0%3A1&t=87TxCsT2z5kEfRZS-1)
+## 開発背景
 
-[ER図](https://drive.google.com/file/d/1-xSW5JZVod1zqIBsZsH9mkjcK8eCGUhc/view?usp=sharing) 
-=> テーブル名をDonesからSendListsに変更
-    user_idカラムの追加、Itemsテーブルのvideo_urlカラムをitem_urlに変更
+現役消防士である開発者が、日々の119番通報対応業務の中で感じた課題を解決するために考案しました。音声のみによる説明での不安や誤解を解消し、より効果的な初期対応を実現することを目指しています。
+
+🧑‍🚒 [開発者X](https://x.com/EmergencyCplus)
+
+📺 [YouTubeチャンネル](https://www.youtube.com/@emegency_cplus "YouTube EmergenCy+")
+
+応急手当て等のショート動画は↑チャンネルから（随時更新予定）
+
+## 導入効果
+
+- 通報者への的確な指示による救命率の向上
+- 指令員の負担軽減と対応時間の短縮
+- 標準化された指導による均一なサービス提供
+
+## お問い合わせ
+
+Emergency Call Supportの導入やデモンストレーションについてのお問い合わせは、以下のGoogleフォームからお願いいたします。
+
+[お問い合わせフォーム](https://forms.gle/WoPsBfeCWghTMHAh9)
