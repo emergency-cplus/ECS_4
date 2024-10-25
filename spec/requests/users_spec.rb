@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe UsersController, type: :request do
+RSpec.describe UsersController do
   let(:user) { create(:user, password: 'OldPassword1!', password_confirmation: 'OldPassword1!') }
   
   describe 'GET #show' do
@@ -21,7 +21,7 @@ RSpec.describe UsersController, type: :request do
       end
 
       it 'redirects to the login page' do
-        expect(response).to redirect_to(login_path)  # ログインページへのリダイレクトを期待
+        expect(response).to redirect_to(login_path) # ログインページへのリダイレクトを期待
       end
     end
   end
@@ -36,10 +36,10 @@ RSpec.describe UsersController, type: :request do
   describe "POST /users" do
     context "with valid parameters" do
       it "creates a new user and redirects to the root path" do
-        expect {
+        expect do
           post users_path, params: { user: { name: "Test User", email: "test@example.com", password: "Password1!", password_confirmation: "Password1!" } }
-          puts response.body  # エラーメッセージの確認用
-        }.to change(User, :count).by(1)
+          puts response.body # エラーメッセージの確認用
+        end.to change(User, :count).by(1)
         expect(response).to redirect_to(root_path)
         follow_redirect!
         expect(response.body).to include("ユーザー登録が成功し、ログインしました")
@@ -48,9 +48,9 @@ RSpec.describe UsersController, type: :request do
 
     context "with invalid parameters" do
       it "does not create a user and re-renders the new template" do
-        expect {
+        expect do
           post users_path, params: { user: { name: "", email: "test@example.com", password: "password", password_confirmation: "password" } }
-        }.not_to change(User, :count)
+        end.not_to change(User, :count)
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include("ユーザー登録に失敗しました")
       end
@@ -97,14 +97,14 @@ RSpec.describe UsersController, type: :request do
         }
       end
 
-    it "updates the password, logs out the user and redirects to the login path" do
-      patch update_password_user_path(user.uuid), params: new_password_params
-      expect(response).to redirect_to(login_path)
-      follow_redirect!
-      expect(response.body).to include('パスワードが更新されました。再ログインしてください。')
-      expect(user.reload.valid_password?('NewPassword1!')).to be_truthy
+      it "updates the password, logs out the user and redirects to the login path" do
+        patch update_password_user_path(user.uuid), params: new_password_params
+        expect(response).to redirect_to(login_path)
+        follow_redirect!
+        expect(response.body).to include('パスワードが更新されました。再ログインしてください。')
+        expect(user.reload.valid_password?('NewPassword1!')).to be_truthy
+      end
     end
-  end
 
     context "with password mismatch" do
       let(:mismatch_password_params) do

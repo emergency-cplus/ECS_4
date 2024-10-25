@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "PasswordResets", type: :request do
+RSpec.describe "PasswordResets" do
   describe 'GET #new' do
     it 'renders the new template' do
       get new_password_reset_path
@@ -79,9 +79,9 @@ RSpec.describe "PasswordResets", type: :request do
 
     context 'with invalid password params' do
       it 'does not reset the password and re-renders the edit template' do
-        expect {
+        expect do
           patch password_reset_path(user.reset_password_token), params: { user: { password: 'short', password_confirmation: 'short' } }
-        }.not_to change { user.reload.crypted_password }
+        end.not_to(change { user.reload.crypted_password })
         
         expect(response).to have_http_status(:ok)
         expect(response.body).to include('パスワードリセットに失敗しました。もう一度試してください。')
@@ -91,7 +91,7 @@ RSpec.describe "PasswordResets", type: :request do
     context 'with invalid password format' do
       shared_examples 'invalid password' do |password|
         it 'does not reset the password and shows an error message' do
-          patch password_reset_path(user.reset_password_token), params: { user: { password: password, password_confirmation: password } }
+          patch password_reset_path(user.reset_password_token), params: { user: { password:, password_confirmation: password } }
           expect(response).to have_http_status(:ok)
           expect(response.body).to include('パスワードリセットに失敗しました。もう一度試してください。')
         end

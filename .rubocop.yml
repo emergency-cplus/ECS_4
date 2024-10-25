@@ -72,9 +72,12 @@ Rails/UniqueValidationWithoutIndex:
 Rails/ActionOrder:
   Enabled: true
 
+Rails/EagerEvaluationLogMessage:
+  Enabled: true
+
 # RSpec関連
 RSpec/MultipleExpectations:
-  Max: 5
+  Max: 6
 
 RSpec/ExampleLength:
   Max: 15
@@ -100,8 +103,14 @@ RSpec/EmptyExampleGroup:
 RSpec/PredicateMatcher:
   Enabled: false
 
+RSpec/NoExpectationExample:
+  Enabled: false
+
+# Lint関連
 Lint/DuplicateBranch:
   Enabled: true
 
-Rails/EagerEvaluationLogMessage:
+# FactoryBot関連
+FactoryBot/ExcessiveCreateList:
   Enabled: true
+  MaxAmount: 25
