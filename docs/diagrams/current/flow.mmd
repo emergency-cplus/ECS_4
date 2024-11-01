@@ -1,0 +1,27 @@
+```mermaid
+flowchart TD
+  A["Create(users)"] --> B[Login]
+  B --> C[Top]
+  C <--> D[message_template]
+  C <--> E[items_index]
+  E --> F["select item"]
+  F --> G{"Send item?"}
+  G -->|Yes| H["send_form (PopUp)"]
+  H -->|OK| I["send confirm"]
+  H -->|Cancel| E
+  G -->|NG| E
+  E <--> J[send_lists]
+  E --> K["show_item"]
+  K --> L["edit_item"]
+  L --> K
+  K --> M["delete_item"]
+  M --> E
+  E <--> N["create_items"]
+  
+  %% 新しい要素
+  C <--> O[User Management]
+  E <--> P[Search/Filter]
+  I --> Q[SMS Sent via Twilio]
+  Q --> R[View Send History]
+  R --> J
+```
