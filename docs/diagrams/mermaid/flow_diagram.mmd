@@ -1,0 +1,42 @@
+flowchart TD
+  A["Create(users)"] --> B[Login]
+  B --> C[Top]
+
+  C --> E[items_index]
+  C --> O[User Management]
+  
+  D[message_template] --> O
+  O --> D
+  
+  E --> N["create_items"]
+  N --> E
+  
+  E --> K["show_item"]
+  K --> L["edit_item"]
+  L --> K
+  
+  K --> M["delete_item"]
+  M --> E
+  
+  E --> F["select item"]
+  F --> G{"Send item?"}
+  G -->|Yes| H["send_form (PopUp)"]
+  H -->|OK| I["send confirm"]
+  I --> J[send_lists]
+  J --> C
+  C --> J
+  
+  G -->|NG| E
+  H -->|Cancel| E
+  
+  E --> P[Search/Filter]
+  P --> E
+
+  %% スタイリング
+  classDef default fill:#000000,color:#ffffff,stroke:#333,stroke-width:2px
+  classDef popup fill:#000000,color:#ffffff,stroke:#333,stroke-width:2px
+  classDef decision fill:#000000,color:#ffffff,stroke:#333,stroke-width:2px,shape:diamond
+
+  %% クラスの適用
+  class A,B,C,D,E,F,K,L,M,N,O,P,H,I,J default
+  class G decision

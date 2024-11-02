@@ -1,0 +1,67 @@
+```mermaid
+erDiagram
+    Users ||--o{ Items : posts
+    Users ||--o{ SendLists : creates
+    Items ||--o{ SendLists : is_sent_as
+    Items ||--o{ Taggings : has
+    Tags ||--o{ Taggings : has
+
+    Users {
+        bigint id PK
+        string email UK "null: false"
+        string crypted_password
+        string salt
+        string name "null: false"
+        text message_template
+        string token UK
+        string reset_password_token
+        datetime reset_password_token_expires_at
+        datetime reset_password_email_sent_at
+        string uuid UK "null: false"
+        integer role
+        datetime created_at
+        datetime updated_at
+    }
+
+    Items {
+        bigint id PK
+        string title
+        text description
+        string item_url
+        bigint user_id FK
+        datetime created_at
+        datetime updated_at
+    }
+
+    SendLists {
+        bigint id PK
+        bigint item_id FK
+        bigint user_id FK "null: false"
+        string phone_number
+        datetime send_at
+        string sender
+        boolean send_as_test "default: false"
+        datetime created_at
+        datetime updated_at
+    }
+
+    Tags {
+        bigint id PK
+        string name UK
+        integer taggings_count "default: 0"
+        datetime created_at
+        datetime updated_at
+    }
+
+    Taggings {
+        bigint id PK
+        bigint tag_id FK
+        string taggable_type
+        bigint taggable_id
+        string tagger_type
+        bigint tagger_id
+        string context "limit: 128"
+        string tenant "limit: 128"
+        datetime created_at
+    }
+```
