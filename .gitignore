@@ -51,3 +51,7 @@ config/environments/*.local.yml
 
 # 環境依存設定ファイル
 config/secrets.yml
+
+# .gitignoreに追加
+.DS_Store
+**/.DS_Store
