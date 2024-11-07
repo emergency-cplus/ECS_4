@@ -15,6 +15,7 @@ class User < ApplicationRecord
 
   before_create :ensure_uuid
 
+  # データベースレベルでroleのnullを制限、バリデーションは不要
   enum :role, { admin: 0, general: 1, demo: 2 }
 
   # sorceryで使う
