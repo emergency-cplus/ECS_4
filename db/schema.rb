@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_06_060038) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_10_045316) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -82,6 +82,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_06_060038) do
     t.datetime "reset_password_email_sent_at"
     t.string "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.integer "role", null: false
+    t.integer "login_count", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["token"], name: "index_users_on_token", unique: true
     t.index ["uuid"], name: "index_users_on_uuid", unique: true

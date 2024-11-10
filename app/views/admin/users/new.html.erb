@@ -1,0 +1,52 @@
+<div class="mx-5 mt-5 sm:mt-20">
+  <h1 class="text-2xl font-bold my-20 text-center">新規ユーザー登録（管理者用）</h1>
+  
+  <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
+    <div class="space-y-4">
+      <%= form_with model: @user, local: true do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
+      
+        <div class="mb-4">
+          <%= f.label :name, '名前', class: 'block mb-2 font-bold' %>
+          <%= f.text_field :name, class: 'w-full input input-bordered input-primary', required: true %>
+        </div>
+
+        <div class="mb-4">
+          <%= f.label :email, 'メールアドレス', class: 'block mb-2 font-bold' %>
+          <%= f.email_field :email, class: 'w-full input input-bordered input-primary', required: true %>
+        </div>
+
+        <div class="mb-4">
+          <%= f.label :password, 'パスワード', class: 'block mb-2 font-bold' %>
+          <%= f.password_field :password, class: 'w-full input input-bordered input-primary', required: true %>
+        </div>
+
+        <div class="mb-4">
+          <%= f.label :password_confirmation, 'パスワード確認', class: 'block mb-2 font-bold' %>
+          <%= f.password_field :password_confirmation, class: 'w-full input input-bordered input-primary', required: true %>
+        </div>
+        
+        <div class="mb-4">
+          <span class="block mb-2 font-bold">ユーザータイプ</span>
+          <div class="flex justify-center space-x-8">
+          <%# <div class="flex space-x-4"> %>
+            <label class="flex items-center">
+              <%= f.radio_button :role, 'general', class: 'radio radio-primary mr-2' %>
+              <span>一般</span>
+            </label>
+            <label class="flex items-center">
+              <%= f.radio_button :role, 'demo', class: 'radio radio-primary mr-2' %>
+              <span>デモ</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-2 mt-6">
+          <%= f.button type: 'submit', class: 'btn btn-primary' do %>
+            <i class="ph ph-user-plus large-icon"></i> 新規登録
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
