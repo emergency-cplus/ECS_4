@@ -1,11 +1,11 @@
 <div class="mx-5 mt-5 sm:mt-20" data-controller="video-preview">
   <h1 class="text-2xl font-bold my-20 text-center">パスワードリセット</h1>
   <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
-    <div class= "space-y-4">
+    <div class= "space-y-4 font-bold">
       <%= form_with url: password_resets_path, local: true do |f| %>
         <%= f.label :email, 'メールアドレス' %>
         <%= f.text_field :email, class: 'w-full input input-bordered input-primary mt-2',required: true %>
-       <div class="flex justify-end space-x-2 mt-4">
+       <div class="flex justify-end space-x-2 mt-4 font-bold">
           <%= f.button type: 'submit', class: 'btn btn-primary' do %>
           <i class="ph ph-key large-icon"></i> 申請
           <% end %>

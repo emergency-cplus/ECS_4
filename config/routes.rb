@@ -17,6 +17,10 @@ Rails.application.routes.draw do
     end
   end
   
+  namespace :admin do
+    resources :users
+  end
+
   # usersのindexページは存在しないから'/users'でroutingエラーになる
   get '/users', to: redirect('/')  # ルートにリダイレクト
 

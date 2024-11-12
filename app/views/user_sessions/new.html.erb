@@ -3,11 +3,11 @@
   <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
     <div class= "space-y-4">
       <%= form_with url: login_path, local: true do |f| %>
-      <div class="mb-4">
+      <div class="mb-4 font-bold ">
         <%= f.label :email, 'メールアドレス'%>
         <%= f.text_field :email, class: 'w-full input input-bordered input-primary' %>
       </div>
-      <div class="mb-4">
+      <div class="mb-4 font-bold ">
         <%= f.label :password, 'パスワード' %>
         <%= f.password_field :password, class: 'w-full input input-bordered input-primary space-y-4' %>
       </div>
@@ -20,8 +20,10 @@
     </div>
     <br>
     <div class='text-center'>
-      <ul class="menu menu-horizontal px-1">
+      <ul class="menu menu-horizontal px-1 font-bold ">
+        <!--
         <li><%= link_to '新規登録ページへ', new_user_path %></li>
+        -->
         <li><%= link_to 'パスワードをお忘れの方はこちら', new_password_reset_path %></li>
       </ul>
     </div>

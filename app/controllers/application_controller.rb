@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   before_action :require_login
   add_flash_types :success, :danger
   before_action :set_locale
+  before_action :check_password_change, if: :logged_in?
 
   def set_locale
       I18n.locale = params[:locale] || I18n.default_locale
@@ -12,5 +13,16 @@ class ApplicationController < ActionController::Base
 
   def not_authenticated
     redirect_to login_path, danger: "ログインしてください"
+  end
+
+  def check_password_change
+    if current_user.login_count == 1 && !current_user.admin?
+      redirect_to edit_password_user_path(current_user), 
+        danger: '初回ログインです。セキュリティのため、パスワードを変更してください'
+    end
+  end
+
+  def on_edit_password_page?
+    controller_name == 'users' && action_name == 'edit_password'
   end
 end
