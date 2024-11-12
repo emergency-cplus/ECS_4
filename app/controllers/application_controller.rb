@@ -17,8 +17,12 @@ class ApplicationController < ActionController::Base
 
   def check_password_change
     if current_user.login_count == 1 && !current_user.admin?
-      redirect_to edit_user_password_path, 
+      redirect_to edit_password_user_path(current_user), 
         danger: '初回ログインです。セキュリティのため、パスワードを変更してください'
     end
+  end
+
+  def on_edit_password_page?
+    controller_name == 'users' && action_name == 'edit_password'
   end
 end

@@ -7,6 +7,7 @@ class UserSessionsController < ApplicationController
   def create
     @user = login(params[:email], params[:password])
     if @user
+      @user.increment_login_count!
       redirect_back_or_to root_path, success: "ログインしました"
     else
       flash.now[:danger] = 'ログインに失敗しました'

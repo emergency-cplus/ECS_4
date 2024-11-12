@@ -33,12 +33,28 @@ class User < ApplicationRecord
 
   def change_password(new_password)
     self.password = new_password
-    if valid?
-      save
+    self.password_confirmation = new_password  # confirmation も自動的に設定
+    
+    if save
+      true
     else
-      errors.add(:password, 'は最低8文字で、数字と大文字を含む必要があります。')
+      # カスタムバリデータで適切なエラーメッセージが設定されているため追加のエラーメッセージは不要
       false
     end
+  end
+
+  def increment_login_count!
+    increment!(:login_count)
+  end
+
+  def first_login?
+    login_count == 1
+  end
+
+  def update_password(new_password)
+    self.password = new_password
+    self.password_confirmation = new_password
+    save
   end
 
   private
