@@ -20,8 +20,16 @@ class User < ApplicationRecord
 
   # sorceryで使う
   def deliver_reset_password_instructions!
-    generate_reset_password_token!
-    UserMailer.reset_password_email(self).deliver_now
+    return false if reset_password_email_sent_at && 
+                    reset_password_email_sent_at > 5.minutes.ago
+
+    if generate_reset_password_token!
+      UserMailer.reset_password_email(self).deliver_later  # deliver_now から変更
+      update_column(:reset_password_email_sent_at, Time.current)
+      true
+    else
+      false
+    end
   end
 
   def clear_reset_password_token!
@@ -31,16 +39,22 @@ class User < ApplicationRecord
     )
   end
 
+  # def change_password(new_password)
+  #   self.password = new_password
+  #   self.password_confirmation = new_password  # confirmation も自動的に設定
+    
+  #   if save
+  #     true
+  #   else
+  #     # カスタムバリデータで適切なエラーメッセージが設定されているため追加のエラーメッセージは不要
+  #     false
+  #   end
+  # end
+
   def change_password(new_password)
     self.password = new_password
-    self.password_confirmation = new_password  # confirmation も自動的に設定
-    
-    if save
-      true
-    else
-      # カスタムバリデータで適切なエラーメッセージが設定されているため追加のエラーメッセージは不要
-      false
-    end
+    self.password_confirmation = new_password
+    save(validate: true)  # バリデーションは実行するが、変更の有無は確認しない
   end
 
   def increment_login_count!

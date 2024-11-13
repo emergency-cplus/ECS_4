@@ -5,7 +5,13 @@ class UserMailer < ApplicationMailer
   # パスワードリセットのメールを送信するメソッド
   def reset_password_email(user)
     @user = user
-    @token = user.reset_password_token # Sorceryで生成されるトークン
-    mail(to: @user.email, subject: 'パスワードリセット')
+    @token = user.reset_password_token
+    @url = edit_password_reset_url(@token)  # URLヘルパーを使用
+
+    mail(
+      to: @user.email,
+      subject: 'パスワードリセットの手順',
+      content_type: "text/html"
+    )
   end
 end
