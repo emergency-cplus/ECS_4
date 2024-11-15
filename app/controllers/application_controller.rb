@@ -1,4 +1,3 @@
-# app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
   include SessionsHelper
   before_action :require_login
@@ -9,6 +8,7 @@ class ApplicationController < ActionController::Base
   private
 
   def check_admin_redirect
+    return unless current_user  # ログインしていない場合はチェックしない
     if current_user.admin? && request.path == '/top'
       redirect_to admin_top_path
     end
