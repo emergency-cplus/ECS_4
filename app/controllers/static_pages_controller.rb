@@ -1,6 +1,7 @@
 class StaticPagesController < ApplicationController
   skip_before_action :require_login, only: %i[top privacy_policy terms_of_use]
-
+  before_action :check_admin_redirect
+  
   def top; end
   
   def privacy_policy; end
