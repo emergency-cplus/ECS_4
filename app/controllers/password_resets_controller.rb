@@ -1,52 +1,67 @@
 class PasswordResetsController < ApplicationController
   skip_before_action :require_login
-
+  skip_before_action :check_password_change
+  
   def new; end
+
+  def create
+    @user = User.find_by_email(params[:email])
+    
+    # ユーザーの存在有無に関わらず、同じメッセージを表示
+    flash[:notice] = "パスワードリセットの手順を記載したメールを送信しました。メールが届かない場合は、入力したアドレスをご確認ください。"
+    
+    if @user
+      @user.deliver_reset_password_instructions!
+    else
+      # ユーザーが存在しない場合、同等の処理時間を確保
+      BCrypt::Password.create(SecureRandom.hex(10))
+    end
+    
+    redirect_to login_path
+  end
 
   def edit
     @token = params[:token]
     @user = User.load_from_reset_password_token(@token)
-    
-    unless @user
-      Rails.logger.info("Invalid or expired password reset token")
-      redirect_to new_password_reset_path, alert: '無効または期限切れのトークンです。もう一度試してください。'
-    end
-  end
 
-  def create
-    @user = User.find_by(email: params[:email])
-    if @user
-      @user.deliver_reset_password_instructions! # トークン生成と保存、メール送信
-      redirect_to login_path, notice: 'パスワードリセットのメールを送信しました。メールをご確認ください。'
-    else
-      redirect_to new_password_reset_path, alert: '指定されたメールアドレスは見つかりませんでした。'
+    if @user.blank?
+      not_authenticated
+      return
     end
   end
 
   def update
     @token = params[:token]
     @user = User.load_from_reset_password_token(@token)
-  
+
     if @user.blank?
-      redirect_to new_password_reset_path, alert: '無効または期限切れのトークンです。もう一度試してください。'
+      not_authenticated
       return
     end
-  
+
     @user.password_confirmation = params[:user][:password_confirmation]
     if @user.change_password(params[:user][:password])
       @user.clear_reset_password_token!
-      redirect_to login_path, notice: 'パスワードがリセットされました。'
+      flash.keep[:success] = 'パスワードを変更しました。新しいパスワードでログインしてください。'
+      redirect_to login_path
     else
-      Rails.logger.error "パスワードの変更に失敗しました。エラー: #{@user.errors.full_messages}"
-      flash.now[:alert] = 'パスワードリセットに失敗しました。もう一度試してください。'
+      flash.now[:alert] = 'パスワードの変更に失敗しました。'
       render :edit
     end
   end
 
   private
 
-  # パスワードバリデーションをチェックするメソッド
-  def valid_password_params?(password, confirmation)
-    password == confirmation && password.length >= 6 && password.match?(/\A(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+\z/)
+  def not_authenticated
+    if controller_name == 'password_resets' && action_name == 'edit'
+      redirect_to new_password_reset_path, 
+                  alert: '無効または期限切れのトークンです。もう一度パスワードリセットを申請してください。'
+    elsif controller_name == 'password_resets' && action_name == 'update'
+      flash.keep[:success] = 'パスワードを変更しました。新しいパスワードでログインしてください。'
+      redirect_to login_path
+                  # notice: 'パスワードが正常に更新されました。新しいパスワードでログインしてください。'
+    else
+      redirect_to login_path, notice: "ログインしてください"
+    end
   end
 end

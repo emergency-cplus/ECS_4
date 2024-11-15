@@ -19,7 +19,7 @@ class UserSessionsController < ApplicationController
     # ログアウト前に現在のユーザーのroleを保存しておく（必要に応じて）
     was_admin = current_user&.admin?
     logout
-    redirect_to root_path, success: "ログアウトしました"
+    redirect_to root_path, notice: "ログアウトしました"
   end
 
   private
