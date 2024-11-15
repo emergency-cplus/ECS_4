@@ -1,8 +1,14 @@
 <header>
   <nav class="bg-gray-100 p-4 fixed top-0 w-full z-50">
     <div class="container mx-auto flex items-center justify-between">
-      <%= link_to root_path, class: "text-3xl font-header_name" do %>
-        <%= image_tag 'new_logo.png', alt: 'Logo' %>
+      <% if current_user.admin? %>
+        <%= link_to admin_top_path, class: "text-3xl font-header_name" do %>
+          <%= image_tag 'new_logo.png', alt: 'Logo' %>
+        <% end %>
+      <% else %>
+        <%= link_to top_path, class: "text-3xl font-header_name" do %>
+          <%= image_tag 'new_logo.png', alt: 'Logo' %>
+        <% end %>
       <% end %>
 
       <div class="md:hidden">
@@ -13,15 +19,23 @@
         </button>
       </div>
 
-      <div class="dropdown dropdown-bottom dropdown-end" style="z-index: 200;">
-        <div tabindex="0" role="button" class="bg-transparent text-black">アイテム</div>
-          <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-            <li><%= link_to 'アイテム一覧', items_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %></li>
-            <li><%= link_to 'アイテム作成', new_item_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %></li>
-          </ul>
-      </div>
+      <% if current_user.admin? %>
+        <span class="bg-red-100 text-red-800 text-sm font-bold px-3 py-1 rounded-full">
+          管理者としてログイン中
+        </span>
+      <% end %>
 
-      <%= link_to '送信一覧', send_lists_path, class: "text-gray-700 hover:text-gray-900" %>
+      <% unless current_user.admin? %>
+        <div class="dropdown dropdown-bottom dropdown-end" style="z-index: 200;">
+          <div tabindex="0" role="button" class="bg-transparent text-black">アイテム</div>
+            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+              <li><%= link_to 'アイテム一覧', items_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %></li>
+              <li><%= link_to 'アイテム作成', new_item_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %></li>
+            </ul>
+        </div>
+
+        <%= link_to '送信一覧', send_lists_path, class: "text-gray-700 hover:text-gray-900" %>
+      <% end %>
 
       <div class="dropdown dropdown-bottom dropdown-end" style="z-index: 200;">
         <div tabindex="0" role="button" class="bg-transparent text-black"><%= current_user.name %></div>

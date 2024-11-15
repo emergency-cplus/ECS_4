@@ -8,6 +8,12 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def check_admin_redirect
+    if current_user.admin? && request.path == '/top'
+      redirect_to admin_top_path
+    end
+  end
+
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end
