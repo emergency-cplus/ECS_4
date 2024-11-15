@@ -18,7 +18,10 @@ Rails.application.routes.draw do
   end
   
   namespace :admin do
-    resources :users
+    get 'top', to: 'dashboards#top'
+    resources :users,  except: [:show, :destroy]  # showとdestroyアクションを除外
+    resources :items
+    # resources :histories
   end
 
   # usersのindexページは存在しないから'/users'でroutingエラーになる
