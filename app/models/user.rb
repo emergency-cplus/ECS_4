@@ -4,6 +4,7 @@ class User < ApplicationRecord
   end
 
   has_many :items
+  has_many :send_lists  # 追加
 
   validates :password, length: { minimum: 8 }, if: -> { new_record? || changes[:crypted_password] }
   validates :password, password_symbols: true, if: -> { new_record? || changes[:crypted_password] }
@@ -38,18 +39,6 @@ class User < ApplicationRecord
       reset_password_token_expires_at: nil
     )
   end
-
-  # def change_password(new_password)
-  #   self.password = new_password
-  #   self.password_confirmation = new_password  # confirmation も自動的に設定
-    
-  #   if save
-  #     true
-  #   else
-  #     # カスタムバリデータで適切なエラーメッセージが設定されているため追加のエラーメッセージは不要
-  #     false
-  #   end
-  # end
 
   def change_password(new_password)
     self.password = new_password
