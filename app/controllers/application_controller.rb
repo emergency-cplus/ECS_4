@@ -1,46 +1,17 @@
 class ApplicationController < ActionController::Base
-  include SessionsHelper
   before_action :require_login
-  add_flash_types :success, :danger
-  before_action :set_locale
-  before_action :check_password_change, if: :logged_in?
 
   private
 
-  def check_admin_redirect
-    return unless current_user  # ログインしていない場合はチェックしない
-    if current_user.admin? && request.path == '/top'
-      redirect_to admin_top_path
-    end
-  end
-
-  def set_locale
-    I18n.locale = params[:locale] || I18n.default_locale
-  end
-
-  def require_admin
-    redirect_to root_path, alert: '管理者権限が必要です。' unless current_user&.admin?
-  end
-
   def not_authenticated
-    redirect_to login_path, notice: "ログインしてください"
+    flash[:warning] = 'ログインしてください'
+    redirect_to login_path
   end
 
-  def check_password_change
-    if current_user.login_count == 1 && !current_user.admin?
-      redirect_to edit_password_user_path(current_user), 
-        danger: '初回ログインです。セキュリティのため、パスワードを変更してください'
+  def check_admin_redirect
+    unless current_user&.admin?
+      flash[:alert] = '権限がありません'
+      redirect_to root_path
     end
-  end
-
-  def require_login
-    unless logged_in?
-      flash[:danger] = "ログインしてください"
-      redirect_to login_url, status: :see_other
-    end
-  end
-
-  def correct_user
-    redirect_to(root_url) unless current_user.admin? || current_user == @user
   end
 end
