@@ -18,6 +18,13 @@ ja:
               too_many_tags: "は最大3つまでです"
             item_url:
               invalid_youtube_shorts_url: "は有効なYouTube Shorts URLである必要があります"
+  enums:
+    user:
+      role:
+        admin: "管理者"
+        general: "一般"
+        demo: "デモ"
+  errors:
   errors:
     format: "%{attribute}%{message}"  # エラーメッセージのフォーマットを追加
     messages:
