@@ -1,3 +1,49 @@
-<h1>Admin::Users#index</h1>
-<p>Find me in app/views/admin/users/index.html.erb</p>
-test
+<div class="mx-5 mt-5 sm:mt-20">
+  <h1 class="text-2xl font-bold my-20 text-center">ユーザー一覧</h1>
+
+  <div class="container px-10 pt-20 pb-20 mx-auto bg-slate-40 rounded-md shadow-md my-10">
+    <div class="overflow-x-auto">
+      <table class="table table-lg">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="px-6 py-3">No.</th>
+            <th class="px-6 py-3">名前</th>
+            <th class="px-6 py-3">メールアドレス</th>
+            <th class="px-6 py-3">登録日</th>
+            <th class="px-6 py-3">SMS送信回数</th>
+            <th class="px-6 py-3">権限</th>
+            <th class="px-6 py-3">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% start_number = ((@users.current_page - 1) * @users.limit_value) + 1 %>
+          <% @users.each_with_index do |user, index| %>
+            <tr>
+              <th class="px-6 py-4"><%= start_number + index %></th>
+              <td class="px-6 py-4"><%= user.name %></td>
+              <td class="px-6 py-4"><%= user.email %></td>
+              <td class="px-6 py-4"><%= user.created_at.in_time_zone('Tokyo').strftime('%Y年%m月%d日') %></td>
+              <td class="px-6 py-4"><%= user.send_lists&.count || 0 %></td>
+              <td class="px-6 py-4">
+                <%= case user.role
+                    when 'admin' then '管理者'
+                    when 'general' then '一般'
+                    when 'demo' then 'デモ'
+                    else user.role
+                end %>
+            </td>
+              <td class="px-6 py-4">
+                <%= link_to '編集', edit_admin_user_path(user), class: "btn btn-sm btn-primary" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot></tfoot>
+      </table>
+      <!-- ページネーションコントロール -->
+      <div class="flex justify-center mt-10 mb-20">
+        <%= paginate @users %>
+      </div>
+    </div>
+  </div>
+</div>
