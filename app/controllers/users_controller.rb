@@ -1,12 +1,12 @@
 class UsersController < ApplicationController
   before_action :require_login, except: [:new, :create]
-  before_action :require_admin, only: [:index, :new, :create, :destroy]
+  # before_action :require_admin, only: [:index, :new, :create, :destroy]
   before_action :set_user, only: [:show, :edit, :update, :edit_password, :update_password]
   before_action :correct_user, only: [:show, :edit, :update, :edit_password, :update_password]
 
-  def index
-    @users = User.all
-  end
+  # def index # indexアクションを削除（管理者機能）
+  #   @users = User.all
+  # end
 
   def show; end
 
@@ -120,5 +120,16 @@ class UsersController < ApplicationController
 
   def same_as_old_password?(user, new_password)
     user.crypted_password.present? && Sorcery::CryptoProviders::BCrypt.matches?(user.crypted_password, new_password, user.salt)
+  end
+
+  def correct_user
+    # 管理者の場合は全てのユーザーにアクセス可能
+    return if current_user.admin?
+    
+    # 一般ユーザーの場合は自分のページのみアクセス可能
+    unless @user == current_user
+      flash[:danger] = "アクセス権限がありません"
+      redirect_to root_url
+    end
   end
 end

@@ -1,10 +1,10 @@
 # app/controllers/admin/users_controller.rb
-class Admin::UsersController < Admin::ApplicationController
+class Admin::UsersController < ApplicationController
   before_action :require_login
   before_action :require_admin
 
   def index
-    @users = User.all
+    @users = User.page(params[:page]).per(10)
   end
 
   def new
@@ -50,6 +50,10 @@ class Admin::UsersController < Admin::ApplicationController
     params.require(:user).permit(:role)
   end
 
+  def require_admin
+    redirect_to root_path, alert: '管理者権限が必要です' unless current_user.admin?
+  end
+  
   def generate_simple_secure_password
     random_part = SecureRandom.alphanumeric(6)
     "A!#{random_part}"
