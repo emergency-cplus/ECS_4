@@ -22,3 +22,4 @@ class SendList < ApplicationRecord
     scope = scope.actual_sends unless include_test
     scope.count
   end
+end
