@@ -1,0 +1,64 @@
+<div class="mx-5 mt-5 sm:mt-20">
+  <h1 class="text-2xl font-bold my-20 text-center">ユーザー権限編集</h1>
+  
+  <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
+    <div class="space-y-4">
+      <%= form_with(model: [:admin, @user], local: true) do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
+      
+        <div class="mb-4">
+          <div class="block text-gray-700 font-bold mb-2">ユーザー情報</div>
+          <div class="p-4 bg-gray-100 rounded-md space-y-2">
+            <p>
+              <span class="text-gray-600">名前：</span>
+              <span class="font-medium"><%= @user.name %></span>
+            </p>
+            <p>
+              <span class="text-gray-600">メールアドレス：</span>
+              <span class="font-medium"><%= @user.email %></span>
+            </p>
+            <p>
+              <span class="text-gray-600">登録日：</span>
+              <span class="font-medium"><%= @user.created_at.in_time_zone('Tokyo').strftime('%Y年%m月%d日') %></span>
+            </p>
+            <p>
+              <span class="text-gray-600">現在の権限：</span>
+              <span class="font-medium"><%= t("enums.user.role.#{@user.role}") %></span>
+            </p>
+            <p>
+              <span class="text-gray-600">権限更新日：</span>
+              <span class="font-medium">
+                <%= @user.role_updated_at.present? ? 
+                    @user.role_updated_at.in_time_zone('Tokyo').strftime('%Y年%m月%d日') :
+                    @user.created_at.in_time_zone('Tokyo').strftime('%Y年%m月%d日') %>
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <div class="block text-gray-700 font-bold mb-2">権限設定</div>
+          <div class="flex justify-center space-x-8 p-4 bg-gray-100 rounded-md">
+            <label class="flex items-center cursor-pointer">
+              <%= f.radio_button :role, 'general', class: 'radio radio-primary mr-2' %>
+              <span class="text-gray-700">一般</span>
+            </label>
+            <label class="flex items-center cursor-pointer">
+              <%= f.radio_button :role, 'demo', class: 'radio radio-primary mr-2' %>
+              <span class="text-gray-700">デモ</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="flex justify-between space-x-2 mt-6">
+          <%= link_to admin_users_path, class: 'btn btn-ghost' do %>
+            <i class="ph ph-arrow-left"></i> 戻る
+          <% end %>
+          <%= f.button type: 'submit', class: 'btn btn-primary' do %>
+            <i class="ph ph-check"></i> 更新
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -31,16 +31,18 @@
                     when 'demo' then 'デモ'
                     else user.role
                 end %>
-            </td>
+              </td>
               <td class="px-6 py-4">
-                <%= link_to '編集', edit_admin_user_path(user), class: "btn btn-sm btn-primary" %>
+                <%# 誤って管理者の権限を編集しないように、編集ボタンを表示させない %>
+                <% unless user.role == 'admin' %>
+                  <%= link_to '編集', edit_admin_user_path(user), class: "btn btn-sm btn-primary" %>
+                <% end %>
               </td>
             </tr>
           <% end %>
         </tbody>
         <tfoot></tfoot>
       </table>
-      <!-- ページネーションコントロール -->
       <div class="flex justify-center mt-10 mb-20">
         <%= paginate @users %>
       </div>

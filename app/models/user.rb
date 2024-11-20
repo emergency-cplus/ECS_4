@@ -4,7 +4,7 @@ class User < ApplicationRecord
   end
 
   has_many :items
-  has_many :send_lists  # 追加
+  has_many :send_lists
 
   validates :password, length: { minimum: 8 }, if: -> { new_record? || changes[:crypted_password] }
   validates :password, password_symbols: true, if: -> { new_record? || changes[:crypted_password] }
@@ -15,6 +15,7 @@ class User < ApplicationRecord
   validates :name, presence: true, length: { maximum: 255 }
 
   before_create :ensure_uuid
+  before_save :set_role_updated_at, if: :will_save_change_to_role?
 
   # データベースレベルでroleのnullを制限、バリデーションは不要
   enum :role, { admin: 0, general: 1, demo: 2 }
@@ -64,5 +65,9 @@ class User < ApplicationRecord
 
   def ensure_uuid
     self.uuid ||= SecureRandom.uuid
+  end
+
+  def set_role_updated_at
+    self.role_updated_at = Time.current
   end
 end
