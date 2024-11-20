@@ -15,7 +15,7 @@
         <div class="w-full input input-bordered input-primary-content mt-1 p-2 bg-white h-32 flex items-center"><%= @user.message_template %></div>
       </div>
       <div class="flex justify-end space-x-2 mt-4">
-        <%= link_to edit_user_path(uuid: @user.uuid), class: "btn btn-primary", id: "button-edit-#{@user.uuid}" do %>
+        <%= link_to edit_user_path(uuid: @user.uuid), class: "btn bg-gray-500", id: "button-edit-#{@user.uuid}" do %>
           <i class="ph ph-note-pencil large-icon"></i> 編集
         <% end %>
       </div>
