@@ -61,6 +61,15 @@ class User < ApplicationRecord
     save
   end
 
+  # デモユーザーの操作制限に関するメソッドを追加
+  def can_modify_items?
+    !demo?
+  end
+
+  def can_view_all_items?
+    admin? || demo?
+  end
+
   private
 
   def ensure_uuid

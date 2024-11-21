@@ -14,15 +14,17 @@
         <div class="text-lg font-semibold">
           <%= link_to item.title, item_path(item), class: "block" %>
         </div>
+        <!--
         <div>
           <% item.tag_list.each do |tag| %>
             <%= link_to tag, items_path(tag: tag), class: "badge rounded-full bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 text-xs no-underline" %>
           <% end %>
         </div>
+        -->
         <br>
         <div class="flex justify-end">
           <button class="btn btn-primary" onclick="document.getElementById('sendModal-<%= item.id %>').showModal()">
-            <i class="ph ph-rocket-launch large-icon"></i> 送信 <!-- Phosphor icon for sending -->
+            <i class="ph ph-rocket-launch large-icon"></i> SMS送信 <!-- Phosphor icon for sending -->
           </button>
         </div>
         <dialog id="sendModal-<%= item.id %>" class="modal">
