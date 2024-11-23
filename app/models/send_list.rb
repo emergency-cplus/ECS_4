@@ -10,14 +10,14 @@ class SendList < ApplicationRecord
   
   # 特定ユーザーの送信回数を取得
   def self.count_for_user(user_id, include_test: true)
-    scope = where(user_id: user_id)
+    scope = where(user_id:)
     scope = scope.actual_sends unless include_test
     scope.count
   end
 
   # 期間指定での送信回数取得
   def self.count_for_period(user_id, start_date, end_date, include_test: true)
-    scope = where(user_id: user_id)
+    scope = where(user_id:)
             .where(created_at: start_date.beginning_of_day..end_date.end_of_day)
     scope = scope.actual_sends unless include_test
     scope.count

@@ -4,8 +4,18 @@ class PasswordResetsController < ApplicationController
   
   def new; end
 
+  def edit
+    @token = params[:token]
+    @user = User.load_from_reset_password_token(@token)
+
+    if @user.blank?
+      not_authenticated
+      nil
+    end
+  end
+
   def create
-    @user = User.find_by_email(params[:email])
+    @user = User.find_by(email: params[:email])
     
     # ユーザーの存在有無に関わらず、同じメッセージを表示
     flash[:notice] = "パスワードリセットの手順を記載したメールを送信しました。メールが届かない場合は、入力したアドレスをご確認ください。"
@@ -18,16 +28,6 @@ class PasswordResetsController < ApplicationController
     end
     
     redirect_to login_path
-  end
-
-  def edit
-    @token = params[:token]
-    @user = User.load_from_reset_password_token(@token)
-
-    if @user.blank?
-      not_authenticated
-      return
-    end
   end
 
   def update
@@ -59,7 +59,7 @@ class PasswordResetsController < ApplicationController
     elsif controller_name == 'password_resets' && action_name == 'update'
       flash.keep[:success] = 'パスワードを変更しました。新しいパスワードでログインしてください。'
       redirect_to login_path
-                  # notice: 'パスワードが正常に更新されました。新しいパスワードでログインしてください。'
+    # notice: 'パスワードが正常に更新されました。新しいパスワードでログインしてください。'
     else
       redirect_to login_path, notice: "ログインしてください"
     end

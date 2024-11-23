@@ -1,13 +1,16 @@
-class Admin::ApplicationController < ApplicationController
-  before_action :require_admin
-  # layout 'admin'
+module Admin
+  class ApplicationController < ApplicationController
+    before_action :require_admin
+    # layout 'admin'
 
-  private
+    private
 
-  def require_admin
-    unless current_user&.admin?
+    def require_admin
+      return if current_user&.admin?
+
       flash[:error] = '管理者権限が必要です'
       redirect_to root_path
+      
     end
   end
 end

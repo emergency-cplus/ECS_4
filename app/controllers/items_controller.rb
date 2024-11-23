@@ -8,17 +8,17 @@ class ItemsController < ApplicationController
     # 管理者も全アイテムを閲覧可能
     # 全アイテムを基本クエリとして設定
     @items = if current_user.can_view_all_items?
-                Item.all.order(created_at: :desc)
+               Item.order(created_at: :desc)
              else
-                current_user.items.order(created_at: :desc)
+               current_user.items.order(created_at: :desc)
              end
 
     # テキスト検索があればそれに基づいてフィルタリング
     if params[:search].present?
       @items = @items.left_joins(:tags)
-                    .where("items.title LIKE :search OR items.description LIKE :search OR tags.name LIKE :search", 
-                          search: "%#{params[:search]}%")
-                    .distinct
+                     .where("items.title LIKE :search OR items.description LIKE :search OR tags.name LIKE :search", 
+                            search: "%#{params[:search]}%")
+                     .distinct
     end
 
     # タグに基づいてさらにフィルタリング

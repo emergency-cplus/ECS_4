@@ -1,4 +1,5 @@
-class Admin::DashboardsController < Admin::ApplicationController
-  def top
+module Admin
+  class DashboardsController < Admin::ApplicationController
+    def top; end
   end
 end

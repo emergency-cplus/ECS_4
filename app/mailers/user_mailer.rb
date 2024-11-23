@@ -6,7 +6,7 @@ class UserMailer < ApplicationMailer
   def reset_password_email(user)
     @user = user
     @token = user.reset_password_token
-    @url = edit_password_reset_url(@token)  # URLヘルパーを使用
+    @url = edit_password_reset_url(@token) # URLヘルパーを使用
 
     mail(
       to: @user.email,
