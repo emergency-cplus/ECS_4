@@ -38,7 +38,10 @@
       <% else %>
         <p class="text-lg">まだアイテムがありません...</p>
         <br>
-        <%= button_to '新規作成する', new_item_path, method: :get, class: "btn btn-primary" %>
+        <!-- 新規作成ボタンの条件分岐 -->
+        <% if @can_create %>
+          <%= button_to '新規作成する', new_item_path, method: :get, class: "btn btn-primary" %>
+        <% end %>
       <% end %>
     </div>
   <% end %>

@@ -17,11 +17,11 @@
         </div>
         <div class="mb-4">
           <label class="block text-gray-700">タグ</label>
-          <div class="w-full input input-bordered input-primary-content mt-1 p-2 bg-white flex items-center">
-            <% @item.tag_list.each_with_index do |tag, index| %>
-              <%= tag %><%= "," unless index == @item.tag_list.size - 1 %>
-            <% end %>
-          </div>
+          <div class="w-full input input-bordered input-primary-content mt-1 p-2 bg-white flex flex-wrap gap-2">
+  <% @item.tag_list.each do |tag| %>
+    <%= link_to tag, items_path(tag: tag), class: "badge rounded-full bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 text-lg no-underline" %>
+  <% end %>
+</div>
         </div>
         <div class="mb-4">
           <label class="block text-gray-700">動画URL</label>
@@ -29,18 +29,26 @@
             <%= @item.item_url %>
           </div>
         </div>
+        <!-- 編集・削除ボタンの条件分岐 -->
         <div class='flex justify-end space-x-2 mt-4'>
-          <%= link_to edit_item_path(@item), class: "btn btn-primary", id: "button-edit-#{@item.id}" do %>
-            <i class="ph ph-note-pencil large-icon"></i> 編集
-          <% end %>
-          <%= link_to item_path(@item), method: :delete, data: { turbo_confirm: '削除しますか?', turbo_method: :delete }, class: "btn btn-accent", id: "button-delete-#{@item.id}" do %>
-            <i class="ph ph-trash large-icon"></i> 削除
+          <% unless current_user.demo? %>
+            <%= link_to edit_item_path(@item), class: "btn btn bg-gray-500", id: "button-edit-#{@item.id}" do %>
+              <i class="ph ph-note-pencil large-icon"></i> 編集
+            <% end %>
+            <%= link_to item_path(@item), method: :delete, data: { turbo_confirm: '削除しますか?', turbo_method: :delete }, class: "btn btn-accent", id: "button-delete-#{@item.id}" do %>
+              <i class="ph ph-trash large-icon"></i> 削除
+            <% end %>
           <% end %>
         </div>
-        <div class='flex justify-end'>
+
+        <div class='flex justify-between'>
           <ul class="menu menu-horizontal px-1">
             <li><%= link_to '一覧に戻る', items_path %></li>
           </ul>
+          <!-- SMS送信ボタンを追加 -->
+          <button class="btn btn-primary" onclick="document.getElementById('sendModal-<%= @item.id %>').showModal()">
+            <i class="ph ph-rocket-launch large-icon"></i> SMS送信
+          </button>
         </div>
       </div>
     </div>
