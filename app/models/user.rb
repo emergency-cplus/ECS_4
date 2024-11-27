@@ -14,8 +14,8 @@ class User < ApplicationRecord
   validates :email, uniqueness: true, presence: true
   validates :name, presence: true, length: { maximum: 255 }
 
-  before_create :ensure_uuid
   before_save :set_role_updated_at, if: :will_save_change_to_role?
+  before_create :ensure_uuid
 
   # データベースレベルでroleのnullを制限、バリデーションは不要
   enum :role, { admin: 0, general: 1, demo: 2 }
@@ -26,7 +26,7 @@ class User < ApplicationRecord
                     reset_password_email_sent_at > 5.minutes.ago
 
     if generate_reset_password_token!
-      UserMailer.reset_password_email(self).deliver_later  # deliver_now から変更
+      UserMailer.reset_password_email(self).deliver_later # deliver_now から変更
       update_column(:reset_password_email_sent_at, Time.current)
       true
     else
@@ -44,7 +44,7 @@ class User < ApplicationRecord
   def change_password(new_password)
     self.password = new_password
     self.password_confirmation = new_password
-    save(validate: true)  # バリデーションは実行するが、変更の有無は確認しない
+    save(validate: true) # バリデーションは実行するが、変更の有無は確認しない
   end
 
   def increment_login_count!

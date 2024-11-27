@@ -109,9 +109,7 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find_by(uuid: params[:uuid])
-    if @user.nil?
-      redirect_to root_url, alert: "ユーザーが見つかりませんでした。"
-    end
+    redirect_to root_url, alert: "ユーザーが見つかりませんでした。" if @user.nil?
   end
 
   def user_password_params

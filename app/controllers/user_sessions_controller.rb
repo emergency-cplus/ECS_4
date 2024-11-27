@@ -17,7 +17,7 @@ class UserSessionsController < ApplicationController
 
   def destroy
     # ログアウト前に現在のユーザーのroleを保存しておく（必要に応じて）
-    was_admin = current_user&.admin?
+    current_user&.admin?
     logout
     redirect_to root_path, notice: "ログアウトしました"
   end
@@ -25,10 +25,11 @@ class UserSessionsController < ApplicationController
   private
 
   def redirect_if_logged_in
-    if logged_in?
-      redirect_path = current_user.admin? ? admin_top_path : root_path
-      redirect_to redirect_path, info: "すでにログインしています"
-    end
+    return unless logged_in?
+
+    redirect_path = current_user.admin? ? admin_top_path : root_path
+    redirect_to redirect_path, info: "すでにログインしています"
+    
   end
 
   def after_login_redirect
