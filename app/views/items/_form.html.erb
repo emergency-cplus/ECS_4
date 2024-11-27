@@ -24,13 +24,16 @@
         </div>
 
         <div class="mb-4">
-          <%= f.label :tag, 'タグ', class: "block text-gray-700" %>
-          <%= f.text_field :tag_list, class: "w-full input input-bordered input-primary mt-1", value: @item.tag_list.join(", ") , placeholder: '半角カンマ(,)で区切り、最大3つまで'%>
+          <%= f.label :tag, 'タグ（最大3つまで）', class: "block text-gray-700" %>
+          <%= f.text_field :tag_list, 
+                   class: "w-full input input-bordered input-primary mt-1 placeholder:text-xs", 
+                   value: @item.tag_list.join("、"), 
+                   placeholder: 'スペース 読点(、) カンマ(,)のいずれかで区切る' %>
         </div>
 
         <div class="mb-4">
           <%= f.label :item_url, "動画URL", class: "block text-gray-700" %>
-          <%= f.text_area :item_url, placeholder: 'YouTube shortsのURLを貼り付ける', class: "w-full textarea textarea-bordered textarea-primary mt-1 h-32", data: { video_preview_target: "url" } %>
+          <%= f.text_area :item_url, placeholder: 'YouTube shortsのURLのみ登録可', class: "w-full textarea textarea-bordered textarea-primary mt-1 h-32", data: { video_preview_target: "url" } %>
         </div>
 
         <div class="flex justify-end space-x-2 mt-4">

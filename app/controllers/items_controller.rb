@@ -42,16 +42,18 @@ class ItemsController < ApplicationController
   def edit; end
 
   def create
-    # デモユーザーの二重チェック
-    return redirect_to items_path, alert: 'デモユーザーはこの操作を実行できません。' unless current_user.can_modify_items?
-    
     @item = current_user.items.new(item_params)
     
-    # nil チェックを追加
-    tag_list = item_params[:tag_list].presence || ''
-    # タグリストを3つまでに制限して処理
-    @item.tag_list = item_params[:tag_list].split(',').map(&:strip).uniq.first(3)
-    existing_item = Item.find_by(item_url: @item.item_url)
+    # タグの処理をモデルに委譲
+    @item.normalized_tag_list = item_params[:tag_list]
+
+    video_id = @item.send(:extract_video_id, @item.item_url)
+    existing_item = if current_user.can_view_all_items?
+                     Item.find_by("item_url LIKE ?", "%/shorts/#{video_id}%")
+                   else
+                     current_user.items.find_by("item_url LIKE ?", "%/shorts/#{video_id}%")
+                   end
+
     if existing_item
       redirect_to item_path(existing_item), alert: 'すでにアイテムとして保存されています'
     elsif @item.save
@@ -64,15 +66,26 @@ class ItemsController < ApplicationController
   end
 
   def update
-    # デモユーザーの二重チェック
-    return redirect_to items_path, alert: 'デモユーザーはこの操作を実行できません。' unless current_user.can_modify_items?
-    
     @item = Item.find(params[:id])
-    if @item.update(item_params)
-      if item_params[:tag_list].present?
-        @item.tag_list = item_params[:tag_list].split(',').map(&:strip).uniq.first(3)
-        @item.save
-      end
+    
+    # タグの処理をモデルに委譲
+    @item.normalized_tag_list = item_params[:tag_list] if item_params[:tag_list].present?
+    
+    # 更新前に重複チェック
+    video_id = @item.send(:extract_video_id, item_params[:item_url])
+    existing_item = if current_user.can_view_all_items?
+                     Item.where.not(id: @item.id)
+                         .find_by("item_url LIKE ?", "%/shorts/#{video_id}%")
+                   else
+                     current_user.items
+                               .where.not(id: @item.id)
+                               .find_by("item_url LIKE ?", "%/shorts/#{video_id}%")
+                   end
+
+    if existing_item
+      flash.now[:alert] = 'すでにこの動画は登録されています'
+      render :edit, status: :unprocessable_entity
+    elsif @item.update(item_params)
       redirect_to @item, notice: 'Item was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
@@ -82,7 +95,7 @@ class ItemsController < ApplicationController
   def destroy
     # デモユーザーの二重チェック
     return redirect_to items_path, alert: 'デモユーザーはこの操作を実行できません。' unless current_user.can_modify_items?
-    
+
     @item.destroy
     flash[:success] = 'アイテムを削除しました'
     redirect_to items_url
@@ -92,6 +105,9 @@ class ItemsController < ApplicationController
 
   def item_params
     params.require(:item).permit(:title, :description, :item_url, :tag_list)
+  end
+  def item_params
+    params.require(:item).permit(:title, :item_url, :description, :tag_list)
   end
 
   def set_item
@@ -112,5 +128,9 @@ class ItemsController < ApplicationController
       flash[:alert] = 'デモユーザーはこの操作を実行できません。'
       redirect_to items_path
     end
+  end
+
+  def item_params_without_tags
+    params.require(:item).permit(:title, :description, :item_url)
   end
 end
