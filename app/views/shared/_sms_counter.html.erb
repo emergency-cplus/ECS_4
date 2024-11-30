@@ -1,0 +1,7 @@
+<div class="sms-counter bg-white p-3 rounded-lg shadow-sm inline-block">
+  <% if current_user.demo? %>
+    <span class="text-gray-700">本日の送信回数: <span class="font-semibold"><%= current_user.todays_send_count %>/5</span> 回</span>
+  <% else %>
+    <span class="text-gray-700">本日の送信回数: <span class="font-semibold"><%= current_user.todays_send_count %></span> 回</span>
+  <% end %>
+</div>
