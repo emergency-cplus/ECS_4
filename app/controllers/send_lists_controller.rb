@@ -2,7 +2,10 @@ class SendListsController < ApplicationController
   before_action :set_send_list, only: [:show, :edit, :update]
 
   def index
-    @send_lists = SendList.order(created_at: :desc).page(params[:page]).per(20)
+    @send_lists = SendList.includes(:item)  # N+1クエリ対策
+                         .order(created_at: :desc)
+                         .page(params[:page])
+                         .per(20)
   end
 
   def show; end
@@ -15,41 +18,57 @@ class SendListsController < ApplicationController
 
   def create
     @send_list = SendList.new(send_list_params)
-  
-    if @send_list.phone_number.length != 11 || @send_list.phone_number.scan(/\D/).any?
-      flash[:danger] = '入力に誤りがあります。電話番号はハイフンなしの11桁の数字を入力してください。'
-      redirect_to items_path and return
+    @send_list.user = current_user
+    @send_list.send_at = Time.current
+
+    unless @send_list.valid?
+      flash[:alert] = @send_list.errors.full_messages.join(', ')
+      redirect_to send_lists_path and return
     end
-  
-    sms_sender = SmsSender.new
-    item = Item.find(@send_list.item_id)
-    user_message = User.find(item.user_id).message_template
-    full_body = "#{user_message} Check this out: #{item.item_url}"
-  
+
     begin
+      item = Item.find(@send_list.item_id)
+      sms_sender = SmsSender.new
+      
       response = sms_sender.send_sms(
         to: @send_list.phone_number,
-        body: full_body,
-        item: item
+        body: '',
+        item: item,
+        is_test: params[:send_as_test].present?
       )
-      if response.status == 'queued'
-        @send_list.user = current_user
-        @send_list.send_at = Time.zone.now
-        if @send_list.save
-          redirect_to send_lists_path, success: 'SMSを送信しました。'
-        else
-          redirect_to send_lists_path, danger: 'SendListの保存に失敗しました。'
-        end
+
+      if response&.status == 'queued'
+        @send_list.save!
+        flash[:notice] = @send_list.send_as_test ? 'テストSMSを送信しました' : 'SMSを送信しました'
       else
-        redirect_to send_lists_path, danger: 'SMSの送信に失敗しました。'
+        flash[:alert] = 'SMSの送信に失敗しました'
       end
+
+    rescue ActiveRecord::RecordNotFound
+      flash[:alert] = 'アイテムが見つかりませんでした'
+    rescue Twilio::REST::TwilioError => e
+      flash[:alert] = "SMS送信エラー: #{e.message}"
+      Rails.logger.error "Twilioエラー: #{e.message}"
     rescue StandardError => e
-      logger.error "SMS sending failed: #{e.message}"
-      redirect_to send_lists_path, danger: 'SMS送信中にエラーが発生しました。'
+      flash[:alert] = 'エラーが発生しました'
+      Rails.logger.error "予期せぬエラー: #{e.class} - #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+    end
+
+    redirect_to send_lists_path
+  end
+
+  def update; end
+
+  def check_send_limit
+    if current_user.demo? && current_user.todays_send_count >= User::DEMO_DAILY_LIMIT
+      next_reset = Time.current.beginning_of_day + User::RESET_HOUR.hours + User::RESET_MINUTE.minutes
+      next_reset += 1.day if Time.current >= next_reset
+      
+      flash[:alert] = "本日の送信可能回数（#{User::DEMO_DAILY_LIMIT}回）を超えました。"
+      redirect_to send_lists_path and return
     end
   end
-  
-  def update; end
 
   private
 
@@ -58,6 +77,7 @@ class SendListsController < ApplicationController
   end
 
   def send_list_params
-    params.require(:send_list).permit(:phone_number, :sender, :item_id, :send_at, :send_as_test)
+    params.permit(:phone_number, :sender, :item_id, :send_at, :send_as_test)
   end
+  
 end

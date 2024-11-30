@@ -20,6 +20,12 @@ class User < ApplicationRecord
   # データベースレベルでroleのnullを制限、バリデーションは不要
   enum :role, { admin: 0, general: 1, demo: 2 }
 
+  # demoの送信数制限はデフォルトで5回まで（admin, generalの場合は送信数制限なし）
+  # 送信数のカウントは始業時間（AM8:30~翌AM8:30）を基準にリセット
+  DEMO_DAILY_LIMIT = 5
+  RESET_HOUR = 8
+  RESET_MINUTE = 30
+
   # sorceryで使う
   def deliver_reset_password_instructions!
     return false if reset_password_email_sent_at && 
@@ -68,6 +74,22 @@ class User < ApplicationRecord
 
   def can_view_all_items?
     admin? || demo?
+  end
+
+  def todays_send_count
+    last_reset = Time.current.beginning_of_day + RESET_HOUR.hours + RESET_MINUTE.minutes
+    next_reset = last_reset + 1.day
+    
+    if Time.current < last_reset
+      last_reset -= 1.day
+      next_reset -= 1.day
+    end
+
+    send_lists.where(created_at: last_reset..next_reset).count
+  end
+  
+  def todays_send_limit
+    demo? ? DEMO_DAILY_LIMIT : Float::INFINITY
   end
 
   private
