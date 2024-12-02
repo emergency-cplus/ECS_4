@@ -65,7 +65,7 @@ class SendListsController < ApplicationController
       next_reset = Time.current.beginning_of_day + User::RESET_HOUR.hours + User::RESET_MINUTE.minutes
       next_reset += 1.day if Time.current >= next_reset
       
-      flash[:alert] = "本日の送信可能回数（#{User::DEMO_DAILY_LIMIT}回）を超えました。"
+      flash[:alert] = "1日の送信可能回数（#{User::DEMO_DAILY_LIMIT}回）を超えました。"
       redirect_to send_lists_path and return
     end
   end
