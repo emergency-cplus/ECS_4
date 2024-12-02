@@ -79,7 +79,7 @@ class User < ApplicationRecord
   def todays_send_count
     last_reset = Time.current.beginning_of_day + RESET_HOUR.hours + RESET_MINUTE.minutes
     next_reset = last_reset + 1.day
-    
+
     if Time.current < last_reset
       last_reset -= 1.day
       next_reset -= 1.day
