@@ -1,0 +1,4 @@
+<button class="btn btn-primary" onclick="document.getElementById('sendModal-<%= item.id %>').showModal()">
+  <i class="ph ph-rocket-launch large-icon"></i> SMS送信
+</button>
+<%= render 'shared/sms_modal', item: item %>
