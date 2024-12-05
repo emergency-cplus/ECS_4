@@ -18,10 +18,10 @@
         <div class="mb-4">
           <label class="block text-gray-700">タグ</label>
           <div class="w-full input input-bordered input-primary-content mt-1 p-2 bg-white flex flex-wrap gap-2">
-  <% @item.tag_list.each do |tag| %>
-    <%= link_to tag, items_path(tag: tag), class: "badge rounded-full bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 text-lg no-underline" %>
-  <% end %>
-</div>
+            <% @item.tag_list.each do |tag| %>
+              <%= link_to tag, items_path(tag: tag), class: "badge rounded-full bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 text-lg no-underline" %>
+            <% end %>
+          </div>
         </div>
         <div class="mb-4">
           <label class="block text-gray-700">動画URL</label>
@@ -29,6 +29,7 @@
             <%= @item.item_url %>
           </div>
         </div>
+        
         <!-- 編集・削除ボタンの条件分岐 -->
         <div class='flex justify-end space-x-2 mt-4'>
           <% unless current_user.demo? %>
@@ -45,13 +46,11 @@
           <ul class="menu menu-horizontal px-1">
             <li><%= link_to '一覧に戻る', items_path %></li>
           </ul>
-          <!-- SMS送信ボタンを追加 -->
-          <button class="btn btn-primary" onclick="document.getElementById('sendModal-<%= @item.id %>').showModal()">
-            <i class="ph ph-rocket-launch large-icon"></i> SMS送信
-          </button>
+          <%= render 'shared/sms_button', item: @item %>
         </div>
       </div>
     </div>
+    
     <!-- プレビュー画面 -->
     <div class="mockup-phone" style="width: 360px;">
       <div class="camera"></div>
@@ -65,5 +64,6 @@
       </div>
     </div>
   </div>
-  <br>
+  
+  <%= render 'shared/sms_modal', item: @item %>
 </div>

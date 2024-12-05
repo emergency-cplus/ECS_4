@@ -1,0 +1,27 @@
+<dialog id="sendModal-<%= item.id %>" class="modal">
+  <div class="modal-box">
+    <button class="btn btn-sm btn-circle absolute right-2 top-2" onclick="document.getElementById('sendModal-<%= item.id %>').close()">✕</button>
+    <h3 class="font-bold text-lg mb-4">送信フォーム</h3>
+    <form method="post" action="<%= send_sms_path %>" class="flex flex-col items-center gap-4">
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      <input type="hidden" name="item_id" value="<%= item.id %>">
+      <div class="w-full max-w-xs">
+        <label class="label block text-left">送信先電話番号:</label>
+        <input type="text" placeholder="ハイフンなし" name="phone_number" class="input input-bordered w-full" required>
+      </div>
+      <div class="w-full max-w-xs">
+        <label class="label block text-left">送信者名:</label>
+        <input type="text" placeholder="送信者名を入力" name="sender" class="input input-bordered w-full" required>
+      </div>
+      <div class="w-full max-w-xs">
+        <div class="flex items-center">
+          <label>テスト送信</label>
+          <input type="checkbox" name="send_as_test" class="checkbox checkbox-primary" style="margin-left: 16px;">
+        </div>
+      </div>
+      <div class="modal-action">
+        <input type="submit" value="送信する" class="btn btn-primary">
+      </div>
+    </form>
+  </div>
+</dialog>

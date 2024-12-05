@@ -45,6 +45,10 @@
   border-color: #666; /* ボーダーの色も同じに */
 }
 
+.btn-gray {
+  @apply bg-[#666] hover:bg-[#555];
+}
+
 *, *:before, *:after {
   box-sizing: border-box; /* 全要素に border-box を適用 */
 }
