@@ -5,16 +5,12 @@
       <%= form_with(model: @user, url: user_path(uuid: @user.uuid), local: true) do |f| %>
         <%= render 'shared/error_messages', object: f.object %>
         <div class="mb-4">
-          <%= f.label 'ユーザー名', class: 'block text-gray-700' %>
+          <%= f.label '名前', class: 'block text-gray-700' %>
           <%= f.text_field :name, class: 'w-full input input-bordered input-primary mt-1' %>
         </div>
         <div class="mb-4">
           <%= f.label 'メールアドレス', class: 'block text-gray-700' %>
           <%= f.email_field :email, class: 'w-full input input-bordered input-primary mt-1' %>
-        </div>
-        <div class="mb-4">
-          <%= f.label 'メッセージテンプレート', class: 'block text-gray-700' %>
-          <%= f.text_area :message_template, class: 'w-full textarea textarea-bordered textarea-primary mt-1 h-32' %>
         </div>
         <div class="flex justify-end space-x-2 mt-4">
           <%= f.button type: 'submit', class: 'btn btn-primary' do %>

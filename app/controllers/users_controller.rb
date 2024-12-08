@@ -100,11 +100,11 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :message_template)
+    params.require(:user).permit(:name, :email)
   end
 
   def admin_user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :message_template, :role)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :role)
   end
 
   def set_user
