@@ -1,7 +1,8 @@
 <div class="sms-counter text-lg">
+  <% send_list = SendList.new(user: current_user) %>
   <% if current_user.demo? %>
-    <span class="text-gray-700">（本日 <span class="font-semibold"><%= current_user.todays_send_count %>/5</span> 回）</span>
+    <span class="text-gray-700">（本日 <span class="font-semibold"><%= send_list.todays_send_count %>/<%= SendList::DEMO_DAILY_LIMIT %></span> 回）</span>
   <% else %>
-    <span class="text-gray-700">（本日 <span class="font-semibold"><%= current_user.todays_send_count %></span> 回）</span>
+    <span class="text-gray-700">（本日 <span class="font-semibold"><%= send_list.todays_send_count %></span> 回）</span>
   <% end %>
 </div>
