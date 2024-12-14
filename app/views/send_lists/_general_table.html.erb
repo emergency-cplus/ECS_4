@@ -1,0 +1,33 @@
+<table class="table table-sm">
+  <thead>
+    <tr class="bg-gray-100">
+      <th class="px-6 py-3">No.</th>
+      <th class="px-6 py-3">送信先番号</th>
+      <th class="px-6 py-3">送信日時</th>
+      <th class="px-6 py-3">送信アイテム</th>
+      <th class="px-6 py-3">環境</th>
+      <th class="px-6 py-3">送信者</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% start_number = ((send_lists.current_page - 1) * send_lists.limit_value) + 1 %>
+    <% send_lists.each_with_index do |send_list, index| %>
+      <tr>
+        <th class="px-6 py-4"><%= start_number + index %></th>
+        <td class="px-6 py-4"><%= mask_phone_number(send_list.phone_number) %></td>
+        <td class="px-6 py-4"><%= send_list.send_at.in_time_zone('Tokyo').strftime('%Y.%m.%d %H:%M') %></td>
+        <td class="px-6 py-4">
+          <% if send_list.item %>
+            <%= link_to send_list.item.title, item_path(send_list.item) %>
+          <% else %>
+            削除されたアイテム
+          <% end %>
+        </td>
+        <td class="px-6 py-4">
+          <%= send_list.send_as_test ? 'テスト' : '本番' %>
+        </td>
+        <td class="px-6 py-4"><%= send_list.sender %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
