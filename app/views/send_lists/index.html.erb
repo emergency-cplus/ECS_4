@@ -4,48 +4,7 @@
   </h1>
   <div class="container px-10 pb-20 mx-auto">
     <div class="overflow-x-auto">
-      
-      <table class="table table-lg">
-        <thead>
-          <tr class="bg-gray-100">
-            <th class="px-6 py-3">No.</th>
-            <th class="px-6 py-3">送信先番号</th>
-            <th class="px-6 py-3">送信日時</th>
-            <th class="px-6 py-3">動画タイトル</th>
-            <th class="px-6 py-3">送信者</th>
-            <th class="px-6 py-3">備考</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% start_number = ((@send_lists.current_page - 1) * @send_lists.limit_value) + 1 %>
-          <% @send_lists.each_with_index do |send_list, index| %>
-            <tr>
-              <th class="px-6 py-4"><%= start_number + index %></th>
-              <td class="px-6 py-4"><%= mask_phone_number(send_list.phone_number) %></td>
-              <td class="px-6 py-4"><%= send_list.send_at.in_time_zone('Tokyo').strftime('%Y-%m-%d %H:%M:%S') %></td>
-              <td class="px-6 py-4">
-                <% if send_list.item %>
-                  <%= link_to send_list.item.title, item_path(send_list.item) %>
-                <% else %>
-                  削除されたアイテム
-                <% end %>
-              </td>
-              <td class="px-6 py-4"><%= send_list.sender %></td>
-              <td class="px-6 py-4">
-                <% if send_list.send_as_test %>
-                  テスト
-                <% else %>
-                  本番
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-        <tfoot></tfoot>
-      </table>
-      <div class="flex justify-center mt-10 mb-20">
-        <%= paginate @send_lists %>
-      </div>
+      <%= render "send_lists/#{current_user.role}_table", send_lists: @send_lists %>
     </div>
   </div>
 </div>
