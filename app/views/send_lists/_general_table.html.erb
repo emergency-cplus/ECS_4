@@ -7,6 +7,7 @@
       <th class="px-6 py-3">送信アイテム</th>
       <th class="px-6 py-3">環境</th>
       <th class="px-6 py-3">送信者</th>
+      <th class="px-6 py-3">送信時</th>
     </tr>
   </thead>
   <tbody>
@@ -27,6 +28,18 @@
           <%= send_list.send_as_test ? 'テスト' : '本番' %>
         </td>
         <td class="px-6 py-4"><%= send_list.sender %></td>
+                <td class="px-6 py-4">
+          <%= 
+            case send_list.role_at_time
+            when 'admin'
+              '管理者'
+            when 'general'
+              '一般'
+            when 'demo'
+              'デモ'
+            end 
+          %>
+        </td>
       </tr>
     <% end %>
   </tbody>
