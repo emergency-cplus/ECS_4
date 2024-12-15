@@ -2,10 +2,18 @@ class SendListsController < ApplicationController
   before_action :set_send_list, only: [:show, :edit, :update]
 
   def index
-    @send_lists = SendList.includes(:item)
-                          .order(created_at: :desc)
-                          .page(params[:page])
-                          .per(20)
+    @send_lists = case current_user.role
+                  when 'admin'
+                    SendList.viewable_for_admin
+                  when 'general'
+                    SendList.viewable_for_general(current_user.id)
+                  when 'demo'
+                    SendList.viewable_for_demo
+                  end
+                  .includes(:item, :user)
+                  .order(created_at: :desc)
+                  .page(params[:page])
+                  .per(20)
   end
 
   def show; end
@@ -86,4 +94,20 @@ class SendListsController < ApplicationController
     reset_time += 1.day if current >= reset_time
     reset_time.strftime('%Y-%m-%d %H:%M:%S')
   end
+
+  # def determine_viewable_roles
+  #   case current_user.role
+  #   when 'admin'
+  #     # 管理者は全ての履歴を閲覧可能
+  #     [0, 1, 2]
+  #   when 'general'
+  #     # generalユーザーは自身のgeneral時代の履歴と、過去のdemo時代の履歴を閲覧可能
+  #     roles = [1] # general: 1
+  #     roles << 2 if current_user.was_demo? # demo: 2
+  #     roles
+  #   when 'demo'
+  #     # demoユーザーはdemoの履歴のみ閲覧可能(現generalユーザーのdemo時代の履歴を含む)
+  #     ['demo']
+  #   end
+  # end
 end

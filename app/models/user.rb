@@ -70,6 +70,15 @@ class User < ApplicationRecord
     admin? || demo?
   end
 
+
+  def was_demo?
+    # role_updated_atカラムがある場合
+    return false if role_updated_at.nil?
+    
+    # 過去にroleが[demo: 2]だった記録があるかどうかを確認
+    SendList.where(user: self, role_at_time: 2).exists?
+  end
+
   private
 
   def ensure_uuid
