@@ -2,7 +2,8 @@
   <h1 class="text-2xl font-bold my-20 text-center">パスワード再設定</h1>
   <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
     <div class="space-y-4">
-      <%= form_with model: @user, url: password_resets_path(@token), local: true do |f| %>
+      <%= form_with model: @user, url: password_reset_path(@token), local: true do |f| %>
+        <%= hidden_field_tag :token, @token %> <%# トークンをhiddenで送る %>
         <%= render 'shared/error_messages', object: f.object %>
 
         <div class="mb-4 font-bold">
