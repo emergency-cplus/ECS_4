@@ -1,7 +1,6 @@
 class PasswordResetsController < ApplicationController
   skip_before_action :require_login
-  skip_before_action :check_password_change
-  
+
   def new; end
 
   def edit
@@ -31,7 +30,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def update
-    @token = params[:token]
+    @token = params[:token] # params[:id] ではなく params[:token] から取得
     @user = User.load_from_reset_password_token(@token)
 
     if @user.blank?
