@@ -86,7 +86,7 @@ class ItemsController < ApplicationController
       flash.now[:alert] = 'すでにこの動画は登録されています'
       render :edit, status: :unprocessable_entity
     elsif @item.update(item_params)
-      redirect_to @item, notice: 'Item was successfully updated.'
+      redirect_to @item, success: 'アイテム更新に成功しました'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -97,7 +97,7 @@ class ItemsController < ApplicationController
     return redirect_to items_path, alert: 'デモユーザーはこの操作を実行できません。' unless current_user.can_modify_items?
 
     @item.destroy
-    flash[:success] = 'アイテムを削除しました'
+    flash[:notice] = 'アイテムを削除しました'
     redirect_to items_url
   end
 
