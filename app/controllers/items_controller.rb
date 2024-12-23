@@ -8,10 +8,10 @@ class ItemsController < ApplicationController
     # 管理者も全アイテムを閲覧可能
     # 全アイテムを基本クエリとして設定
     @items = if current_user.can_view_all_items?
-               Item.order(created_at: :desc)
-             else
-               current_user.items.order(created_at: :desc)
-             end
+      Item.includes(:tags).order(created_at: :desc)
+    else
+      current_user.items.includes(:tags).order(created_at: :desc)
+    end
 
     # テキスト検索があればそれに基づいてフィルタリング
     if params[:search].present?
@@ -49,10 +49,13 @@ class ItemsController < ApplicationController
 
     video_id = @item.send(:extract_video_id, @item.item_url)
     existing_item = if current_user.can_view_all_items?
-                     Item.find_by("item_url LIKE ?", "%/shorts/#{video_id}%")
-                   else
-                     current_user.items.find_by("item_url LIKE ?", "%/shorts/#{video_id}%")
-                   end
+      Item.where.not(id: 0) # 存在しないIDを指定
+          .find_by("item_url LIKE ?", "%/shorts/#{video_id}%")
+    else
+      current_user.items
+                 .where.not(id: 0) # 存在しないIDを指定
+                 .find_by("item_url LIKE ?", "%/shorts/#{video_id}%")
+    end
 
     if existing_item
       redirect_to item_path(existing_item), alert: 'すでにアイテムとして保存されています'
@@ -103,9 +106,6 @@ class ItemsController < ApplicationController
 
   private
 
-  def item_params
-    params.require(:item).permit(:title, :description, :item_url, :tag_list)
-  end
   def item_params
     params.require(:item).permit(:title, :item_url, :description, :tag_list)
   end

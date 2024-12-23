@@ -7,7 +7,7 @@ class Item < ApplicationRecord
   acts_as_taggable_on :tags
   validate :validate_tag_limit
   validate :validate_youtube_shorts_url
-  before_validation :standardize_youtube_url  # URLの標準化を追加
+  before_validation :standardize_youtube_url
 
   validates :title, presence: true, length: { maximum: 255 }
   validates :item_url, presence: true, length: { maximum: 255 }
@@ -18,19 +18,19 @@ class Item < ApplicationRecord
 
     begin
       Rails.logger.debug "Original tag string: #{tag_string.inspect}"
-      
+
       tag_string = tag_string.to_s.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
       Rails.logger.debug "After encoding: #{tag_string.inspect}"
-      
+
       normalized_tags = tag_string.gsub(JAPANESE_SEPARATORS, ',')
                                   .split(',')
                                   .map { |tag| normalize_tag(tag) }
                                   .reject(&:blank?)
                                   .uniq
                                   .first(3)  # 最大3つのタグに制限
-      
+
       Rails.logger.debug "Final normalized tags: #{normalized_tags.inspect}"
-      
+
       self.tag_list = normalized_tags
     rescue EncodingError => e
       Rails.logger.error "Tag encoding error: #{e.message}"
@@ -74,8 +74,9 @@ class Item < ApplicationRecord
       return
     end
 
-    # 自分以外で同じ動画IDを持つレコードが存在するかチェック
+    # 自分以外で、かつ、現在のユーザーのアイテムと同じ動画IDを持つレコードが存在するかチェック
     existing_item = Item.where.not(id: id)
+                       .where(user_id: user_id) # ユーザーIDの条件を追加
                        .where("item_url LIKE ?", "%/shorts/#{video_id}%")
                        .first
 
