@@ -17,6 +17,7 @@ ja:
             tag_list:
               too_many_tags: "は最大3つまでです"
             item_url:
+              duplicate_video: "はすでに登録されています"
               invalid_youtube_shorts_url: "は有効なYouTube Shorts URLである必要があります"
   enums:
     user:
