@@ -45,7 +45,7 @@ class ItemsController < ApplicationController
     @item = current_user.items.new(item_params)
     
     # タグの処理をモデルに委譲
-    @item.normalized_tag_list = item_params[:tag_list]
+    # @item.normalized_tag_list = item_params[:tag_list]
 
     video_id = @item.send(:extract_video_id, @item.item_url)
     existing_item = if current_user.can_view_all_items?
@@ -72,7 +72,7 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     
     # タグの処理をモデルに委譲
-    @item.normalized_tag_list = item_params[:tag_list] if item_params[:tag_list].present?
+    # @item.normalized_tag_list = item_params[:tag_list] if item_params[:tag_list].present?
     
     # 更新前に重複チェック
     video_id = @item.send(:extract_video_id, item_params[:item_url])
