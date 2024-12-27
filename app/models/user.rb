@@ -16,6 +16,7 @@ class User < ApplicationRecord
   before_save :set_role_updated_at, if: :will_save_change_to_role?
   before_create :ensure_uuid
 
+  attribute :role, :integer
   enum :role, { admin: 0, general: 1, demo: 2 }
 
   # sorcery関連のメソッド
