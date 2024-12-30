@@ -11,6 +11,12 @@ ARG NODE_VERSION
 ENV LANG C.UTF-8
 ENV TZ Asia/Tokyo
 
+# Railsアプリケーションの環境変数の設定
+ENV RAILS_ENV=production
+ENV RACK_ENV=production
+ENV NODE_ENV=production
+
+
 # Node.jsとYarnのセットアップ
 RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
     && wget --quiet -O - /tmp/pubkey.gpg https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
