@@ -49,10 +49,10 @@ COPY . /app
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 
-# アセットのプリコンパイル
-RUN bundle exec rails assets:precompile
+# アセットのプリコンパイル（ダミーのSECRET_KEY_BASEを使用）
+RUN SECRET_KEY_BASE=dummy RAILS_ENV=production bundle exec rails assets:precompile
 
 ENTRYPOINT ["entrypoint.sh"]
 EXPOSE 3000
 
-CMD [ "rails" , "server" , "-b" , "0.0.0.0" ]
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
