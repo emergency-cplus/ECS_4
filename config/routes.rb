@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   end
 
   # 一般ユーザー用のルーティング
-  resources :users, only: [:show, :edit, :update], param: :uuid do
+  resources :users, only: [:new, :show, :edit, :update], param: :uuid do
     member do
       get 'edit_password'
       patch 'update_password'

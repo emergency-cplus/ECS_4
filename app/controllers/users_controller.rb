@@ -1,12 +1,8 @@
 class UsersController < ApplicationController
   before_action :require_login, except: [:new, :create]
-  # before_action :require_admin, only: [:index, :new, :create, :destroy]
   before_action :set_user, only: [:show, :edit, :update, :edit_password, :update_password]
   before_action :correct_user, only: [:show, :edit, :update, :edit_password, :update_password]
-
-  # def index # indexアクションを削除（管理者機能）
-  #   @users = User.all
-  # end
+  before_action :handle_new_action, only: [:new] 
 
   def show; end
 
@@ -58,6 +54,15 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def handle_new_action
+    if current_user&.admin?
+      redirect_to new_admin_user_path
+    else
+      flash[:notice] = "アクセス権限がありません"
+      redirect_to root_path
+    end
+  end
 
   def password_mismatch?
     params[:user][:password] != params[:user][:password_confirmation]
