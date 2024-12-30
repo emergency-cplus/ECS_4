@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   end
 
   # 一般ユーザー用のルーティング
-  resources :users, only: [:new, :create, :show, :edit, :update], param: :uuid do
+  resources :users, only: [:show, :edit, :update], param: :uuid do
     member do
       get 'edit_password'
       patch 'update_password'
@@ -27,6 +27,8 @@ Rails.application.routes.draw do
 
   # usersのindexページのリダイレクト（管理者用ルーティングの後に配置）
   get '/users', to: redirect('/')
+  # /users/new へのアクセスを管理者ページまたはホームにリダイレクト
+  get '/users/new', to: redirect('/admin/users/new')  # または to: redirect('/')
 
   resources :items
   resources :send_lists
