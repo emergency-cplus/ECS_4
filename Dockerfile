@@ -53,6 +53,6 @@ RUN chmod +x /usr/bin/entrypoint.sh
 RUN SECRET_KEY_BASE=dummy RAILS_ENV=production bundle exec rails assets:precompile
 
 ENTRYPOINT ["entrypoint.sh"]
-EXPOSE 3000
+EXPOSE 3000/tcp
 
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
