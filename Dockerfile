@@ -11,12 +11,6 @@ ARG NODE_VERSION
 ENV LANG C.UTF-8
 ENV TZ Asia/Tokyo
 
-# Railsアプリケーションの環境変数の設定
-ENV RAILS_ENV=production
-ENV RACK_ENV=production
-ENV NODE_ENV=production
-
-
 # Node.jsとYarnのセットアップ
 RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
     && wget --quiet -O - /tmp/pubkey.gpg https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
@@ -49,10 +43,10 @@ COPY . /app
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 
-# アセットのプリコンパイル（ダミーのSECRET_KEY_BASEを使用）
-RUN SECRET_KEY_BASE=dummy RAILS_ENV=production bundle exec rails assets:precompile
+# アセットのプリコンパイル
+RUN bundle exec rails assets:precompile
 
 ENTRYPOINT ["entrypoint.sh"]
-EXPOSE 3000/tcp
+EXPOSE 3000
 
-CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+CMD [ "rails" , "server" , "-b" , "0.0.0.0" ]
