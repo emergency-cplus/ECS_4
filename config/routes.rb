@@ -43,4 +43,3 @@ Rails.application.routes.draw do
   # 定義されていない全てのパスを404ページにリダイレクト
   match '*path', via: :all, to: 'static_pages#not_found'
 end
-
