@@ -23,6 +23,8 @@ services:
     environment:
       TZ: Asia/Tokyo
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      RAILS_ENV: development
+      NODE_ENV: development
     ports:
       - "3000:3000"
     depends_on:
