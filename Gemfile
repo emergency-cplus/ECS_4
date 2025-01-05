@@ -106,3 +106,5 @@ group :test do
   gem "faker"
   gem "rails-controller-testing"
 end
+
+gem "dockerfile-rails", ">= 1.6", :group => :development
