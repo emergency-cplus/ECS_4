@@ -71,7 +71,6 @@ class User < ApplicationRecord
     admin? || demo?
   end
 
-
   def was_demo?
     # role_updated_atカラムがある場合
     return false if role_updated_at.nil?
