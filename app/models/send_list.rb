@@ -9,7 +9,7 @@ class SendList < ApplicationRecord
   RESET_MINUTE = 30
 
   # roleの定義をUserモデルから参照
-  enum role_at_time: User.roles
+  enum :role_at_time, User.roles
 
   # バリデーション
   validates :phone_number, presence: true,
@@ -26,21 +26,11 @@ class SendList < ApplicationRecord
   }
 
   scope :viewable_for_admin, -> { all } # adminは全て見れる
-  scope :viewable_for_general, -> (user_id) { 
+  scope :viewable_for_general, lambda { |user_id| 
     user = User.find(user_id)
     where(user_id: user.id).or(where(user_id: user.id, role_at_time: User.roles[:demo])) 
   }
   scope :viewable_for_demo, -> { where(role_at_time: User.roles[:demo]) }
-
-  # scope :for_user, ->(user_id) { where(user_id:) }
-  # scope :viewable_for_demo, -> { where(role_at_time: :demo) }
-  # scope :viewable_for_user, ->(user) {
-  #   if user.demo?
-  #     viewable_for_demo
-  #   else
-  #     where(user_id: user.id)
-  #   end
-  # }
 
   # コールバックを追加して、作成時にユーザーのroleを保存
   before_create :set_role_at_time
@@ -85,23 +75,6 @@ class SendList < ApplicationRecord
       scope = scope.actual_sends unless include_test
       scope.count
     end
-
-    # 期間を指定してユーザーの送信数を取得
-    # def count_for_period(user_id, start_date, end_date, include_test: true)
-    #   scope = for_user(user_id).in_period(start_date, end_date)
-    #   scope = scope.actual_sends unless include_test
-    #   scope.count
-    # end
-
-    # 日別の利用状況レポート
-    # def daily_stats(user_id, days = 30)
-    #   start_date = days.days.ago.beginning_of_day
-    #   for_user(user_id)
-    #     .where('created_at >= ?', start_date)
-    #     .group('DATE(created_at)')
-    #     .select('DATE(created_at) as date, COUNT(*) as total_count, ' \
-    #             'SUM(CASE WHEN send_as_test THEN 1 ELSE 0 END) as test_count')
-    # end
   end
 
   private
@@ -109,6 +82,7 @@ class SendList < ApplicationRecord
   def check_demo_user_limit
     return unless user&.demo?
     return unless todays_send_count >= DEMO_DAILY_LIMIT
+
     errors.add(:base, "デモユーザーの1日の送信制限（#{DEMO_DAILY_LIMIT}回）を超えています")
   end
 
