@@ -20,25 +20,25 @@
       </div>
 
       <% if current_user.admin? %>
-        <span class="bg-red-100 text-red-800 text-sm font-bold px-3 py-1 rounded-full">
+        <span class="bg-red-100 text-red-800 text-sm font-bold px-3 py-1 rounded-full font-bold">
           管理者としてログイン中
         </span>
       <% end %>
 
       <% unless current_user.admin? %>
         <div class="dropdown dropdown-bottom dropdown-end" style="z-index: 200;">
-          <div tabindex="0" role="button" class="bg-transparent text-black">アイテム</div>
+          <div tabindex="0" role="button" class="bg-transparent text-black font-bold">アイテム</div>
             <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
               <li><%= link_to 'アイテム一覧', items_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %></li>
               <li><%= link_to 'アイテム作成', new_item_path, class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %></li>
             </ul>
         </div>
 
-        <%= link_to '送信履歴', send_lists_path, class: "text-gray-700 hover:text-gray-900" %>
+        <%= link_to '送信履歴', send_lists_path, class: "text-gray-700 hover:text-gray-900 font-bold" %>
       <% end %>
 
       <div class="dropdown dropdown-bottom dropdown-end" style="z-index: 200;">
-        <div tabindex="0" role="button" class="bg-transparent text-black"><%= current_user.name %></div>
+        <div tabindex="0" role="button" class="bg-transparent text-black font-bold"><%= current_user.name %></div>
           <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
           <!-- ここで current_user.uuid を使用 -->
           <li><%= link_to 'ユーザー詳細', user_path(current_user.uuid), class: 'block px-4 py-2 text-gray-700 hover:bg-gray-100' %></li>
