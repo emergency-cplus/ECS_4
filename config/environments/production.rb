@@ -91,6 +91,8 @@ Rails.application.configure do
   # メールのデフォルトURLオプション（例: パスワードリセットのリンク生成に使用）
   config.action_mailer.default_url_options = { host: ENV['MAIL_HOST'], protocol: 'https' }
 
+  # config/environments/production.rb に追加
+  config.action_mailer.smtp_settings[:debug_output] = $stdout
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
