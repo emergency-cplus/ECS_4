@@ -19,9 +19,22 @@ Emergency Call Supportは、119番通報時の指令員（ディスパッチャ�
 - 検索・フィルタリング機能
 - ユーザー管理システム
 
----
-※ 操作画面（スクリーンショット）は、近日更新
----
+
+### 操作画面（スクリーンショット）
+|**トップページ**|**ログイン画面**|
+|:-:|:-:|
+|<img src="app/assets/images/docs/top.png" width="780px">|![ログイン画面](app/assets/images/docs/users_login.gif)|
+|ヘッダーとボトムナビゲーションを固定<br>どのページからでもトップページとメインの機能へ|登録したメールアドレスでログイン|
+
+|**アイテム一覧**|**アイテム作成**|
+|:-:|:-:|
+|![アイテム一覧](app/assets/images/docs/items_index.gif)|![アイテム作成](app/assets/images/docs/items_new.gif)|
+|**タイトル・タグ**の検索機能により<br>必要な説明動画をすばやく見つけることが可能|YouTubeにアップロードされているShorts動画をすぐに登録<br>補足の説明やタグの追記も可能|
+
+|**アイテム詳細**|**SMS送信**|
+|:-:|:-:|
+|![アイテム詳細](app/assets/images/docs/items_show.gif)|![SMS送信](app/assets/images/docs/send_SMS.gif)|
+|動画をプレビュー確認でき、**誤選択を防止**<br>必要に応じて編集削除も実行可能|電話番号を入力するだけで<br>**ワンクリックでSMS送信**が完了<br>送信履歴も自動で記録|
 
 ## 導入により想定される効果
 
