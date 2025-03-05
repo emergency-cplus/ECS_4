@@ -32,6 +32,10 @@ Emergency Call Supportは、119番通報時の指令員（オペレーター）�
 
 ![ER図](diagrams/images/er.png)
 
+## ディレクトリ構造
+
+プロジェクトのディレクトリ構造の詳細は、[DIRECTORY_STRUCTURE.md](DIRECTORY_STRUCTURE.md)を参照してください。
+
 ## 技術スタック
 
 - フロントエンド: HTML, CSS, JavaScript, TailwindCSS
