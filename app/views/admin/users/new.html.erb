@@ -3,9 +3,9 @@
   
   <div class="p-6 m-auto bg-slate-50 rounded-md shadow-md sm:max-w-md mt-5 sm:mt-20">
     <div class="space-y-4">
-      <%= form_with model: @user, local: true do |f| %>
+      <%= form_with model: [:admin, @user], local: true do |f| %>
         <%= render 'shared/error_messages', object: f.object %>
-      
+
         <div class="mb-4">
           <%= f.label :name, '名前', class: 'block mb-2 font-bold' %>
           <%= f.text_field :name, class: 'w-full input input-bordered input-primary', required: true %>
@@ -17,19 +17,8 @@
         </div>
 
         <div class="mb-4">
-          <%= f.label :password, 'パスワード', class: 'block mb-2 font-bold' %>
-          <%= f.password_field :password, class: 'w-full input input-bordered input-primary', required: true %>
-        </div>
-
-        <div class="mb-4">
-          <%= f.label :password_confirmation, 'パスワード確認', class: 'block mb-2 font-bold' %>
-          <%= f.password_field :password_confirmation, class: 'w-full input input-bordered input-primary', required: true %>
-        </div>
-        
-        <div class="mb-4">
           <span class="block mb-2 font-bold">ユーザータイプ</span>
           <div class="flex justify-center space-x-8">
-          <%# <div class="flex space-x-4"> %>
             <label class="flex items-center">
               <%= f.radio_button :role, 'general', class: 'radio radio-primary mr-2' %>
               <span>一般</span>
