@@ -18,7 +18,7 @@ class UserMailer < ApplicationMailer
 
     mail(
       to: @user.email,
-      subject: '【Emergency Call Support】ユーザー作成のお知らせ'
+      subject: 'アカウント作成のお知らせ'
     )
   end
 end
