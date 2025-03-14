@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  </head>
+  <body>
+    <p><%= @user.name %>様</p>
+    <p>
+      Emergency Call Support へようこそ！<br>
+      アカウントが作成されましたので、お知らせいたします。<br>
+    </p>
+    <p>
+      ログイン情報:<br>
+      ========================<br>
+      メールアドレス: <%= @user.email %><br>
+      仮パスワード: <%= @password %><br>
+      ========================
+    </p>
+    <p>
+      セキュリティ保護のため、初回ログイン時にパスワードの変更が必要です。<br>
+      以下のURLからパスワードの変更手続きを行ってください。
+    </p>
+      <%= link_to 'パスワード変更', new_password_reset_url %>
+    <p>
+      ※ このメールは送信専用のアドレスから配信されています。<br>
+        ご返信いただいてもお答えできませんので、ご了承ください。
+    </p>
+  </body>
+</html>

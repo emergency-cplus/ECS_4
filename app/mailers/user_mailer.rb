@@ -11,4 +11,14 @@ class UserMailer < ApplicationMailer
       subject: 'パスワードリセットの手順'
     )
   end
+
+  def welcome_email(user, password)
+    @user = user
+    @password = password
+
+    mail(
+      to: @user.email,
+      subject: 'アカウント作成のお知らせ'
+    )
+  end
 end

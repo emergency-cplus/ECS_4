@@ -16,11 +16,14 @@ class ApplicationController < ActionController::Base
     redirect_to root_path
   end
 
-  # ユーザーに初回ログイン時のパスワード変更を強制する
-  def enforce_password_change_on_first_login
-    if current_user.login_count == 1 && !current_user.admin?
-      flash[:warning] = '初回ログインです。セキュリティのため、パスワードを変更してください'
-      redirect_to edit_password_user_path(current_user) 
-    end
-  end
+def enforce_password_change_on_first_login
+  return if current_user.admin? # 管理者はスキップ
+  return if current_user.login_count > 0 # パスワード変更済みならスキップ
+  # パスワード変更関連のアクションの場合はスキップ
+  return if controller_name == 'users' && ['edit_password', 'update_password'].include?(action_name)
+  
+  flash[:warning] = '初回ログインです。セキュリティのため、パスワードを変更してください'
+  redirect_to edit_password_user_path(uuid: current_user.uuid)
+end
+
 end
