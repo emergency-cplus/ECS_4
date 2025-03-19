@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   # 管理者用のルーティングを先に定義
   namespace :admin do
     get 'top', to: 'dashboards#top'
-    resources :users,  except: [:show, :destroy]
+    resources :users, except: [:show]  # destroyを許可するよう修正
     resources :items
     # resources :histories
   end
@@ -25,10 +25,9 @@ Rails.application.routes.draw do
     end
   end
 
-  # usersのindexページのリダイレクト（管理者用ルーティングの後に配置）
+  # 以下は変更なし
   get '/users', to: redirect('/')
-  # /users/new へのアクセスを管理者ページまたはホームにリダイレクト
-  get '/users/new', to: redirect('/admin/users/new')  # または to: redirect('/')
+  get '/users/new', to: redirect('/admin/users/new')
 
   resources :items
   resources :send_lists
@@ -40,6 +39,5 @@ Rails.application.routes.draw do
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
 
-  # 定義されていない全てのパスを404ページにリダイレクト
   match '*path', via: :all, to: 'static_pages#not_found'
 end

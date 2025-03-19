@@ -2,6 +2,7 @@ module Admin
   class UsersController < ApplicationController
     before_action :require_login
     before_action :require_admin
+    before_action :set_user, only: [:edit, :update, :destroy]
 
     def index
       @users = User.page(params[:page]).per(10)
@@ -12,11 +13,11 @@ module Admin
     end
 
     def edit
-      @user = User.find(params[:id])
+      # @user = User.find(params[:id])
     end
 
     def create
-      @user = User.new(user_params)
+      # @user = User.new(user_params)
       temp_password = generate_simple_secure_password
       @user.password = temp_password
       @user.password_confirmation = temp_password
@@ -40,10 +41,37 @@ module Admin
       end
     end
 
+    def destroy
+      # 自分自身は削除できないようにする
+      if @user == current_user
+        redirect_to admin_users_path, alert: '自分自身を削除することはできません'
+        return
+      end
+      
+      # 最後の管理者は削除できないようにする
+      if @user.role == 'admin' && User.where(role: 'admin').count <= 1
+        redirect_to admin_users_path, alert: '最後の管理者は削除できません'
+        return
+      end
+      
+      # ユーザー削除処理
+      if @user.destroy
+        flash[:notice] = "ユーザー「#{@user.name}」を削除しました"
+        redirect_to admin_users_path
+      else
+        flash[:alert] = "ユーザー「#{@user.name}」の削除に失敗しました"
+        redirect_to admin_users_path
+      end
+    end
+
     private
 
     def user_params
       params.require(:user).permit(:name, :email, :role)
+    end
+
+    def set_user
+      @user = User.find(params[:id])
     end
 
     def role_params
