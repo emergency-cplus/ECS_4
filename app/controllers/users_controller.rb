@@ -44,15 +44,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def destroy
-    user = User.find_by(uuid: params[:uuid])
-    if user&.destroy
-      redirect_to users_path, flash: { success: "ユーザーを削除しました" }
-    else
-      redirect_to users_path, flash: { danger: "ユーザーの削除に失敗しました" }
-    end
-  end
-
   private
 
   def handle_new_action
