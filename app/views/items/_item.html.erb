@@ -14,14 +14,6 @@
         <div class="text-lg font-semibold">
           <%= link_to item.title, item_path(item), class: "block" %>
         </div>
-        <%# タグリストを非表示 %>
-        <!--
-        <div>
-          <% item.tag_list.each do |tag| %>
-            <%= link_to tag, items_path(tag: tag), class: "badge rounded-full bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 text-xs no-underline" %>
-          <% end %>
-        </div>
-        -->
         <br>
         <div class="flex justify-end">
           <%= render 'shared/sms_button', item: item %>

@@ -26,9 +26,9 @@
         <div class="mb-4">
           <%= f.label :tag, 'タグ（最大3つまで）', class: "block text-gray-700" %>
           <%= f.text_field :tag_list, 
-                   class: "w-full input input-bordered input-primary mt-1 placeholder:text-xs", 
-                   value: @item.tag_list.join("、"), 
-                   placeholder: '読点(、) カンマ(,) 半角スラッシュ(/)で区切る' %>
+                class: "w-full input input-bordered input-primary mt-1 placeholder:text-xs", 
+                value: @item.tag_list.join("、"), 
+                placeholder: '読点(、) カンマ(,) 半角スラッシュ(/)で区切る' %>
         </div>
 
         <div class="mb-4">
