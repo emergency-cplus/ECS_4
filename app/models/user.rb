@@ -79,6 +79,22 @@ class User < ApplicationRecord
     SendList.where(user: self, role_at_time: 2).exists?
   end
 
+  def can_edit_item?(item)
+    item.user_id == id
+  end
+
+  def admin?
+    role == 'admin'
+  end
+
+  def demo?
+    role == 'demo'
+  end
+
+  def general?
+    role == 'general'
+  end
+
   private
 
   def ensure_uuid
