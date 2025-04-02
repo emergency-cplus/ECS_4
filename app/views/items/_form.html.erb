@@ -20,7 +20,7 @@
 
         <div class="mb-4">
           <%= f.label :description, '説明', class: "block text-gray-700" %>
-          <%= f.text_area :description, class: "w-full textarea textarea-bordered textarea-primary mt-1 h-32" %>
+          <%= f.text_area :description, class: "w-full textarea textarea-bordered textarea-primary mt-1 h-24" %>
         </div>
 
         <div class="mb-4">
@@ -33,8 +33,19 @@
 
         <div class="mb-4">
           <%= f.label :item_url, "動画URL", class: "block text-gray-700" %>
-          <%= f.text_area :item_url, placeholder: 'YouTube shortsのURLのみ登録可', class: "w-full textarea textarea-bordered textarea-primary mt-1 h-32", data: { video_preview_target: "url" } %>
+          <%= f.text_area :item_url, placeholder: 'YouTube shortsのURLのみ登録可', class: "w-full textarea textarea-bordered textarea-primary mt-1 h-24", data: { video_preview_target: "url" } %>
         </div>
+
+        <!-- 管理者のみ表示する一般公開設定 -->
+        <% if @is_admin %>
+          <div class="form-control">
+            <%= f.label :shared_with_general, class: "flex items-center cursor-pointer" do %>
+              <%= f.check_box :shared_with_general, class: "checkbox checkbox-primary mr-2" %>
+              <span class="label-text">一般ユーザーに公開する</span>
+            <% end %>
+            <p class="text-xs text-gray-500 mt-1">チェックすると、一般ユーザーもこのアイテムを閲覧・使用できるようになります</p>
+          </div>
+        <% end %>
 
         <div class="flex justify-end space-x-2 mt-4">
           <%= f.button type: 'submit', class: 'btn btn-primary' do %>
