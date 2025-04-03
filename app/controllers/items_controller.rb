@@ -4,14 +4,23 @@ class ItemsController < ApplicationController
   before_action :set_item, only: %i[show edit update destroy]
   
   def index
-    # デモユーザーの場合は全ユーザーのアイテムを表示
-    # 管理者も全アイテムを閲覧可能
-    # 全アイテムを基本クエリとして設定
-    @items = if current_user.can_view_all_items?
-      Item.includes(:tags).order(created_at: :desc)
+    # 基本クエリの設定
+    @items = if current_user.admin?
+      # 管理者は自分のアイテムのみ閲覧可能
+      current_user.items.includes(:tags)
+    elsif current_user.demo?
+      # デモユーザーは自分のアイテム（通常はない）と管理者の全アイテムを閲覧可能
+      user_items = current_user.items.includes(:tags)
+      admin_items = Item.includes(:tags).where(user_id: User.where(role: :admin).pluck(:id))
+      user_items.or(admin_items)
     else
-      current_user.items.includes(:tags).order(created_at: :desc)
-    end
+      # 一般ユーザーは自分のアイテムと管理者の「一般公開」設定されたアイテムを閲覧可能
+      user_items = current_user.items.includes(:tags)
+      admin_items = Item.includes(:tags)
+                        .where(user_id: User.where(role: :admin).pluck(:id), 
+                               shared_with_general: true)
+      user_items.or(admin_items)
+    end.order(created_at: :desc)
 
     # テキスト検索があればそれに基づいてフィルタリング
     if params[:search].present?
@@ -37,25 +46,25 @@ class ItemsController < ApplicationController
 
   def new
     @item = Item.new
+    @is_admin = current_user.admin?
   end
 
-  def edit; end
+  def edit
+    @is_admin = current_user.admin?
+    
+    # 自分のアイテムでない場合は編集不可
+    unless @item.user_id == current_user.id
+      redirect_to items_path, alert: '他のユーザーのアイテムは編集できません'
+    end
+  end
 
   def create
-    @item = current_user.items.new(item_params)
+    @item = current_user.items.new(item_params_with_sharing)
     
-    # タグの処理をモデルに委譲
-    # @item.normalized_tag_list = item_params[:tag_list]
-
     video_id = @item.send(:extract_video_id, @item.item_url)
-    existing_item = if current_user.can_view_all_items?
-      Item.where.not(id: 0) # 存在しないIDを指定
-          .find_by("item_url LIKE ?", "%/shorts/#{video_id}%")
-    else
-      current_user.items
-                 .where.not(id: 0) # 存在しないIDを指定
-                 .find_by("item_url LIKE ?", "%/shorts/#{video_id}%")
-    end
+    existing_item = current_user.items
+                               .where.not(id: 0) # 存在しないIDを指定
+                               .find_by("item_url LIKE ?", "%/shorts/#{video_id}%")
 
     if existing_item
       redirect_to item_path(existing_item), alert: 'すでにアイテムとして保存されています'
@@ -63,34 +72,32 @@ class ItemsController < ApplicationController
       flash[:success] = 'アイテムを作成しました'
       redirect_to items_url
     else
+      @is_admin = current_user.admin?
       flash.now[:danger] = 'アイテムを作成できませんでした'
       render :new, status: :unprocessable_entity
     end
   end
 
   def update
-    @item = Item.find(params[:id])
-    
-    # タグの処理をモデルに委譲
-    # @item.normalized_tag_list = item_params[:tag_list] if item_params[:tag_list].present?
+    # 自分のアイテムでない場合は更新不可
+    unless @item.user_id == current_user.id
+      return redirect_to items_path, alert: '他のユーザーのアイテムは更新できません'
+    end
     
     # 更新前に重複チェック
-    video_id = @item.send(:extract_video_id, item_params[:item_url])
-    existing_item = if current_user.can_view_all_items?
-                     Item.where.not(id: @item.id)
-                         .find_by("item_url LIKE ?", "%/shorts/#{video_id}%")
-                   else
-                     current_user.items
+    video_id = @item.send(:extract_video_id, item_params_with_sharing[:item_url])
+    existing_item = current_user.items
                                .where.not(id: @item.id)
                                .find_by("item_url LIKE ?", "%/shorts/#{video_id}%")
-                   end
 
     if existing_item
       flash.now[:alert] = 'すでにこの動画は登録されています'
+      @is_admin = current_user.admin?
       render :edit, status: :unprocessable_entity
-    elsif @item.update(item_params)
+    elsif @item.update(item_params_with_sharing)
       redirect_to @item, success: 'アイテム更新に成功しました'
     else
+      @is_admin = current_user.admin?
       render :edit, status: :unprocessable_entity
     end
   end
@@ -99,6 +106,11 @@ class ItemsController < ApplicationController
     # デモユーザーの二重チェック
     return redirect_to items_path, alert: 'デモユーザーはこの操作を実行できません。' unless current_user.can_modify_items?
 
+    # 自分のアイテムでない場合は削除不可
+    unless @item.user_id == current_user.id
+      return redirect_to items_path, alert: '他のユーザーのアイテムは削除できません'
+    end
+
     @item.destroy
     flash[:notice] = 'アイテムを削除しました'
     redirect_to items_url
@@ -106,20 +118,38 @@ class ItemsController < ApplicationController
 
   private
 
-  def item_params
-    params.require(:item).permit(:title, :item_url, :description, :tag_list)
-  end
-
   def set_item
-    # デモユーザーと管理者は全てのアイテムにアクセス可能
-    @item = if current_user.can_view_all_items?
-              Item.find_by(id: params[:id])
-            else
+    @item = if current_user.admin?
+              # 管理者は自分のアイテムのみアクセス可能
               current_user.items.find_by(id: params[:id])
+            elsif current_user.demo?
+              # デモユーザーは自分のアイテムと管理者の全アイテムにアクセス可能
+              user_items = current_user.items
+              admin_items = Item.where(user_id: User.where(role: :admin).pluck(:id))
+              user_items.or(admin_items).find_by(id: params[:id])
+            else
+              # 一般ユーザーは自分のアイテムと管理者の「一般公開」設定されたアイテムにアクセス可能
+              user_items = current_user.items
+              admin_items = Item.where(user_id: User.where(role: :admin).pluck(:id), 
+                                     shared_with_general: true)
+              user_items.or(admin_items).find_by(id: params[:id])
             end
 
     unless @item
       redirect_to items_path, alert: '指定されたアイテムにはアクセスできません。'
+    end
+  end
+
+  def item_params
+    params.require(:item).permit(:title, :item_url, :description, :tag_list)
+  end
+  
+  # 管理者用のパラメータ（一般公開設定を含む）
+  def item_params_with_sharing
+    if current_user.admin?
+      params.require(:item).permit(:title, :item_url, :description, :tag_list, :shared_with_general)
+    else
+      item_params
     end
   end
 
@@ -128,9 +158,5 @@ class ItemsController < ApplicationController
       flash[:alert] = 'デモユーザーはこの操作を実行できません。'
       redirect_to items_path
     end
-  end
-
-  def item_params_without_tags
-    params.require(:item).permit(:title, :description, :item_url)
   end
 end
