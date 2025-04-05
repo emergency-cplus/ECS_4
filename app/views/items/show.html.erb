@@ -34,9 +34,14 @@
           </div>
         </div>
 
+        <!-- 管理者共有アイテムの場合はバッジを表示 -->
+        <% if @item.user.admin? && @item.user_id != current_user.id %>
+          <span class="inline-block bg-gray-500 text-white text-xs px-4 py-1 rounded-full font-semibold">共通アイテム</span>
+        <% end %>
+
         <!-- 編集・削除ボタンの条件分岐 -->
         <div class='flex justify-end space-x-2 mt-4'>
-          <% unless current_user.demo? %>
+          <% if current_user.can_edit_item?(@item) && !current_user.demo? %>
             <%= link_to edit_item_path(@item), class: "btn btn bg-gray-500", id: "button-edit-#{@item.id}" do %>
               <i class="ph ph-note-pencil large-icon"></i> 編集
             <% end %>
