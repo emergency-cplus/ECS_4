@@ -36,7 +36,7 @@
           <%= f.text_area :item_url, placeholder: 'YouTube shortsのURLのみ登録可', class: "w-full textarea textarea-bordered textarea-primary mt-1 h-24", data: { video_preview_target: "url" } %>
         </div>
 
-        <!-- 管理者のみ表示する一般公開設定 -->
+        <!-- 管理者のみ表示,一般公開設定 -->
         <% if @is_admin %>
           <div class="form-control">
             <%= f.label :shared_with_general, class: "flex items-center cursor-pointer" do %>
