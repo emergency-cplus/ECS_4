@@ -19,6 +19,11 @@
   font-size: 24px;
 }
 
+:root {
+  --header-space: 72px; /* ヘッダー + フラッシュメッセージ */
+  --footer-height: 56px; /* フッターの高さ（padding含む） */
+}
+
 /* Tailwind CSSを使用する例 */
 .pagination a {
   @apply bg-gray-100 text-gray-800; /* 背景と文字色 */
@@ -70,6 +75,7 @@ body, html {
 
 body {
   padding-top: 72px; /* ヘッダーの高さ + フラッシュメッセージの高さ */
+  padding-bottom: 56px; /* フッターの高さ */
   position: relative;
   min-height: 100vh;
   max-width: 100vw;

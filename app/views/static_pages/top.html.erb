@@ -1,4 +1,9 @@
-<div class="hero min-h-screen relative" style="background-image: url(<%= image_url('top.jpg') %>); background-size: cover; background-position: center; background-repeat: no-repeat; padding-bottom: 120px; margin-bottom: 40px;"> 
+<div class="hero relative flex flex-col justify-center" 
+     style="height: calc(100vh - 80px - 40px); 
+            background-image: url(<%= image_url('top.jpg') %>); 
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;">
   <div class="hero-overlay bg-opacity-60 absolute inset-0"></div> 
   <div class="hero-content text-neutral-content relative" style="display: flex; justify-content: flex-start; align-items: center; width: 100%; padding-left: 2%;">
     <div class="max-w-md">
@@ -15,7 +20,7 @@
 
   <% unless logged_in? %>
     <div class="chat chat-end absolute bottom-0 right-0" style="margin-bottom: 4rem;">
-      <div class="chat-bubble text-left text-sm font-bold" style="max-width: 280px;">
+      <div class="chat-bubble text-left text-m font-bold" style="max-width: 360px; background-color: rgba(255, 255, 255, 0.9); color: #333;">
         ご質問・お試し利用をご希望の方は<br />
         ページ下　"お問い合わせ"　から！
       </div>
