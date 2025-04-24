@@ -56,7 +56,7 @@ Emergency Call Supportは、119番通報時の指令員（ディスパッチャ�
 
 🧑‍🚒 [開発者X](https://x.com/emergency_cplus)
 
-📺 [YouTubeチャンネル](https://www.youtube.com/@emegency_cplus "YouTube EmergenCy+")
+📺 [YouTubeチャンネル](https://www.youtube.com/@emergency_cplus "YouTube EmergenCy+")
 
 応急手当て等のショート動画は↑チャンネルから（随時更新予定）
 
