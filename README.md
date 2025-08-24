@@ -54,8 +54,6 @@ Emergency Call Supportは、119番通報時の指令員（ディスパッチャ�
 119のオペレーター、現役消防士。
 音声のみによる説明での不安や誤解を解消し、より効果的な初期対応を実現することを願い開発を進めています。
 
-🧑‍🚒 [開発者X](https://x.com/emergency_cplus)
-
 📺 [YouTubeチャンネル](https://www.youtube.com/@emergency_cplus "YouTube EmergenCy+")
 
 応急手当て等のショート動画は↑チャンネルから（随時更新予定）
