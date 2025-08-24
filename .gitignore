@@ -55,3 +55,12 @@ config/secrets.yml
 # .gitignoreに追加
 .DS_Store
 **/.DS_Store
+
+# add files
+/app
+/db
+/config/databases.yml
+config/routes.rb
+/config/environments/development.rb
+/config/environments/production.rb
+/config/environments/test.rb
